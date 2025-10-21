@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Configurações - gmp Academy Admin</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Admin</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Configurações</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="../student/profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html" data-title="Início">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="products.html" data-title="Produtos">
+                    <i class="fas fa-box"></i> Produtos
+                </a>
+                <a class="nav-item has-submenu" href="#" data-title="Menu">
+                    <i class="fas fa-edit"></i> Gerenciar Conteúdo
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="content-manager.html" title="Visão Geral"><i class="fas fa-eye"></i>Visão Geral</a></li>
+                    <li><a class="sub-item" href="video-upload.html" title="Upload de Vídeos"><i class="fas fa-video"></i>Upload de Vídeos</a></li>
+                    <li><a class="sub-item" href="bulk-upload.html" title="Upload em Lote"><i class="fas fa-upload"></i>Upload em Lote</a></li>
+                    <li><a class="sub-item" href="media-library.html" title="Biblioteca de Mídia"><i class="fas fa-photo-video"></i>Biblioteca de Mídia</a></li>
+                </ul>
+                <a class="nav-item" href="students.html" data-title="Alunos">
+                    <i class="fas fa-users"></i> Alunos
+                </a>
+                <a class="nav-item" href="classes.html" data-title="Turmas">
+                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                </a>
+                <a class="nav-item" href="analytics.html" data-title="Analytics">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a class="nav-item" href="certificates.html" data-title="Certificados">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="gamification.html" data-title="Gamificação">
+                    <i class="fas fa-trophy"></i> Gamificação
+                </a>
+                <a class="nav-item" href="sales.html" data-title="Vendas">
+                    <i class="fas fa-dollar-sign"></i> Vendas
+                </a>
+                <a class="nav-item" href="comments.html" data-title="Comentários">
+                    <i class="fas fa-comments"></i> Comentários
+                </a>
+                <a class="nav-item" href="showcase.html" data-title="Vitrine">
+                    <i class="fas fa-store"></i> Vitrine
+                </a>
+                <a class="nav-item has-submenu active" href="#" data-title="Menu">
+                    <i class="fas fa-cog"></i> Configurações
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu active">
+                    <li><a class="sub-item active" href="settings.html" title="Configurações Gerais"><i class="fas fa-cogs"></i>Geral</a></li>
+                    <li><a class="sub-item" href="personalization.html" title="Personalização"><i class="fas fa-palette"></i>Personalização</a></li>
+                    <li><a class="sub-item" href="payment-setup.html" title="Configuração de Pagamento"><i class="fas fa-credit-card"></i>Config. Pagamento</a></li>
+                    <li><a class="sub-item" href="payment-history.html" title="Histórico de Pagamento"><i class="fas fa-history"></i>Histórico Pagamento</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+                    
+                    <!-- Navigation Container -->
+                    <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 2rem;">
+                        <div class="card" style="flex: 1; position: relative;">
+                            <div class="card-body" style="padding: 0; position: relative; margin: 0;">
+                                <div class="admin-nav-tabs-container" style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; padding-right: 0; display: inline-flex; width: fit-content;">
+                                    <style>
+                                        .admin-nav-tabs-container::-webkit-scrollbar { display: none; }
+                                        .admin-nav-tab { flex-shrink: 0; }
+                                        .admin-nav-tab:last-child { margin-right: 0; }
+                                    </style>
+                                    <a class="admin-nav-tab" href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+                                    <a class="admin-nav-tab" href="products.html"><i class="fas fa-box"></i> Produtos</a>
+                                    <a class="admin-nav-tab" href="content-manager.html"><i class="fas fa-edit"></i> Conteúdo</a>
+                                    <a class="admin-nav-tab" href="students.html"><i class="fas fa-users"></i> Alunos</a>
+                                    <a class="admin-nav-tab" href="classes.html"><i class="fas fa-chalkboard-teacher"></i> Turmas</a>
+                                    <a class="admin-nav-tab" href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a>
+                                    <a class="admin-nav-tab" href="certificates.html"><i class="fas fa-certificate"></i> Certificados</a>
+                                </div>
+                                <div class="scroll-fade-left" style="position: absolute; left: 0; top: 0; bottom: 2px; width: 20px; background: linear-gradient(to right, rgba(255,255,255,0.9), transparent); pointer-events: none; z-index: 1;"></div>
+                                <div class="scroll-fade-right" style="position: absolute; right: 0; top: 0; bottom: 2px; width: 20px; background: linear-gradient(to left, rgba(255,255,255,0.9), transparent); pointer-events: none; z-index: 1;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="flex-shrink: 0; position: relative; overflow: visible;">
+                            <div class="card-body" style="padding: 0; position: relative; margin: 0; overflow: visible;">
+                                <div class="admin-nav-more-dropdown" style="display: flex; align-items: center; height: 100%; position: relative;">
+                                    <button class="admin-nav-tab admin-more-btn" type="button" id="moreDropdown">
+                                        <i class="fas fa-ellipsis-h"></i> Mais
+                                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: 0.8rem; transition: transform 0.2s;"></i>
+                                    </button>
+                                    <div class="admin-more-dropdown-menu" id="moreDropdownMenu" style="display: none; position: absolute; top: 100%; right: 0; z-index: 1000;">
+                                        <div class="admin-dropdown-header">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                            <span>Mais Opções</span>
+                                        </div>
+                                        
+                                        <a href="gamification.html" class="admin-dropdown-item">
+                                            <i class="fas fa-trophy"></i>
+                                            <div>
+                                                <span>Gamificação</span>
+                                                <small>Gerenciar sistema de conquistas</small>
+                                            </div>
+                                        </a>
+                                        <a href="sales.html" class="admin-dropdown-item">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <div>
+                                                <span>Vendas</span>
+                                                <small>Acompanhar vendas e receitas</small>
+                                            </div>
+                                        </a>
+                                        <a href="comments.html" class="admin-dropdown-item">
+                                            <i class="fas fa-comments"></i>
+                                            <div>
+                                                <span>Comentários</span>
+                                                <small>Gerenciar feedback dos alunos</small>
+                                            </div>
+                                        </a>
+                                        <a href="showcase.html" class="admin-dropdown-item">
+                                            <i class="fas fa-store"></i>
+                                            <div>
+                                                <span>Vitrine</span>
+                                                <small>Exibir cursos em destaque</small>
+                                            </div>
+                                        </a>
+                                        
+                                        <div class="admin-dropdown-divider"></div>
+                                        
+                                        <a href="video-upload.html" class="admin-dropdown-item">
+                                            <i class="fas fa-video"></i>
+                                            <div>
+                                                <span>Upload de Vídeos</span>
+                                                <small>Enviar novos vídeos</small>
+                                            </div>
+                                        </a>
+                                        <a href="bulk-upload.html" class="admin-dropdown-item">
+                                            <i class="fas fa-upload"></i>
+                                            <div>
+                                                <span>Upload em Lote</span>
+                                                <small>Enviar múltiplos arquivos</small>
+                                            </div>
+                                        </a>
+                                        <a href="media-library.html" class="admin-dropdown-item">
+                                            <i class="fas fa-photo-video"></i>
+                                            <div>
+                                                <span>Biblioteca de Mídia</span>
+                                                <small>Gerenciar arquivos de mídia</small>
+                                            </div>
+                                        </a>
+                                        
+                                        <div class="admin-dropdown-divider"></div>
+                                        
+                                        <a href="payment-setup.html" class="admin-dropdown-item">
+                                            <i class="fas fa-credit-card"></i>
+                                            <div>
+                                                <span>Config. Pagamento</span>
+                                                <small>Configurar métodos de pagamento</small>
+                                            </div>
+                                        </a>
+                                        <a href="payment-history.html" class="admin-dropdown-item">
+                                            <i class="fas fa-history"></i>
+                                            <div>
+                                                <span>Histórico de Pagamentos</span>
+                                                <small>Visualizar transações anteriores</small>
+                                            </div>
+                                        </a>
+                                        <a href="personalization.html" class="admin-dropdown-item">
+                                            <i class="fas fa-palette"></i>
+                                            <div>
+                                                <span>Personalização</span>
+                                                <small>Customizar aparência e layout</small>
+                                            </div>
+                                        </a>
+                                        <a href="settings.html" class="admin-dropdown-item active" style="background-color: #ffcc00; color: #333;">
+                                            <i class="fas fa-cogs" style="color: #333;"></i>
+                                            <div>
+                                                <span>Configurações Gerais</span>
+                                                <small>Configurações do sistema</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const navContainer = document.querySelector('.admin-nav-tabs-container');
+                        const leftFade = document.querySelector('.scroll-fade-left');
+                        const rightFade = document.querySelector('.scroll-fade-right');
+                        
+                        if (navContainer && leftFade && rightFade) {
+                            function updateFades() {
+                                const scrollLeft = navContainer.scrollLeft;
+                                const maxScroll = navContainer.scrollWidth - navContainer.clientWidth;
+                                leftFade.style.opacity = scrollLeft > 10 ? '1' : '0';
+                                rightFade.style.opacity = scrollLeft < maxScroll - 10 ? '1' : '0';
+                            }
+                            updateFades();
+                            navContainer.addEventListener('scroll', updateFades);
+                        }
+                    });
+                    
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const moreBtn = document.getElementById('moreDropdown');
+                        const moreMenu = document.getElementById('moreDropdownMenu');
+                        
+                        if (moreBtn && moreMenu) {
+                            let isOpen = false;
+                            moreBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                isOpen = !isOpen;
+                                moreMenu.style.display = isOpen ? 'block' : 'none';
+                                const chevron = moreBtn.querySelector('.fa-chevron-down');
+                                if (chevron) {
+                                    chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                                }
+                            });
+                            document.addEventListener('click', function(e) {
+                                if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+                                    isOpen = false;
+                                    moreMenu.style.display = 'none';
+                                    const chevron = moreBtn.querySelector('.fa-chevron-down');
+                                    if (chevron) {
+                                        chevron.style.transform = 'rotate(0deg)';
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    </script>
+
+                    <!-- Page Header with Enhanced UX -->
+                    <div class="card shadow-hover animate-slide-in-down">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">
+                                        <i class="fas fa-cogs" style="color: var(--primary-blue); margin-right: 12px;"></i>
+                                        Configurações
+                                    </h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Gerencie as configurações gerais da sua plataforma
+                                    </p>
+                                </div>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-save"></i> Salvar Alterações
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Settings with Enhanced UX -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-sliders-h" style="color: var(--primary-green); margin-right: 8px;"></i>
+                                Configurações Gerais
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="platform-name" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Nome da Plataforma</label>
+                                    <input class="form-control" id="platform-name" type="text" value="gmp Academy" style="border-radius: 6px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-email" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Email de Contato</label>
+                                    <input class="form-control" id="contact-email" type="email" value="contato@gmpacademy.com" style="border-radius: 6px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="support-phone" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Telefone de Suporte</label>
+                                    <input class="form-control" id="support-phone" type="text" value="(XX) XXXX-XXXX" style="border-radius: 6px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timezone" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Fuso Horário Padrão</label>
+                                    <select class="form-control" id="timezone" style="border-radius: 6px;">
+                                        <option>GMT-3 (Brasília)</option>
+                                        <option>GMT-2 (Fernando de Noronha)</option>
+                                        <option>GMT-4 (Manaus)</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Branding Settings with Enhanced UX -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-paint-brush" style="color: var(--primary-orange); margin-right: 8px;"></i>
+                                Personalização e Branding
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="logo-upload" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Logo da Plataforma</label>
+                                    <div class="file-upload-container" style="border: 2px dashed var(--border-color); border-radius: 8px; padding: 1.5rem; text-align: center; background: var(--card-bg); transition: all 0.3s ease; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 0.5rem;"></i>
+                                        <p style="margin: 0;">Arraste sua imagem aqui ou clique para selecionar</p>
+                                        <input class="form-control-file" id="logo-upload" type="file" style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;"/>
+                                    </div>
+                                    <small class="form-text text-muted">Upload de imagem (PNG, JPG) - Tamanho recomendado: 200x50px</small>
+                                </div>
+                                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="primary-color" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Cor Primária</label>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <input class="form-control" id="primary-color" type="color" value="#FF6B35" style="width: 60px; height: 40px; padding: 0; border: none;"/>
+                                            <input type="text" value="#FF6B35" class="form-control" style="border-radius: 6px; flex: 1;"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="secondary-color" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Cor Secundária</label>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <input class="form-control" id="secondary-color" type="color" value="#007BFF" style="width: 60px; height: 40px; padding: 0; border: none;"/>
+                                            <input type="text" value="#007BFF" class="form-control" style="border-radius: 6px; flex: 1;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Prévia</label>
+                                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                        <div style="background: #FF6B35; color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500;">Cor Primária</div>
+                                        <div style="background: #007BFF; color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500;">Cor Secundária</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Integrations with Enhanced UX -->
+                    <div class="card shadow-hover animate-slide-in-right">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-plug" style="color: var(--primary-purple); margin-right: 8px;"></i>
+                                Integrações
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="integration-item" style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem; align-items: center;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-credit-card" style="color: var(--primary-blue); font-size: 1.25rem;"></i>
+                                        <h4 style="margin: 0; font-size: 1.1rem;">Gateway de Pagamento</h4>
+                                    </div>
+                                    <p style="color: var(--text-secondary); margin: 0;">Conecte sua plataforma a um gateway de pagamento para processar vendas.</p>
+                                </div>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-cog"></i> Configurar
+                                </button>
+                            </div>
+                            <div class="integration-item" style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem; align-items: center;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-envelope" style="color: var(--primary-green); font-size: 1.25rem;"></i>
+                                        <h4 style="margin: 0; font-size: 1.1rem;">Serviço de Email Marketing</h4>
+                                    </div>
+                                    <p style="color: var(--text-secondary); margin: 0;">Integre com seu provedor de email para automação de marketing.</p>
+                                </div>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-cog"></i> Configurar
+                                </button>
+                            </div>
+                            <div class="integration-item" style="display: grid; grid-template-columns: 1fr auto; gap: 1rem; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; align-items: center;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-chart-line" style="color: var(--primary-orange); font-size: 1.25rem;"></i>
+                                        <h4 style="margin: 0; font-size: 1.1rem;">Google Analytics</h4>
+                                    </div>
+                                    <p style="color: var(--text-secondary); margin: 0;">Conecte a ferramentas de análise para rastrear o desempenho do seu portal.</p>
+                                </div>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-cog"></i> Configurar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script defer src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

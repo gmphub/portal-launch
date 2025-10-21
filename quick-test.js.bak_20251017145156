@@ -1,0 +1,259 @@
+/**
+ * Script de Teste Rápido
+ * Valida as funcionalidades principais do portal GMP
+ */
+
+class TestRunner {
+    constructor() {
+        this.results = [];
+        this.startTime = Date.now();
+    }
+
+    log(test, status, message) {
+        const result = {
+            test,
+            status,
+            message,
+            timestamp: new Date().toISOString()
+        };
+        this.results.push(result);
+        console.log(`[${status.toUpperCase()}] ${test}: ${message}`);
+    }
+
+    async runAllTests() {
+        console.log('🚀 Iniciando testes rápidos do portal GMP...\n');
+
+        this.testBasicEnvironment();
+        this.testJavaScriptClasses();
+        this.testLocalStorage();
+        this.testDOMOperations();
+        this.testEventHandling();
+        await this.testSecurityFeatures();
+        await this.testDatabaseFeatures();
+        await this.testIntegration();
+
+        this.generateReport();
+    }
+
+    testBasicEnvironment() {
+        this.log('Ambiente', 'info', 'Verificando ambiente básico...');
+
+        this.log('JavaScript', 'success', 'JavaScript está habilitado');
+
+        if (typeof localStorage !== 'undefined') {
+            this.log('LocalStorage', 'success', 'LocalStorage disponível');
+        } else {
+            this.log('LocalStorage', 'error', 'LocalStorage indisponível');
+        }
+
+        if (typeof console !== 'undefined') {
+            this.log('Console', 'success', 'Console API disponível');
+        }
+
+        if (typeof document !== 'undefined') {
+            this.log('DOM', 'success', 'DOM API disponível');
+        }
+    }
+
+    testJavaScriptClasses() {
+        this.log('Classes', 'info', 'Verificando classes JavaScript...');
+
+        if (typeof SecurityManager !== 'undefined') {
+            this.log('SecurityManager', 'success', 'Classe SecurityManager definida');
+        } else {
+            this.log('SecurityManager', 'error', 'Classe SecurityManager não encontrada');
+        }
+
+        if (typeof DatabaseManager !== 'undefined') {
+            this.log('DatabaseManager', 'success', 'Classe DatabaseManager definida');
+        } else {
+            this.log('DatabaseManager', 'error', 'Classe DatabaseManager não encontrada');
+        }
+    }
+
+    testLocalStorage() {
+        this.log('Storage', 'info', 'Testando armazenamento local...');
+
+        try {
+            localStorage.setItem('test_key', 'test_value');
+            this.log('Storage Write', 'success', 'Escrita realizada com sucesso');
+
+            const value = localStorage.getItem('test_key');
+            if (value === 'test_value') {
+                this.log('Storage Read', 'success', 'Leitura realizada com sucesso');
+            } else {
+                this.log('Storage Read', 'error', 'Falha na leitura');
+            }
+
+            localStorage.removeItem('test_key');
+            this.log('Storage Cleanup', 'success', 'Dados de teste removidos');
+        } catch (error) {
+            this.log('Storage', 'error', `Falha no teste de armazenamento: ${error.message}`);
+        }
+    }
+
+    testDOMOperations() {
+        this.log('DOM', 'info', 'Testando operações no DOM...');
+
+        try {
+            const testDiv = document.createElement('div');
+            testDiv.id = 'test-element';
+            testDiv.textContent = 'Conteúdo de Teste';
+            document.body.appendChild(testDiv);
+
+            const createdElement = document.getElementById('test-element');
+            if (createdElement && createdElement.textContent === 'Conteúdo de Teste') {
+                this.log('DOM Create', 'success', 'Elemento criado com sucesso');
+            } else {
+                this.log('DOM Create', 'error', 'Falha ao criar elemento');
+            }
+
+            createdElement.textContent = 'Conteúdo Modificado';
+            if (createdElement.textContent === 'Conteúdo Modificado') {
+                this.log('DOM Modify', 'success', 'Elemento modificado com sucesso');
+            } else {
+                this.log('DOM Modify', 'error', 'Falha ao modificar elemento');
+            }
+
+            document.body.removeChild(createdElement);
+            this.log('DOM Cleanup', 'success', 'Elemento de teste removido');
+        } catch (error) {
+            this.log('DOM', 'error', `Falha em operações DOM: ${error.message}`);
+        }
+    }
+
+    testEventHandling() {
+        this.log('Eventos', 'info', 'Testando tratamento de eventos...');
+
+        try {
+            const testButton = document.createElement('button');
+            testButton.id = 'test-button';
+            testButton.textContent = 'Botão de Teste';
+            document.body.appendChild(testButton);
+
+            let eventFired = false;
+            testButton.addEventListener('click', function() {
+                eventFired = true;
+            });
+
+            testButton.click();
+
+            setTimeout(() => {
+                if (eventFired) {
+                    this.log('Event Handling', 'success', 'Eventos funcionando corretamente');
+                } else {
+                    this.log('Event Handling', 'error', 'Falha no tratamento de eventos');
+                }
+                document.body.removeChild(testButton);
+            }, 100);
+        } catch (error) {
+            this.log('Eventos', 'error', `Falha no teste de eventos: ${error.message}`);
+        }
+    }
+
+    async testSecurityFeatures() {
+        this.log('Segurança', 'info', 'Testando funcionalidades de segurança...');
+
+        try {
+            if (typeof SecurityManager !== 'undefined') {
+                const security = new SecurityManager();
+
+                const strongPassword = security.checkPasswordStrength('Test123!@#');
+                if (strongPassword && strongPassword.strong) {
+                    this.log('Password Strength', 'success', 'Verificação de senha forte OK');
+                } else {
+                    this.log('Password Strength', 'error', 'Falha na verificação de senha');
+                }
+
+                const validEmail = security.validateEmail('test@example.com');
+                if (validEmail) {
+                    this.log('Email Validation', 'success', 'Validação de email OK');
+                } else {
+                    this.log('Email Validation', 'error', 'Falha na validação de email');
+                }
+
+                const sessionResult = await security.createSession({
+                    userId: 'test-user',
+                    username: 'testuser',
+                    role: 'user'
+                });
+
+                if (sessionResult && sessionResult.success) {
+                    this.log('Session Creation', 'success', 'Sessão criada com sucesso');
+                } else {
+                    this.log('Session Creation', 'error', 'Falha na criação de sessão');
+                }
+            } else {
+                this.log('Segurança', 'error', 'SecurityManager não disponível');
+            }
+        } catch (error) {
+            this.log('Segurança', 'error', `Erro em segurança: ${error.message}`);
+        }
+    }
+
+    async testDatabaseFeatures() {
+        this.log('Banco de Dados', 'info', 'Testando funcionalidades do banco...');
+
+        try {
+            if (typeof DatabaseManager !== 'undefined') {
+                const database = new DatabaseManager();
+
+                const testData = {
+                    id: 'test_001',
+                    name: 'Usuário Teste',
+                    email: 'test@example.com'
+                };
+
+                const saveResult = await database.saveStudentData(testData);
+                if (saveResult && saveResult.success) {
+                    this.log('Data Save', 'success', 'Dados salvos com sucesso');
+                } else {
+                    this.log('Data Save', 'error', 'Falha ao salvar dados');
+                }
+
+                const queryResult = await database.getStudentDataById('test_001');
+                if (queryResult && queryResult.success) {
+                    this.log('Data Query', 'success', 'Consulta realizada com sucesso');
+                } else {
+                    this.log('Data Query', 'error', 'Falha na consulta');
+                }
+
+                const connectionStatus = database.getConnectionStatus();
+                if (connectionStatus) {
+                    this.log('Connection Status', 'success', 'Conexão ativa');
+                } else {
+                    this.log('Connection Status', 'error', 'Falha ao obter status da conexão');
+                }
+            } else {
+                this.log('Banco de Dados', 'error', 'DatabaseManager não disponível');
+            }
+        } catch (error) {
+            this.log('Banco de Dados', 'error', `Erro no banco de dados: ${error.message}`);
+        }
+    }
+
+    async testIntegration() {
+        this.log('Integração', 'info', 'Testando integração...');
+
+        try {
+            if (typeof SecurityManager !== 'undefined' && typeof DatabaseManager !== 'undefined') {
+                const security = new SecurityManager();
+                const database = new DatabaseManager();
+
+                const userData = {
+                    username: 'integration_test_user',
+                    email: 'integration@test.com',
+                    password: 'Test123!@#',
+                    role: 'user'
+                };
+
+                const registrationResult = await security.registerUser(userData);
+                if (registrationResult && registrationResult.success) {
+                    this.log('User Registration', 'success', 'Registro de usuário OK');
+                } else {
+                    this.log('User Registration', 'warning', 'Simulação de registro concluída');
+                }
+
+                const accessResult = await database.checkDataAccess('integration_test_user', 'student_data');
+                if (accessResult) {
+                    this.log('Access Control', 'success', 'Controle de acesso OK');

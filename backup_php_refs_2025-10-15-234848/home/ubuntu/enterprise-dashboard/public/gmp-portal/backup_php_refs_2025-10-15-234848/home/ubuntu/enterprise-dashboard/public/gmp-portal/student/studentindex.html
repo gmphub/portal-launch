@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dashboard - gmp Academy</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="../assets/css/dashboard.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="./student/index.html">Student</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Dashboard</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="./student/profile.html">Perfil</a>
+                    <a href="./student/settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="./assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <div class="sidebar-header" style="display: none;">
+                <div class="sidebar-logo">
+                    <span>gmp Academy</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" href="./student/index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="./student/my-courses.html">
+                    <i class="fas fa-book"></i> Meus Cursos
+                </a>
+                <a class="nav-item" href="./student/classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Aulas
+                </a>
+                <a class="nav-item" href="./student/course-view.html">
+                    <i class="fas fa-eye"></i> Visualizar Curso
+                </a>
+                <a class="nav-item" href="./student/lesson.html">
+                    <i class="fas fa-play-circle"></i> Lição
+                </a>
+                <a class="nav-item" href="./student/progress.html">
+                    <i class="fas fa-chart-line"></i> Progresso
+                </a>
+                <a class="nav-item" href="./student/certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="./student/downloads.html">
+                    <i class="fas fa-download"></i> Downloads
+                </a>
+                <a class="nav-item" href="./student/profile.html">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a class="nav-item" href="./student/settings.html">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+            </nav>
+        </div>
+        
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+                    <!-- Dashboard Header -->
+                    <div class="card shadow-hover animate-fade-in-up" style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); border: none; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                        <!-- Decorative Elements -->
+                        <div style="position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.5;"></div>
+                        <div style="position: absolute; bottom: -20px; left: -20px; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.3;"></div>
+                        
+                        <div class="card-body" style="position: relative; color: white; padding: 2rem; z-index: 2;">
+                            <div class="d-flex align-items-center justify-content-between" style="flex-wrap: wrap; gap: 2rem;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <i class="fas fa-tachometer-alt" style="font-size: 24px; color: white;"></i>
+                                    </div>
+                                    <div>
+                                        <h1 style="margin: 0 0 0.5rem 0; font-weight: 700; font-size: 1.8rem;">Dashboard</h1>
+                                        <p style="margin: 0 0 1rem 0; opacity: 0.9;">Visão geral do sistema</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Empty Dashboard Content Area -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="width: 40px; height: 40px; background: var(--primary-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-chart-line" style="color: white; font-size: 16px;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gradient" style="margin: 0; font-size: 20px;">Conteúdo do Dashboard</h3>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Área principal para widgets e métricas</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="app-container">
+                                <div class="header-section">
+                                    <div class="header-content">
+                                        <h1 class="app-title">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            gmp Academy
+                                        </h1>
+                                        <p class="subtitle">Sua jornada para dominar o inglês começa aqui!</p>
+                                    </div>
+                                </div>
+
+                                <div class="stats-bar">
+                                    <div class="stat-item">
+                                        <div class="stat-icon fire">
+                                            <i class="fas fa-fire"></i>
+                                        </div>
+                                        <div class="stat-value">5</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-icon gems">
+                                            <i class="fas fa-gem"></i>
+                                        </div>
+                                        <div class="stat-value">50</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-icon hearts">
+                                            <i class="fas fa-heart"></i>
+                                        </div>
+                                        <div class="stat-value">5</div>
+                                    </div>
+                                </div>
+
+                                <div class="section-header">
+                                    <span>SEÇÃO 3, UNIDADE 28</span>
+                                    <span class="section-number">Lidar com uma emergência</span>
+                                </div>
+
+                                <div class="learning-path" id="learningPath">
+                                    <svg class="path-svg" id="pathSvg"></svg>
+                                    
+                                    <!-- Character images scattered throughout the path -->
+                                    <img src="./assets/images/dunkey%20nonono%20transp.svg" alt="Character" class="learning-character character-1">
+                                    <img src="./assets/images/dunkey%20vroom%20transp.svg" alt="Character" class="learning-character character-2">
+                                    <img src="./assets/images/dunkey%20dance%20transp.svg" alt="Character" class="learning-character character-3">
+                                    <img src="./assets/images/dunkey%20kiss%20transp.svg" alt="Character" class="learning-character character-4">
+                                    <img src="./assets/images/dunkey%20nonono%20transp.svg" alt="Character" class="learning-character character-5">
+                                    <img src="./assets/images/dunkey%20vroom%20transp.svg" alt="Character" class="learning-character character-6">
+                                    <img src="./assets/images/dunkey%20dance%20transp.svg" alt="Character" class="learning-character character-7">
+                                    <img src="./assets/images/dunkey%20kiss%20transp.svg" alt="Character" class="learning-character character-8">
+                                    <img src="./assets/images/dunkey%20nonono%20transp.svg" alt="Character" class="learning-character character-9">
+                                    <img src="./assets/images/dunkey%20vroom%20transp.svg" alt="Character" class="learning-character character-10">
+                                </div>
+
+                                <!-- Bottom navigation removed -->
+
+                                <!-- Popups removed -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script defer="defer" src="./assets/js/main.js" type="text/javascript"></script>
+    <script>
+        // Todas as 71 lições com conteúdo exato
+        const units = [
+            { id: 1, title: "Greetings", description: "Aprenda a cumprimentar e se despedir em inglês. O primeiro passo para qualquer conversa!", progress: 20 },
+            { id: 2, title: "Alfabeto", description: "Domine as letras e sons do alfabeto em inglês para soletrar palavras e nomes corretamente.", progress: 80 },
+            { id: 3, title: "Comprimentar alguém", description: "Aprenda expressões formais e informais para conhecer e cumprimentar pessoas.", progress: 100 },
+            { id: 4, title: "Os substantivos", description: "Entenda o que são substantivos e como eles funcionam em inglês, incluindo gênero e número.", progress: 0 },
+            { id: 5, title: "Plurais irregulares + regras", description: "A maioria dos plurais termina em \"s\", mas muitos não! Aprenda as exceções e regras especiais.", progress: 0 },
+            { id: 6, title: "THE", description: "Aprenda a usar o artigo definido \"the\" para se referir a coisas específicas.", progress: 0 },
+            { id: 7, title: "A-AN", description: "Aprenda a usar os artigos indefinidos \"a\" e \"an\" para falar de coisas em geral.", progress: 0 },
+            { id: 8, title: "This that these those", description: "Aprenda a usar os pronomes demonstrativos para apontar para coisas próximas e distantes.", progress: 0 },
+            { id: 9, title: "Os adjetivos", description: "Aprenda a usar adjetivos para descrever pessoas, lugares e coisas.", progress: 0 },
+            { id: 10, title: "A ordem dos adjetivos", description: "Quando se usa mais de um adjetivo, eles seguem uma ordem específica. Aprenda qual é!", progress: 0 },
+            { id: 11, title: "Os dias da semana", description: "Aprenda os nomes dos dias da semana em inglês e como usá-los em frases.", progress: 0 },
+            { id: 12, title: "Os pronomes pessoais I you he she it", description: "Aprenda a usar os pronomes pessoais do caso reto (subject pronouns) em inglês.", progress: 0 },
+            { id: 13, title: "Verbo TO BE afirmativo", description: "Aprenda a forma afirmativa do verbo mais fundamental do inglês: \"to be\" (ser/estar).", progress: 0 },
+            { id: 14, title: "Verbo TO BE negativo", description: "Aprenda a fazer frases negativas com o verbo \"to be\" (ser/estar).", progress: 0 },
+            { id: 15, title: "Verbo TO BE interrogativo", description: "Aprenda a fazer perguntas com o verbo \"to be\" (ser/estar).", progress: 0 },
+            { id: 16, title: "Verbo TO BE interrogativo negativo", description: "Aprenda a fazer perguntas negativas com o verbo \"to be\", usadas para confirmar informações ou expressar surpresa.", progress: 0 },
+            { id: 17, title: "Present Simple TO WORK - afirmativo", description: "Aprenda a usar o Present Simple para falar sobre rotinas, fatos e hábitos.", progress: 0 },
+            { id: 18, title: "Present Simple TO WORK - negativo", description: "Aprenda a formar frases negativas no Present Simple usando \"do not\" (don't) e \"does not\" (doesn't).", progress: 0 },
+            { id: 19, title: "Present Simple TO WORK - interrogativo", description: "Aprenda a fazer perguntas no Present Simple usando os auxiliares \"Do\" e \"Does\".", progress: 0 },
+            { id: 20, title: "Present simple TO WORK - interrogativo negativo", description: "Aprenda a fazer perguntas negativas no Present Simple, que são usadas para confirmar ou expressar surpresa.", progress: 0 },
+            { id: 21, title: "Verbo TO HAVE afirmativo", description: "Aprenda a usar o verbo \"to have\" (ter/possuir) na forma afirmativa.", progress: 0 },
+            { id: 22, title: "Verbo TO HAVE negativo", description: "Aprenda as duas formas principais de negar o verbo \"to have\" em inglês.", progress: 0 },
+            { id: 23, title: "Verbo TO HAVE interrogativo", description: "Aprenda as duas formas principais de fazer perguntas com o verbo \"to have\".", progress: 0 },
+            { id: 24, title: "Verbo TO HAVE interrogativo negativo", description: "Aprenda a fazer perguntas negativas com \"to have\" para expressar surpresa ou confirmar uma suposição.", progress: 0 },
+            { id: 25, title: "Verbo TO HAVE com Do Does Don't Doesn't", description: "Uma revisão completa do verbo \"to have\" no Present Simple, consolidando todas as formas.", progress: 0 },
+            { id: 26, title: "Verbo NEED afirmativo negativo e interrogativo", description: "Aprenda a usar o verbo \"need\" (precisar) para expressar necessidades e requisitos.", progress: 0 },
+            { id: 27, title: "Present Continuous afirmativo", description: "Aprenda a usar o Present Continuous para falar sobre ações acontecendo agora.", progress: 0 },
+            { id: 28, title: "Present Continuous negativo", description: "Aprenda a formar frases negativas no Present Continuous para dizer o que não está acontecendo.", progress: 0 },
+            { id: 29, title: "Present Continuous interrogativo", description: "Aprenda a fazer perguntas sobre ações que estão acontecendo no momento.", progress: 0 },
+            { id: 30, title: "Present Continuous negativo interrogativo", description: "Aprenda a usar a forma interrogativa-negativa para expressar surpresa sobre uma ação em progresso.", progress: 0 },
+            { id: 31, title: "Esquema resumido presente simple vs continuous", description: "Uma revisão rápida para decidir quando usar o Present Simple e quando usar o Present Continuous.", progress: 0 },
+            { id: 32, title: "Quando se usa present simple", description: "Aprofunde seu conhecimento sobre os usos específicos do Present Simple, incluindo horários e fatos.", progress: 0 },
+            { id: 33, title: "Quando se usa present continuous", description: "Aprofunde-se nos usos do Present Continuous, incluindo situações temporárias e planos futuros.", progress: 0 },
+            { id: 34, title: "Futuro com present simple", description: "Aprenda a usar o Present Simple para falar sobre eventos futuros que fazem parte de um horário ou programação.", progress: 0 },
+            { id: 35, title: "Futuro com present continuous", description: "Use o Present Continuous para falar sobre seus planos e arranjos futuros já confirmados.", progress: 0 },
+            { id: 36, title: "Futuro com WILL - afirmativo", description: "Aprenda a usar \"will\" para falar sobre decisões espontâneas, previsões e promessas.", progress: 0 },
+            { id: 37, title: "Futuro com WILL - negativo", description: "Aprenda a usar \"will not\" e a contração \"won't\" para falar sobre o futuro na negativa.", progress: 0 },
+            { id: 38, title: "Futuro com WILL - interrogativo", description: "Aprenda a fazer perguntas sobre o futuro usando \"Will\".", progress: 0 },
+            { id: 39, title: "Futuro WILL - interrogativo negativo", description: "Aprenda a fazer perguntas negativas com \"Won't\" para expressar surpresa, convites ou críticas.", progress: 0 },
+            { id: 40, title: "Verbo CAN afirmativo negativo interrogativo", description: "Aprenda a usar o verbo modal \"can\" para falar sobre habilidade, permissão e possibilidade.", progress: 0 },
+            { id: 41, title: "Verbo COULD afirmativo negativo interrogativo", description: "Aprenda a usar \"could\" para falar de habilidades passadas, fazer pedidos educados e falar de possibilidades.", progress: 0 },
+            { id: 42, title: "Verbo MAY/MIGHT afirmativo negativo interrogativo", description: "Aprenda a usar \"may\" e \"might\" para falar sobre possibilidades e pedir permissão formalmente.", progress: 0 },
+            { id: 43, title: "Verbo WOULD afirmativo negativo interrogativo", description: "Aprenda a usar \"would\" para situações hipotéticas, pedidos educados e falar do futuro no passado.", progress: 0 },
+            { id: 44, title: "Verbo SHOULD afirmativo negativo interrogativo", description: "Aprenda a usar \"should\" para dar conselhos, fazer recomendações e expressar expectativas.", progress: 0 },
+            { id: 45, title: "MUST", description: "Aprenda a usar \"must\" para expressar obrigação forte, necessidade e deduções lógicas.", progress: 0 },
+            { id: 46, title: "WH Questions", description: "Aprenda a fazer perguntas de informação usando as \"Wh-words\".", progress: 0 },
+            { id: 47, title: "Dizendo a hora", description: "Aprenda as diferentes maneiras de perguntar e dizer as horas em inglês.", progress: 0 },
+            { id: 48, title: "Adjetivos possessivos", description: "Aprenda a usar \"my\", \"your\", \"his\", \"her\", \"its\", \"our\" e \"their\" para indicar posse.", progress: 0 },
+            { id: 49, title: "Pronomes possessivos", description: "Aprenda a usar \"mine\", \"yours\", \"his\", \"hers\", \"ours\" e \"theirs\" para substituir um substantivo.", progress: 0 },
+            { id: 50, title: "Possessive case 's", description: "Aprenda a usar o 's (caso possessivo) para mostrar posse, principalmente com pessoas.", progress: 0 },
+            { id: 51, title: "Pronomes objeto", description: "Aprenda a usar \"me\", \"you\", \"him\", \"her\", \"it\", \"us\", \"them\" como o objeto de um verbo ou preposição.", progress: 0 },
+            { id: 52, title: "Preposições OF, ON, IN, AT, TO, FOR, FROM", description: "Domine o uso das preposições mais comuns em inglês para tempo, lugar e propósito.", progress: 0 },
+            { id: 53, title: "Advérbios de frequência", description: "Aprenda a usar \"always\", \"usually\", \"often\", \"sometimes\", \"rarely\" e \"never\" para descrever com que frequência você faz as coisas.", progress: 0 },
+            { id: 54, title: "Rotinas diárias", description: "Aprenda vocabulário e frases para descrever sua rotina diária.", progress: 0 },
+            { id: 55, title: "Adjetivos comparativos", description: "Aprenda a comparar duas coisas usando adjetivos comparativos.", progress: 0 },
+            { id: 56, title: "Adjetivos superlativos", description: "Aprenda a usar adjetivos superlativos para descrever o máximo de uma qualidade em um grupo.", progress: 0 },
+            { id: 57, title: "Advérbios em ...ly", description: "Aprenda a transformar adjetivos em advérbios para descrever como uma ação é feita.", progress: 0 },
+            { id: 58, title: "Some/Any", description: "Aprenda a usar \"some\" e \"any\" para falar de quantidades indefinidas.", progress: 0 },
+            { id: 59, title: "How much how many how long how far", description: "Aprenda a fazer perguntas sobre quantidade, duração e distância.", progress: 0 },
+            { id: 60, title: "Countable uncountable nouns", description: "Entenda a diferença crucial entre substantivos contáveis e incontáveis.", progress: 0 },
+            { id: 61, title: "Quantifiers much little a bit of many a lot lots plenty few", description: "Aprenda a usar diferentes quantificadores para expressar quantidade.", progress: 0 },
+            { id: 62, title: "Past Simple verbo TO BE", description: "Aprenda a usar \"was\" e \"were\" para falar sobre o passado.", progress: 0 },
+            { id: 63, title: "Past Simple verbo TO WORK", description: "Aprenda a falar de ações concluídas no passado com verbos regulares.", progress: 0 },
+            { id: 64, title: "Verbo TO HAVE com DIDN'T", description: "Revise o uso do verbo \"have\" no passado simples.", progress: 0 },
+            { id: 65, title: "Irregular verbs", description: "Aprenda as formas passadas dos verbos irregulares mais comuns.", progress: 0 },
+            { id: 66, title: "Past Continuous verbo TO WORK", description: "Aprenda a falar de ações que estavam em progresso em um ponto específico no passado.", progress: 0 },
+            { id: 67, title: "Encontrando alguém", description: "Aprenda frases e vocabulário úteis para marcar encontros e se apresentar.", progress: 0 },
+            { id: 68, title: "Países e nacionalidades", description: "Aprenda os nomes de países comuns e como dizer as nacionalidades correspondentes.", progress: 0 },
+            { id: 69, title: "Descrevendo alguém", description: "Aprenda vocabulário para descrever a aparência física e a personalidade de alguém.", progress: 0 },
+            { id: 70, title: "No avião", description: "Aprenda vocabulário e frases úteis para usar durante um voo.", progress: 0 },
+            { id: 71, title: "No hotel", description: "Aprenda vocabulário e frases para fazer check-in e se hospedar em um hotel.", progress: 0 }
+        ];
+
+        // Função para criar o caminho de aprendizagem
+        function createLearningPath() {
+            const pathContainer = document.getElementById('learningPath');
+            const svg = document.getElementById('pathSvg');
+            const containerWidth = pathContainer.offsetWidth;
+            
+            // Limpar conteúdo existente
+            pathContainer.querySelectorAll('.unit-node, .character-section, .practice-area, .treasure-section').forEach(el => el.remove());
+            svg.innerHTML = '';
+            
+            // Calcular dimensões do caminho
+            const pathHeight = 11600;
+            const segmentHeight = 160; // Espaçamento generoso para evitar sobreposição
+            const leftX = 60;
+            const centerX = containerWidth / 2;
+            const rightX = containerWidth - 60;
+            
+            // Criar SVG path
+            const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            let pathData = `M ${centerX} 50`;
+            
+            // Criar caminho zigue-zague
+            units.forEach((unit, index) => {
+                const y = 50 + (index + 1) * segmentHeight;
+                let x;
+                
+                // Padrão: left, center, right, center, left, center, right...
+                const positionPattern = index % 4;
+                switch(positionPattern) {
+                    case 0:
+                        x = leftX;
+                        break;
+                    case 1:
+                        x = centerX;
+                        break;
+                    case 2:
+                        x = rightX;
+                        break;
+                    case 3:
+                        x = centerX;
+                        break;
+                }
+                
+                // Adicionar curva suave
+                if (index > 0) {
+                    const prevY = 50 + index * segmentHeight;
+                    const prevX = index === 1 ? centerX : 
+                        (index - 1) % 4 === 0 ? leftX :
+                        (index - 1) % 4 === 2 ? rightX : centerX;
+                    
+                    const controlX1 = prevX;
+                    const controlY1 = prevY + segmentHeight / 3;
+                    const controlX2 = x;
+                    const controlY2 = prevY + 2 * segmentHeight / 3;
+                    
+                    pathData += ` C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${x} ${y}`;
+                } else {
+                    pathData += ` L ${x} ${y}`;
+                }
+            });
+            
+            pathElement.setAttribute('d', pathData);
+            pathElement.setAttribute('stroke', '#58cc02');
+            pathElement.setAttribute('stroke-width', '4');
+            pathElement.setAttribute('fill', 'none');
+            pathElement.setAttribute('stroke-dasharray', '10, 5');
+            pathElement.setAttribute('opacity', '0.6');
+            svg.appendChild(pathElement);
+            
+            // Criar nós das unidades
+            units.forEach((unit, index) => {
+                const y = 50 + (index + 1) * segmentHeight;
+                let x;
+                let position;
+                
+                // Determinar posição
+                const positionPattern = index % 4;
+                switch(positionPattern) {
+                    case 0:
+                        x = leftX;
+                        position = 'left';
+                        break;
+                    case 1:
+                        x = centerX;
+                        position = 'center';
+                        break;
+                    case 2:
+                        x = rightX;
+                        position = 'right';
+                        break;
+                    case 3:
+                        x = centerX;
+                        position = 'center';
+                        break;
+                }
+                
+                // Criar nó da unidade
+                const unitNode = document.createElement('div');
+                unitNode.className = `unit-node ${position}`;
+                
+                // Determinar status do círculo
+                let circleClass = 'available';
+                if (unit.progress === 100) {
+                    circleClass = 'completed';
+                } else if (unit.progress > 0) {
+                    circleClass = 'in-progress';
+                } else if (index > 0 && units[index - 1].progress < 100) {
+                    circleClass = 'locked';
+                }
+                
+                // Selecionar ícone apropriado
+                let icon = "fa-book";
+                if (unit.title.includes("TO BE") || unit.title.includes("TO HAVE") || unit.title.includes("TO WORK") || unit.title.includes("CAN") || unit.title.includes("COULD") || unit.title.includes("MAY") || unit.title.includes("MIGHT") || unit.title.includes("WOULD") || unit.title.includes("SHOULD") || unit.title.includes("MUST") || unit.title.includes("NEED")) {
+                    icon = "fa-language";
+                } else if (unit.title.includes("Present") || unit.title.includes("Past") || unit.title.includes("Futuro")) {
+                    icon = "fa-clock";
+                } else if (unit.title.includes("Questions") || unit.title.includes("interrogativo")) {
+                    icon = "fa-question-circle";
+                } else if (unit.title.includes("Alfabeto")) {
+                    icon = "fa-font";
+                } else if (unit.title.includes("substantivos") || unit.title.includes("adjetivos") || unit.title.includes("pronomes")) {
+                    icon = "fa-spell-check";
+                } else if (unit.title.includes("Plurais")) {
+                    icon = "fa-shapes";
+                } else if (unit.title.includes("THE") || unit.title.includes("A-AN")) {
+                    icon = "fa-certificate";
+                } else if (unit.title.includes("This") || unit.title.includes("that")) {
+                    icon = "fa-hand-point-up";
+                } else if (unit.title.includes("dias")) {
+                    icon = "fa-calendar-day";
+                } else if (unit.title.includes("Preposições")) {
+                    icon = "fa-map-marker-alt";
+                } else if (unit.title.includes("Advérbios")) {
+                    icon = "fa-gauge-high";
+                } else if (unit.title.includes("Quantifiers") || unit.title.includes("Some/Any") || unit.title.includes("How much")) {
+                    icon = "fa-sort-amount-up";
+                } else if (unit.title.includes("Verbo")) {
+                    icon = "fa-registered";
+                } else if (unit.title.includes("Irregular")) {
+                    icon = "fa-shuffle";
+                } else if (unit.title.includes("Encontrando") || unit.title.includes("Países") || unit.title.includes("Descrevendo") || unit.title.includes("aviao") || unit.title.includes("hotel")) {
+                    icon = "fa-comments";
+                } else if (unit.title.includes("Dizendo")) {
+                    icon = "fa-clock";
+                }
+                
+                unitNode.innerHTML = `
+                    <div class="unit-circle ${circleClass}">
+                        <i class="fas ${icon}"></i>
+                        <div class="unit-number">${unit.id}</div>
+                    </div>
+                    <div class="unit-content">
+                        <div class="unit-title">${unit.title}</div>
+                        <div class="unit-description">${unit.description}</div>
+                        <div class="unit-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${unit.progress}%"></div>
+                            </div>
+                            <div class="progress-text">${unit.progress}%</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Posicionar o nó
+                if (position === 'left') {
+                    unitNode.style.left = `${x}px`;
+                    unitNode.style.top = `${y - 30}px`;
+                } else if (position === 'right') {
+                    unitNode.style.right = `${containerWidth - x}px`;
+                    unitNode.style.top = `${y - 30}px`;
+                } else {
+                    unitNode.style.left = `${x - 30}px`;
+                    unitNode.style.top = `${y - 30}px`;
+                }
+                
+                // Adicionar evento de clique
+                unitNode.addEventListener('click', function() {
+                    if (circleClass !== 'locked') {
+                        showNotification('Unidade Selecionada', unit.title);
+                    } else {
+                        showNotification('Unidade Bloqueada', 'Complete as unidades anteriores para desbloquear');
+                    }
+                });
+                
+                pathContainer.appendChild(unitNode);
+            });
+            
+            // Adicionar elementos especiais
+            // Personagem (após unidade 15)
+            const characterSection = document.createElement('div');
+            characterSection.className = 'character-section';
+            characterSection.style.left = `${centerX}px`;
+            characterSection.style.top = `${50 + 16 * segmentHeight}px`;
+            characterSection.style.transform = 'translateX(-50%)';
+            
+            characterSection.innerHTML = `
+                <div class="character">
+                    <i class="fas fa-owl"></i>
+                    <div class="character-jump-rope"></div>
+                </div>
+                <div class="character-text">Continue assim!</div>
+            `;
+            
+            pathContainer.appendChild(characterSection);
+            
+            // Área de prática (após unidade 30)
+            const practiceArea = document.createElement('div');
+            practiceArea.className = 'practice-area';
+            practiceArea.style.left = `${centerX}px`;
+            practiceArea.style.top = `${50 + 31 * segmentHeight}px`;
+            practiceArea.style.transform = 'translateX(-50%)';
+            
+            practiceArea.innerHTML = `
+                <div class="practice-container">
+                    <div class="practice-title">Área de Prática</div>
+                    <div class="practice-buttons">
+                        <div class="practice-btn books" onclick="showNotification('Prática', 'Exercícios de leitura')">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="practice-btn dumbbell" onclick="showNotification('Prática', 'Exercícios de reforço')">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div class="practice-btn video" onclick="showNotification('Prática', 'Aulas em vídeo')">
+                            <i class="fas fa-video"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            pathContainer.appendChild(practiceArea);
+            
+            // Baú do tesouro (após unidade 45)
+            const treasureSection = document.createElement('div');
+            treasureSection.className = 'treasure-section';
+            treasureSection.style.left = `${centerX}px`;
+            treasureSection.style.top = `${50 + 46 * segmentHeight}px`;
+            treasureSection.style.transform = 'translateX(-50%)';
+            
+            treasureSection.innerHTML = `
+                <div class="treasure-box" onclick="openTreasure()">
+                    <i class="fas fa-treasure-chest"></i>
+                </div>
+                <div class="treasure-text">Abra o baú!</div>
+            `;
+            
+            pathContainer.appendChild(treasureSection);
+            
+            // Atualizar altura do container
+            pathContainer.style.height = `${pathHeight + 100}px`;
+            
+            // Criar mini mapa
+            createMiniMap();
+        }
+
+        // Função para criar mini mapa
+        function createMiniMap() {
+            const miniMapContent = document.getElementById('miniMapContent');
+            miniMapContent.innerHTML = '';
+            
+            const mapWidth = miniMapContent.offsetWidth;
+            const mapHeight = miniMapContent.offsetHeight;
+            const zigzagWidth = mapWidth / 2;
+            const segmentHeight = mapHeight / (units.length + 3);
+            
+            // Desenhar mini caminho
+            const miniPath = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            miniPath.setAttribute('width', mapWidth);
+            miniPath.setAttribute('height', mapHeight);
+            miniPath.style.position = 'absolute';
+            miniPath.style.top = '0';
+            miniPath.style.left = '0';
+            
+            const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            let pathData = `M ${mapWidth/2} 0`;
+            
+            for (let i = 0; i < units.length + 3; i++) {
+                const y = (i + 1) * segmentHeight;
+                const x = i % 2 === 0 ? mapWidth/2 - zigzagWidth/2 : mapWidth/2 + zigzagWidth/2;
+                pathData += ` L ${x} ${y}`;
+            }
+            
+            pathElement.setAttribute('d', pathData);
+            pathElement.setAttribute('stroke', '#58cc02');
+            pathElement.setAttribute('stroke-width', '2');
+            pathElement.setAttribute('fill', 'none');
+            pathElement.setAttribute('opacity', '0.5');
+            miniPath.appendChild(pathElement);
+            miniMapContent.appendChild(miniPath);
+            
+            // Adicionar pontos para as unidades
+            units.forEach((unit, index) => {
+                const y = (index + 1) * segmentHeight;
+                const x = index % 2 === 0 ? mapWidth/2 - zigzagWidth/2 : mapWidth/2 + zigzagWidth/2;
+                
+                const dot = document.createElement('div');
+                dot.className = 'mini-map-dot';
+                
+                if (unit.progress === 100) {
+                    dot.classList.add('completed');
+                } else if (unit.progress > 0) {
+                    dot.classList.add('current');
+                }
+                
+                dot.style.left = `${x - 3}px`;
+                dot.style.top = `${y - 3}px`;
+                
+                miniMapContent.appendChild(dot);
+            });
+        }
+
+        // Função para mostrar notificação
+        function showNotification(title, message) {
+            const toast = document.getElementById('toast');
+            const toastTitle = toast.querySelector('.toast-title');
+            const toastMessage = toast.querySelector('.toast-message');
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Função para abrir baú do tesouro
+        function openTreasure() {
+            showNotification('Tesouro Aberto!', 'Você ganhou 10 gemas!');
+        }
+
+        // Toggle do mini mapa
+        document.getElementById('progressMap').addEventListener('click', function() {
+            document.getElementById('miniMap').classList.toggle('show');
+        });
+
+        // Event listeners para navegação
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                const label = this.querySelector('.nav-label').textContent;
+                showNotification('Navegação', `Você clicou em ${label}`);
+            });
+        });
+
+        // Inicializar ao carregar a página
+        window.addEventListener('load', function() {
+            createLearningPath();
+            
+            // Mostrar notificação de boas-vindas
+            setTimeout(() => {
+                showNotification('Bem-vindo de volta!', 'Você está há 5 dias seguidos estudando. Continue assim!');
+            }, 1000);
+        });
+
+        // Recriar caminho ao redimensionar
+        window.addEventListener('resize', function() {
+            createLearningPath();
+        });
+    </script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

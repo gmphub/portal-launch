@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Performance - Portal GMP</title>
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    .performance-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .test-button { background:#007bff; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin:5px; }
+    .test-button:hover { background:#0056b3; }
+    .results-area { background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:15px; margin-top:15px; font-family:monospace; white-space:pre-wrap; max-height:400px; overflow-y:auto; }
+    .metric-card { background:#e9ecef; padding:15px; border-radius:8px; margin:10px 0; text-align:center; }
+    .metric-value { font-size:2rem; font-weight:bold; color:#007bff; }
+    .metric-label { color:#666; margin-top:5px; }
+    .progress-bar { width:100%; height:20px; background:#e9ecef; border-radius:10px; overflow:hidden; margin:10px 0; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#007bff,#28a745); transition:width 0.3s ease; }
+  </style>
+</head>
+<div class="test-section">
+  <h2>Exportar Resultados</h2>
+  <button class="test-button" onclick="exportCSV()">📄 Exportar CSV</button>
+  <button class="test-button" onclick="exportJSON()">🧾 Exportar JSON</button>
+</div>
+
+<script>
+function exportCSV() {
+  const allResults = Object.entries(testResults).map(([category, logs]) => {
+    return logs.map(log => `"${category}","${log.replace(/"/g, '""')}"`).join('\n');
+  }).join('\n');
+
+  const csvContent = 'data:text/csv;charset=utf-8,Categoria,Mensagem\n' + allResults;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', 'resultados_gmp.csv');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportJSON() {
+  const jsonContent = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(testResults, null, 2));
+  const link = document.createElement('a');
+  link.setAttribute('href', jsonContent);
+  link.setAttribute('download', 'resultados_gmp.json');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+</script>
+
+<body>
+  <div class="performance-container">
+    <h1>Teste de Performance do Sistema</h1>
+
+    <div class="test-section">
+      <h2>Teste de JavaScript</h2>
+      <button class="test-button" onclick="testJSPeformance()">Testar Execução JS</button>
+      <button class="test-button" onclick="testMemoryUsage()">Testar Uso de Memória</button>
+      <button class="test-button" onclick="testDOMPerformance()">Testar Manipulação DOM</button>
+      <div id="js-results" class="results-area"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Teste de Banco de Dados</h2>
+      <button class="test-button" onclick="testDatabasePerformance()">Testar Inserção</button>
+      <button class="test-button" onclick="testQueryPerformance()">Testar Consulta</button>
+      <button class="test-button" onclick="testTransactionPerformance()">Testar Transação</button>
+      <div id="db-results" class="results-area"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Teste de Segurança</h2>
+      <button class="test-button" onclick="testAuthPerformance()">Testar Autenticação</button>
+      <button class="test-button" onclick="testCryptoPerformance()">Testar Token</button>
+      <button class="test-button" onclick="testSessionPerformance()">Testar Sessão</button>
+      <div id="security-results" class="results-area"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Métricas Gerais</h2>
+      <div class="progress-bar"><div id="overall-progress" class="progress-fill" style="width:0%"></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;">
+        <div class="metric-card"><div id="js-metric" class="metric-value">-</div><div class="metric-label">JS (ms)</div></div>
+        <div class="metric-card"><div id="db-metric" class="metric-value">-</div><div class="metric-label">Banco de Dados (ms)</div></div>
+        <div class="metric-card"><div id="security-metric" class="metric-value">-</div><div class="metric-label">Segurança (ms)</div></div>
+        <div class="metric-card"><div id="memory-metric" class="metric-value">-</div><div class="metric-label">Memória (MB)</div></div>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>Teste de Estresse</h2>
+      <button class="test-button" onclick="runStressTest()">Executar Estresse</button>
+      <button class="test-button" onclick="testConcurrentOperations()">Testar Concorrência</button>
+      <div id="stress-results" class="results-area"></div>
+    </div>
+  </div>
+
+<script>
+let testResults = { js:[], db:[], security:[], stress:[] };
+
+function logResult(category, message){
+  const ts=new Date().toLocaleTimeString();
+  testResults[category].push(`[${ts}] ${message}`);
+  document.getElementById(category+'-results').innerText=testResults[category].join('\n');
+}
+function updateMetric(id,val){document.getElementById(id).innerText=val;}
+function updateProgress(p){document.getElementById('overall-progress').style.width=p+'%';}
+
+// JS tests
+async function testJSPeformance(){
+  logResult('js','Iniciando teste de JS...');
+  const start=performance.now();
+  let r=0; for(let i=0;i<1e6;i++){r+=Math.sqrt(i)*Math.sin(i);}
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('js',`Execução JS concluída em ${dur}ms`);
+  updateMetric('js-metric',dur); updateProgress(25);
+}
+async function testMemoryUsage(){
+  if(performance.memory){
+    const used=(performance.memory.usedJSHeapSize/1024/1024).toFixed(2);
+    logResult('js',`Memória usada: ${used}MB`); updateMetric('memory-metric',used);
+  } else { logResult('js','Navegador não suporta monitoramento de memória'); updateMetric('memory-metric','N/A'); }
+  updateProgress(50);
+}
+async function testDOMPerformance(){
+  const start=performance.now();
+  const c=document.createElement('div');
+  for(let i=0;i<1000;i++){const e=document.createElement('div');e.textContent=`Elemento ${i}`;c.appendChild(e);}
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('js',`Manipulação DOM concluída em ${dur}ms`); updateProgress(75);
+}
+
+// DB tests
+async function testDatabasePerformance(){
+  const start=performance.now();
+  const res=await fetch('/api/db/execute',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sql:"INSERT INTO audit_logs (id,action) VALUES (?,?)",params:["test-"+Date.now(),"perf-test"]})});
+  const data=await res.json();
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('db',`Inserção concluída em ${dur}ms, alterações: ${data.changes}`); updateMetric('db-metric',dur);
+}
+async function testQueryPerformance(){
+  const start=performance.now();
+  const res=await fetch('/api/db/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sql:"SELECT * FROM users LIMIT 5"})});
+  const data=await res.json();
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('db',`Consulta concluída em ${dur}ms, registros: ${data.rows.length}`);
+}
+async function testTransactionPerformance(){
+  const start=performance.now();
+  await testDatabasePerformance();
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('db',`Transação simulada concluída em ${dur}ms`);
+}
+
+// Segurança
+async function testAuthPerformance(){
+  const start=performance.now();
+  const res=await fetch('/api/security/validate',{headers:{'Authorization':'Bearer '+(window.securityManager?.token||'')}});
+  const data=await res.json();
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('security',`Validação de autenticação em ${dur}ms, status: ${data.valid}`); updateMetric('security-metric',dur);
+}
+async function testCryptoPerformance(){
+  const start=performance.now();
+  const token=window.securityManager?.token||'';
+  const dur=(performance.now()-start).toFixed(2);
+  logResult('security', `Token simulado em ${dur}ms`);
+}
+async function testSessionPerformance(){
+  const start=performance.now();
+  const sessionId = window.securityManager?.getSession()?.sessionId || 'sessao-teste';
+  const res = await fetch('/api/security/validate', {
+    headers: {
+      'Authorization': 'Bearer ' + (window.securityManager?.token || ''),
+      'Content-Type': 'application/json'
+    }
+  });
+  const data = await res.json();
+  const dur = (performance.now() - start).toFixed(2);
+  logResult('security', `Sessão validada em ${dur}ms, status: ${data.valid}`);
+  updateProgress(100);
+}
+
+// Teste de Estresse
+async function runStressTest(){
+  logResult('stress','Iniciando teste de estresse...');
+  const start = performance.now();
+  const requests = [];
+  for(let i=0;i<50;i++){
+    requests.push(fetch('/api/db/query',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({sql:"SELECT * FROM users WHERE email LIKE '%@gmp.com'"})
+    }));
+  }
+  const results = await Promise.all(requests);
+  const dur = (performance.now() - start).toFixed(2);
+  logResult('stress', `Teste de estresse concluído em ${dur}ms para 50 requisições simultâneas`);
+}
+
+async function testConcurrentOperations(){
+  logResult('stress','Iniciando teste de concorrência...');
+  const start = performance.now();
+  const ops = [];
+  for(let i=0;i<30;i++){
+    ops.push(fetch('/api/security/validate',{
+      headers:{'Authorization':'Bearer '+(window.securityManager?.token||'')}
+    }));
+  }
+  const results = await Promise.all(ops);
+  const dur = (performance.now() - start).toFixed(2);
+  logResult('stress', `Concorrência concluída em ${dur}ms para 30 validações simultâneas`);
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  logResult('js','Página de teste carregada');
+  logResult('db','Pronto para testes de banco de dados');
+  logResult('security','Pronto para testes de segurança');
+  logResult('stress','Pronto para testes de estresse');
+});
+</script>
+</body>
+</html>

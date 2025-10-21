@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Integração do gmp Portal</title>
+    <link rel="stylesheet" href="assets/css/gmp-portal.css">
+    <style>
+        .test-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-result { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; margin-top: 10px; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        .success { color: #28a745; } .error { color: #dc3545; } .info { color: #17a2b8; } .warning { color: #ffc107; }
+        button { background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste de Integração do gmp Portal</h1>
+
+        <div class="test-section">
+            <h2>Verificação de status do sistema</h2>
+            <button onclick="checkSystemStatus()">Verificar status do sistema</button>
+            <div id="system-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de autenticação de usuário</h2>
+            <button onclick="testUserAuth()">Testar autenticação de usuário</button>
+            <button onclick="testUserRegistration()">Testar registro de usuário</button>
+            <button onclick="testPasswordReset()">Testar redefinição de senha</button>
+            <div id="auth-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de controle de acesso a dados</h2>
+            <button onclick="testDataAccess()">Testar controle de acesso a dados</button>
+            <button onclick="testRoleBasedAccess()">Testar acesso baseado em papéis</button>
+            <button onclick="testAuditLogs()">Testar log de auditoria</button>
+            <div id="access-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de integração Oracle</h2>
+            <button onclick="testOracleIntegration()">Testar integração Oracle</button>
+            <button onclick="testDataSync()">Testar sincronização de dados</button>
+            <button onclick="testCrossDBQuery()">Testar consulta entre bancos</button>
+            <div id="oracle-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste completo de integração</h2>
+            <button onclick="runFullIntegrationTest()">Executar teste completo de integração</button>
+            <div id="full-results" class="test-result"></div>
+        </div>
+    </div>
+    <script src="assets/js/security.js"></script>
+    <script>
+        let testResults = {
+            system: [],
+            auth: [],
+            access: [],
+            oracle: [],
+            full: []
+        };
+
+        function logResult(category, message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testResults[category].push(logEntry);
+            updateResults(category);
+        }
+
+        function updateResults(category) {
+            const container = document.getElementById(category + '-results');
+            if (container) {
+                container.innerHTML = testResults[category].join('\n');
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        async function checkSystemStatus() {
+            try {
+                logResult('system', 'Iniciando verificação de status do sistema...', 'info');
+                const backendPing = await fetch('/api/security/validate', { headers: securityManager.getAuthHeaders() }).catch(() => null);
+                const backendOk = backendPing && backendPing.ok;
+                logResult('system', `Backend: ${backendOk ? 'OK' : 'Indisponível ou sem token'}`, backendOk ? 'success' : 'warning');
+
+                const status = {
+                    security: securityManager.isAuthenticated() ? 'OK' : 'NOT_AUTH',
+                    browser: navigator.userAgent,
+                    storage: typeof(Storage) !== 'undefined'
+                };
+                logResult('system', `Status do módulo de segurança: ${status.security}`, status.security === 'OK' ? 'success' : 'warning');
+                logResult('system', `Informações do navegador: ${status.browser}`, 'info');
+                logResult('system', `Suporte de armazenamento: ${status.storage}`, 'info');
+                logResult('system', 'Verificação de status concluída', 'success');
+            } catch (error) {
+                logResult('system', `Falha na verificação de status: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUserAuth() {
+            try {
+                logResult('auth', 'Iniciando teste de autenticação...', 'info');
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'test@example.com', password: '123456' })
+                });
+                const data = await res.json();
+                if (res.ok && (data.success || (data.user && data.token))) {
+                    await securityManager.createSession({ user: data.user, token: data.token });
+                    logResult('auth', `Login OK: ${JSON.stringify({ user: data.user })}`, 'success');
+                } else {
+                    logResult('auth', `Falha no login: ${data.error || 'erro'}`, 'error');
+                }
+            } catch (error) {
+                logResult('auth', `Falha no teste de autenticação: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUserRegistration() {
+            try {
+                logResult('auth', 'Iniciando teste de registro...', 'info');
+                const email = 'novo' + Date.now() + '@ex.com';
+                let res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: 'Novo Usuário', email, password: 'Senha@123' })
+                });
+                if (!res.ok) {
+                    // fallback para /api/auth/signup se existir
+                    try {
+                        res = await fetch('/api/auth/signup', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name: 'Novo Usuário', email, password: 'Senha@123' })
+                        });
+                    } catch {}
+                }
+                const data = await res.json();
+                if (res.ok && (data.success || (data.user && data.token))) {
+                    await securityManager.createSession({ user: data.user, token: data.token });
+                    logResult('auth', `Registro OK: ${JSON.stringify({ user: data.user })}`, 'success');
+                } else {
+                    logResult('auth', `Falha no registro: ${data.error || 'erro'}`, 'error');
+                }
+            } catch (error) {
+                logResult('auth', `Falha no teste de registro: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPasswordReset() {
+            try {
+                logResult('auth', 'Iniciando teste de redefinição de senha...', 'info');
+                const res = await fetch('/api/auth/request-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'test@example.com' })
+                }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('auth', `Reset OK: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    logResult('auth', 'Endpoint de reset não disponível ou falha de rede', 'warning');
+                }
+            } catch (error) {
+                logResult('auth', `Falha no teste de redefinição: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDataAccess() {
+            try {
+                logResult('access', 'Iniciando teste de controle de acesso a dados...', 'info');
+                const res = await fetch('/api/db/query', {
+                    method: 'POST',
+                    headers: securityManager.getAuthHeaders(),
+                    body: JSON.stringify({ sql: 'SELECT 1 as ok' })
+                }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('access', `Acesso OK: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    logResult('access', 'Falha ao acessar /api/db/query (token ausente ou backend indisponível)', 'warning');
+                }
+            } catch (error) {
+                logResult('access', `Falha no teste de acesso: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRoleBasedAccess() {
+            try {
+                logResult('access', 'Iniciando teste de acesso por papéis...', 'info');
+                const user = securityManager.getCurrentUser();
+                if (!user) {
+                    logResult('access', 'Sem usuário logado; efetuando login básico...', 'warning');
+                    await testUserAuth();
+                }
+                const uid = (securityManager.getCurrentUser() || {}).id || (securityManager.getCurrentUser() || {}).userId;
+                const before = await securityManager.hasPermission(uid, 'admin');
+                logResult('access', `Permissão admin antes: ${before}`, before ? 'info' : 'warning');
+                // Tenta promover localmente
+                const assign = await securityManager.assignRole(uid, 'admin');
+                if (assign.success) {
+                    const after = await securityManager.hasPermission(uid, 'admin');
+                    logResult('access', `Permissão admin depois: ${after}`, after ? 'success' : 'error');
+                } else {
+                    logResult('access', `Falha ao atribuir papel: ${assign.error}`, 'error');
+                }
+            } catch (error) {
+                logResult('access', `Falha no teste de papéis: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAuditLogs() {
+            try {
+                logResult('access', 'Iniciando teste de log de auditoria...', 'info');
+                const payload = { action: 'TEST_AUDIT', timestamp: Date.now(), user: securityManager.getCurrentUser() };
+                const res = await fetch('/api/security/audit', {
+                    method: 'POST',
+                    headers: securityManager.getAuthHeaders(),
+                    body: JSON.stringify(payload)
+                }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('access', `Auditoria OK: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    logResult('access', 'Endpoint /api/security/audit não disponível; auditoria local registrada no console', 'warning');
+                    console.log('AUDIT_LOCAL', payload);
+                }
+            } catch (error) {
+                logResult('access', `Falha no teste de auditoria: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOracleIntegration() {
+            try {
+                logResult('oracle', 'Iniciando teste de integração Oracle...', 'info');
+                const res = await fetch('/api/oracle/connect', { headers: securityManager.getAuthHeaders() }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('oracle', `Conexão Oracle: ${JSON.stringify(data)}`, data.success ? 'success' : 'warning');
+                } else {
+                    logResult('oracle', 'Endpoint /api/oracle/connect não disponível', 'warning');
+                }
+            } catch (error) {
+                logResult('oracle', `Falha no teste Oracle: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDataSync() {
+            try {
+                logResult('oracle', 'Iniciando teste de sincronização de dados...', 'info');
+                const res = await fetch('/api/oracle/sync', {
+                    method: 'POST',
+                    headers: securityManager.getAuthHeaders(),
+                    body: JSON.stringify({ sourceTable: 'oracle_table', targetTable: 'local_table', syncMode: 'full' })
+                }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('oracle', `Sincronização: ${JSON.stringify(data)}`, data.success ? 'success' : 'warning');
+                } else {
+                    logResult('oracle', 'Endpoint /api/oracle/sync não disponível', 'warning');
+                }
+            } catch (error) {
+                logResult('oracle', `Falha na sincronização: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCrossDBQuery() {
+            try {
+                logResult('oracle', 'Iniciando teste de consulta entre bancos...', 'info');
+                const res = await fetch('/api/oracle/query', {
+                    method: 'POST',
+                    headers: securityManager.getAuthHeaders(),
+                    body: JSON.stringify({ sql: 'SELECT * FROM all_tables FETCH FIRST 5 ROWS ONLY' })
+                }).catch(() => null);
+                if (res && res.ok) {
+                    const data = await res.json();
+                    logResult('oracle', `Consulta entre bancos: ${JSON.stringify(data)}`, data.success ? 'success' : 'warning');
+                } else {
+                    logResult('oracle', 'Endpoint /api/oracle/query não disponível', 'warning');
+                }
+            } catch (error) {
+                logResult('oracle', `Falha na consulta entre bancos: ${error.message}`, 'error');
+            }
+        }
+
+        async function runFullIntegrationTest() {
+            try {
+                logResult('full', 'Iniciando teste completo de integração...', 'info');
+                await checkSystemStatus();
+                await testUserAuth();
+                await testUserRegistration();
+                await testPasswordReset();
+                await testDataAccess();
+                await testRoleBasedAccess();
+                await testAuditLogs();
+                await testOracleIntegration();
+                await testDataSync();
+                await testCrossDBQuery();
+                logResult('full', 'Teste completo de integração concluído', 'success');
+            } catch (error) {
+                logResult('full', `Falha no teste completo: ${error.message}`, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            logResult('system', 'Página de teste de integração do gmp Portal carregada', 'info');
+            logResult('auth', 'Teste de autenticação pronto', 'info');
+            logResult('access', 'Teste de acesso a dados pronto', 'info');
+            logResult('oracle', 'Teste de integração Oracle pronto', 'info');
+            logResult('full', 'Teste completo de integração pronto', 'info');
+        });
+    </script>
+</body>
+</html>

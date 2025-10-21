@@ -1,0 +1,141 @@
+#!/bin/bash
+# Script para corrigir index.html do gmp-portal
+
+TARGET="/home/ubuntu/gmp-portal/index.html"
+
+# Faz backup do index atual
+cp "$TARGET" "${TARGET}.bak_$(date +%Y%m%d%H%M%S)"
+
+# Substitui o conteúdo do index.html pelo revisado
+cat > "$TARGET" <<'EOF'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gmp Portal – Centro de Verificação</title>
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; }
+    .hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; padding: 60px 0; text-align: center;
+    }
+    .cta-button {
+      background: #28a745; color: white; padding: 12px 30px;
+      border: none; border-radius: 5px; font-size: 1.1rem;
+      cursor: pointer; text-decoration: none; display: inline-block;
+      transition: background 0.3s ease;
+    }
+    .cta-button:hover { background: #218838; }
+    .test-section { padding: 60px 0; background: #f8f9fa; }
+    .test-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; }
+    .test-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px; margin-top: 30px;
+    }
+    .test-card {
+      background: white; padding: 20px; border-radius: 8px;
+      border-left: 4px solid #007bff; text-align: left;
+    }
+    .test-card h4 { margin-bottom: 10px; color: #333; }
+    .test-link {
+      background: #007bff; color: white; padding: 8px 16px;
+      border: none; border-radius: 4px; text-decoration: none;
+      display: inline-block; transition: background 0.3s ease;
+    }
+    .test-link:hover { background: #0056b3; }
+    .status-badge {
+      display: inline-block; padding: 4px 8px; border-radius: 4px;
+      font-size: 12px; font-weight: bold; margin-bottom: 10px;
+    }
+    .status-Pronto { background: #d4edda; color: #155724; }
+    footer { background: #222; color: #ccc; text-align: center; padding: 20px; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-brand"><h1>gmp Portal</h1></div>
+        <ul class="nav-menu">
+          <li><a href="#home">Início</a></li>
+          <li><a href="#test">Verificações</a></li>
+          <li><a href="#about">Sobre</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero-section">
+      <div class="hero-content">
+        <h1>Centro de Verificação do gmp Portal</h1>
+        <p>Valide os módulos do sistema em um só lugar</p>
+        <a href="#test" class="cta-button">Iniciar Verificações</a>
+      </div>
+    </section>
+
+    <section id="test" class="test-section">
+      <div class="test-container">
+        <h2>Verificações Disponíveis</h2>
+        <p>Selecione um módulo para abrir e validar</p>
+
+        <div class="test-grid">
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Dashboard de Testes</h4><a href="test-dashboard.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste Básico</h4><a href="minimal-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste de Segurança</h4><a href="security-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste de Banco de Dados</h4><a href="database-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste de Integração</h4><a href="integration-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste de Performance</h4><a href="performance-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Testes Automáticos</h4><a href="auto-test.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Resumo dos Testes</h4><a href="test-summary.html" class="test-link">Abrir</a></div>
+          <div class="test-card"><div class="status-badge status-Pronto">Teste</div><h4>Teste Oracle</h4><a href="oracle-test.html" class="test-link">Abrir</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; gmp Portal. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Rolagem suave
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Destaque da navegação
+    window.addEventListener('scroll', function() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-menu a');
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+EOF
+
+echo "✅ index.html corrigido e backup criado."
+

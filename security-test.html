@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Segurança - GMP</title>
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    .test-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .test-result { background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:10px; margin-top:10px; font-family:monospace; white-space:pre-wrap; max-height:300px; overflow-y:auto; }
+    .success { color:#28a745; }
+    .error { color:#dc3545; }
+    .info { color:#17a2b8; }
+    button { background:#007bff; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; margin:5px; }
+    button:hover { background:#0056b3; }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Teste de Segurança do Sistema</h1>
+
+    <div class="test-section">
+      <h2>Autenticação e Senha</h2>
+      <button onclick="testBasicAuth()">Testar Autenticação</button>
+      <button onclick="testPasswordValidation()">Testar Validação de Senha</button>
+      <button onclick="testTokenGeneration()">Testar Geração de Token</button>
+      <div id="basic-results" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Gerenciamento de Sessão</h2>
+      <button onclick="testSessionCreation()">Criar Sessão</button>
+      <button onclick="testSessionValidation()">Validar Sessão</button>
+      <button onclick="testSessionDestruction()">Destruir Sessão</button>
+      <div id="session-results" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Permissões e Papéis</h2>
+      <button onclick="testPermissionCheck()">Verificar Permissões</button>
+      <button onclick="testRoleAssignment()">Atribuir Papel</button>
+      <div id="permission-results" class="test-result"></div>
+    </div>
+  </div>
+
+<script src="assets/js/security.js"></script>
+<script>
+let testResults = { basic: [], session: [], permission: [] };
+
+function logResult(category, message, type = 'info') {
+  const ts = new Date().toLocaleTimeString();
+  const entry = `<div class="${type}">[${ts}] ${type.toUpperCase()}: ${message}</div>`;
+  testResults[category].push(entry);
+  document.getElementById(category + '-results').innerHTML = testResults[category].join('');
+}
+
+async function testBasicAuth() {
+  try {
+    logResult('basic', 'Iniciando teste de autenticação...', 'info');
+    const auth = await GMP_Security.authenticateUser('admin@gmp.com', 'admin123');
+    logResult('basic', `Resultado: ${JSON.stringify(auth)}`, auth.success ? 'success' : 'error');
+
+    const valid = await GMP_Security.validatePassword('admin123', 'hashed_password');
+    logResult('basic', `Validação de senha: ${valid}`, valid ? 'success' : 'error');
+  } catch (e) {
+    logResult('basic', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testPasswordValidation() {
+  try {
+    logResult('basic', 'Verificando força da senha...', 'info');
+    const strong = GMP_Security.checkPasswordStrength('Admin123!');
+    logResult('basic', `Senha forte: ${JSON.stringify(strong)}`, 'success');
+
+    const weak = GMP_Security.checkPasswordStrength('123');
+    logResult('basic', `Senha fraca: ${JSON.stringify(weak)}`, 'info');
+  } catch (e) {
+    logResult('basic', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testTokenGeneration() {
+  try {
+    logResult('basic', 'Gerando token...', 'info');
+    const token = await GMP_Security.generateToken({ userId: 'admin-fixed', role: 'ADMIN' });
+    logResult('basic', `Token: ${token.success ? token.token.substring(0, 50) + '...' : 'Falha'}`, token.success ? 'success' : 'error');
+  } catch (e) {
+    logResult('basic', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testSessionCreation() {
+  try {
+    logResult('session', 'Criando sessão...', 'info');
+    const session = await GMP_Security.createSession({ userId: 'test-user', username: 'tester', role: 'user' });
+    await GMP_Security.assignRole('test-user', 'admin');
+	
+    logResult('session', `Sessão criada: ${JSON.stringify(session)}`, session.success ? 'success' : 'error');
+  } catch (e) {
+    logResult('session', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testSessionValidation() {
+  try {
+    logResult('session', 'Validando sessão...', 'info');
+    const s = await GMP_Security.createSession({ userId: 'test-user', username: 'tester', role: 'user' });
+    const valid = await GMP_Security.validateSession(s.sessionId);
+    logResult('session', `Sessão válida: ${JSON.stringify(valid)}`, valid.success ? 'success' : 'error');
+  } catch (e) {
+    logResult('session', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testSessionDestruction() {
+  try {
+    logResult('session', 'Destruindo sessão...', 'info');
+    const s = await GMP_Security.createSession({ userId: 'test-user', username: 'tester', role: 'user' });
+    const destroyed = await GMP_Security.destroySession(s.sessionId);
+    logResult('session', `Sessão destruída: ${JSON.stringify(destroyed)}`, destroyed.success ? 'success' : 'error');
+  } catch (e) {
+    logResult('session', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testPermissionCheck() {
+  try {
+    logResult('permission', 'Verificando permissões...', 'info');
+    const perms = ['read', 'write', 'admin'];
+    for (const p of perms) {
+      const has = await GMP_Security.hasPermission('test-user', p);
+      logResult('permission', `Permissão "${p}": ${has}`, has ? 'success' : 'info');
+    }
+  } catch (e) {
+    logResult('permission', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testRoleAssignment() {
+  try {
+    logResult('permission', 'Atribuindo papel...', 'info');
+    const assign = await GMP_Security.assignRole('test-user', 'admin');
+    logResult('permission', `Papel atribuído: ${JSON.stringify(assign)}`, assign.success ? 'success' : 'error');
+
+    const role = await GMP_Security.getUserRole('test-user');
+    logResult('permission', `Papel atual: ${role}`, 'info');
+  } catch (e) {
+    logResult('permission', `Erro: ${e.message}`, 'error');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  logResult('basic', 'Página de teste de segurança carregada', 'info');
+  logResult('session', 'Sessão pronta para testes', 'info');
+  logResult('permission', 'Permissões prontas para testes', 'info');
+});
+</script>
+</body>
+</html>

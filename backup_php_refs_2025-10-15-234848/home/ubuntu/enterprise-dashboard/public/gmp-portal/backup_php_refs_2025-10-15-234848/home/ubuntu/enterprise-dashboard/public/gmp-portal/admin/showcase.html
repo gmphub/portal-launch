@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vitrine - gmp Academy Admin</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Admin</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Vitrine</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="../student/profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html" data-title="Início">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="products.html" data-title="Produtos">
+                    <i class="fas fa-box"></i> Produtos
+                </a>
+                <a class="nav-item has-submenu" href="#" data-title="Menu">
+                    <i class="fas fa-edit"></i> Gerenciar Conteúdo
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="content-manager.html" title="Visão Geral"><i class="fas fa-eye"></i>Visão Geral</a></li>
+                    <li><a class="sub-item" href="video-upload.html" title="Upload de Vídeos"><i class="fas fa-video"></i>Upload de Vídeos</a></li>
+                    <li><a class="sub-item" href="bulk-upload.html" title="Upload em Lote"><i class="fas fa-upload"></i>Upload em Lote</a></li>
+                    <li><a class="sub-item" href="media-library.html" title="Biblioteca de Mídia"><i class="fas fa-photo-video"></i>Biblioteca de Mídia</a></li>
+                </ul>
+                <a class="nav-item" href="students.html" data-title="Alunos">
+                    <i class="fas fa-users"></i> Alunos
+                </a>
+                <a class="nav-item" href="classes.html" data-title="Turmas">
+                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                </a>
+                <a class="nav-item" href="analytics.html" data-title="Analytics">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a class="nav-item" href="certificates.html" data-title="Certificados">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="gamification.html" data-title="Gamificação">
+                    <i class="fas fa-trophy"></i> Gamificação
+                </a>
+                <a class="nav-item" href="sales.html" data-title="Vendas">
+                    <i class="fas fa-dollar-sign"></i> Vendas
+                </a>
+                <a class="nav-item" href="comments.html" data-title="Comentários">
+                    <i class="fas fa-comments"></i> Comentários
+                </a>
+                <a class="nav-item active" href="showcase.html" data-title="Vitrine">
+                    <i class="fas fa-store"></i> Vitrine
+                </a>
+                <a class="nav-item has-submenu" href="#" data-title="Menu">
+                    <i class="fas fa-cog"></i> Configurações
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="settings.html" title="Configurações Gerais"><i class="fas fa-cogs"></i>Geral</a></li>
+                    <li><a class="sub-item" href="personalization.html" title="Personalização"><i class="fas fa-palette"></i>Personalização</a></li>
+                    <li><a class="sub-item" href="payment-setup.html" title="Configuração de Pagamento"><i class="fas fa-credit-card"></i>Config. Pagamento</a></li>
+                    <li><a class="sub-item" href="payment-history.html" title="Histórico de Pagamento"><i class="fas fa-history"></i>Histórico Pagamento</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+
+                    <!-- Enhanced Navigation Bar -->
+                    <div class="card shadow-hover animate-slide-in-down">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="admin-nav-tabs-container" style="display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none;">
+                                <style>
+                                    .admin-nav-tabs-container::-webkit-scrollbar { display: none; }
+                                    .admin-nav-tab { 
+                                        flex-shrink: 0; 
+                                        padding: 1rem 1.5rem; 
+                                        text-decoration: none; 
+                                        color: var(--text-secondary); 
+                                        border-bottom: 3px solid transparent; 
+                                        transition: all 0.3s ease; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        gap: 0.5rem;
+                                        font-weight: 500;
+                                    }
+                                    .admin-nav-tab:hover { 
+                                        color: var(--primary-blue); 
+                                        background: rgba(255, 107, 53, 0.1);
+                                    }
+                                    .admin-nav-tab.active { 
+                                        color: #333; 
+                                        background: linear-gradient(45deg, #ffcc00, #ff9500); 
+                                        border-bottom-color: #ffcc00; 
+                                        box-shadow: 0 2px 8px rgba(255, 204, 0, 0.3);
+                                    }
+                                </style>
+                                <a class="admin-nav-tab" href="index.html">
+                                    <i class="fas fa-home"></i> Dashboard
+                                </a>
+                                <a class="admin-nav-tab" href="products.html">
+                                    <i class="fas fa-box"></i> Produtos
+                                </a>
+                                <a class="admin-nav-tab" href="content-manager.html">
+                                    <i class="fas fa-edit"></i> Conteúdo
+                                </a>
+                                <a class="admin-nav-tab" href="students.html">
+                                    <i class="fas fa-users"></i> Alunos
+                                </a>
+                                <a class="admin-nav-tab" href="classes.html">
+                                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                                </a>
+                                <a class="admin-nav-tab" href="analytics.html">
+                                    <i class="fas fa-chart-bar"></i> Analytics
+                                </a>
+                                <a class="admin-nav-tab" href="certificates.html">
+                                    <i class="fas fa-certificate"></i> Certificados
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Header with Enhanced UX -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">
+                                        <i class="fas fa-store" style="color: var(--primary-blue); margin-right: 12px;"></i>
+                                        Vitrine de Cursos
+                                    </h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Gerencie os cursos destacados na vitrine e organize a exibição pública
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-secondary">
+                                        <i class="fas fa-eye"></i> Visualizar Vitrine
+                                    </button>
+                                    <button class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-plus-circle"></i> Adicionar à Vitrine
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Showcase Statistics -->
+                    <div class="cards-grid cards-grid-4 animate-fade-in-up">
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-blue);">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Cursos na Vitrine</h3>
+                                <div class="card-value">8</div>
+                                <p class="card-description">Cursos em destaque</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--success-green);">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Visualizações</h3>
+                                <div class="card-value">2.8K</div>
+                                <p class="card-description">Visualizações este mês</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-orange);">
+                                <i class="fas fa-mouse-pointer"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Taxa de Clique</h3>
+                                <div class="card-value">12.5%</div>
+                                <p class="card-description">CTR médio</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-purple);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Conversões</h3>
+                                <div class="card-value">156</div>
+                                <p class="card-description">Matrículas via vitrine</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Featured Courses -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-star" style="color: var(--primary-green); margin-right: 8px;"></i>
+                                Cursos em Destaque
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Individual Featured Course Cards -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+                                
+                                <!-- Course 1 - Featured -->
+                                <div style="background: var(--bg-secondary); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 6px solid var(--primary-gold);">
+                                    <!-- Course Image/Preview -->
+                                    <div style="height: 180px; background: linear-gradient(45deg, #4CAF50, #45a049); position: relative; display: flex; align-items: center; justify-content: center;">
+                                        <div style="position: absolute; top: 1rem; right: 1rem;">
+                                            <span class="badge-modern badge-warning" style="background: var(--primary-gold);">
+                                                <i class="fas fa-crown"></i> Destaque
+                                            </span>
+                                        </div>
+                                        <div style="text-align: center; color: white;">
+                                            <i class="fas fa-play-circle" style="font-size: 48px; margin-bottom: 1rem; opacity: 0.9;"></i>
+                                            <div style="font-size: 14px; opacity: 0.9;">Pré-visualização do Curso</div>
+                                        </div>
+                                        <div style="position: absolute; bottom: 1rem; left: 1rem;">
+                                            <div style="background: rgba(0,0,0,0.7); padding: 0.5rem 1rem; border-radius: 20px; font-size: 12px; color: white;">
+                                                <i class="fas fa-clock"></i> 24 aulas
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #4CAF50, #45a049); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                                <i class="fas fa-graduation-cap"></i>
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">Inglês para Iniciantes</h4>
+                                                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Curso completo de inglês básico</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(76, 175, 80, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--success-green);">4.8</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">
+                                                    <i class="fas fa-star" style="color: var(--primary-gold);"></i> Avaliação
+                                                </div>
+                                            </div>
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(33, 150, 243, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--primary-blue);">245</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">Alunos</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <div style="font-size: 18px; font-weight: bold; color: var(--primary-green);">R$ 149,90</div>
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <span style="background: var(--success-green); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 12px;">
+                                                    <i class="fas fa-check"></i> Ativo
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn-modern btn-modern-secondary btn-sm" style="flex: 1;">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button class="btn-modern btn-modern-danger btn-sm">
+                                                <i class="fas fa-times"></i> Remover
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 2 - Featured -->
+                                <div style="background: var(--bg-secondary); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 6px solid var(--primary-blue);">
+                                    <!-- Course Image/Preview -->
+                                    <div style="height: 180px; background: linear-gradient(45deg, #2196F3, #1976D2); position: relative; display: flex; align-items: center; justify-content: center;">
+                                        <div style="position: absolute; top: 1rem; right: 1rem;">
+                                            <span class="badge-modern badge-success">
+                                                <i class="fas fa-check"></i> Ativo
+                                            </span>
+                                        </div>
+                                        <div style="text-align: center; color: white;">
+                                            <i class="fas fa-microphone" style="font-size: 48px; margin-bottom: 1rem; opacity: 0.9;"></i>
+                                            <div style="font-size: 14px; opacity: 0.9;">Pré-visualização do Curso</div>
+                                        </div>
+                                        <div style="position: absolute; bottom: 1rem; left: 1rem;">
+                                            <div style="background: rgba(0,0,0,0.7); padding: 0.5rem 1rem; border-radius: 20px; font-size: 12px; color: white;">
+                                                <i class="fas fa-clock"></i> 16 aulas
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #2196F3, #1976D2); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                                <i class="fas fa-comments"></i>
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">Conversação Avançada</h4>
+                                                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Desenvolva fluência na conversação</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(33, 150, 243, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--primary-blue);">4.9</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">
+                                                    <i class="fas fa-star" style="color: var(--primary-gold);"></i> Avaliação
+                                                </div>
+                                            </div>
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(76, 175, 80, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--success-green);">128</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">Alunos</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <div style="font-size: 18px; font-weight: bold; color: var(--primary-blue);">R$ 199,90</div>
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <span style="background: var(--success-green); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 12px;">
+                                                    <i class="fas fa-check"></i> Ativo
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn-modern btn-modern-secondary btn-sm" style="flex: 1;">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button class="btn-modern btn-modern-danger btn-sm">
+                                                <i class="fas fa-times"></i> Remover
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Course 3 - Pending -->
+                                <div style="background: var(--bg-secondary); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 6px solid var(--warning-yellow);">
+                                    <!-- Course Image/Preview -->
+                                    <div style="height: 180px; background: linear-gradient(45deg, #FF9800, #F57C00); position: relative; display: flex; align-items: center; justify-content: center;">
+                                        <div style="position: absolute; top: 1rem; right: 1rem;">
+                                            <span class="badge-modern badge-warning">
+                                                <i class="fas fa-clock"></i> Pendente
+                                            </span>
+                                        </div>
+                                        <div style="text-align: center; color: white;">
+                                            <i class="fas fa-book" style="font-size: 48px; margin-bottom: 1rem; opacity: 0.9;"></i>
+                                            <div style="font-size: 14px; opacity: 0.9;">Pré-visualização do Curso</div>
+                                        </div>
+                                        <div style="position: absolute; bottom: 1rem; left: 1rem;">
+                                            <div style="background: rgba(0,0,0,0.7); padding: 0.5rem 1rem; border-radius: 20px; font-size: 12px; color: white;">
+                                                <i class="fas fa-clock"></i> 20 aulas
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #FF9800, #F57C00); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                                <i class="fas fa-spell-check"></i>
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">Gramática Essencial</h4>
+                                                <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Fundamentos da gramática inglesa</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(158, 158, 158, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--text-secondary);">--</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">
+                                                    <i class="fas fa-star" style="color: var(--text-secondary);"></i> Avaliação
+                                                </div>
+                                            </div>
+                                            <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+                                                <div style="font-size: 16px; font-weight: bold; color: var(--warning-yellow);">0</div>
+                                                <div style="font-size: 12px; color: var(--text-secondary);">Alunos</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                            <div style="font-size: 18px; font-weight: bold; color: var(--warning-yellow);">R$ 129,90</div>
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <span style="background: var(--warning-yellow); color: white; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 12px;">
+                                                    <i class="fas fa-clock"></i> Pendente
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button class="btn-modern btn-modern-success btn-sm" style="flex: 1;">
+                                                <i class="fas fa-check"></i> Aprovar
+                                            </button>
+                                            <button class="btn-modern btn-modern-primary btn-sm">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Showcase Management -->
+                    <div class="card shadow-hover animate-slide-in-right">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-cog" style="color: var(--primary-orange); margin-right: 8px;"></i>
+                                Configurações da Vitrine
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                                    <div class="form-group">
+                                        <label style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Layout da Vitrine</label>
+                                        <select class="form-control" style="border-radius: 6px;">
+                                            <option value="grid" selected>Grade (3 colunas)</option>
+                                            <option value="carousel">Carrossel</option>
+                                            <option value="list">Lista</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Máximo de Cursos</label>
+                                        <select class="form-control" style="border-radius: 6px;">
+                                            <option value="6">6 cursos</option>
+                                            <option value="9" selected>9 cursos</option>
+                                            <option value="12">12 cursos</option>
+                                            <option value="unlimited">Ilimitado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 2rem;">
+                                    <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Opções de Exibição</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div>
+                                                <strong>Mostrar Preços</strong>
+                                                <div style="font-size: 14px; color: var(--text-secondary);">Exibir valores dos cursos</div>
+                                            </div>
+                                            <label class="switch">
+                                                <input type="checkbox" checked/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div>
+                                                <strong>Avaliações</strong>
+                                                <div style="font-size: 14px; color: var(--text-secondary);">Mostrar notas e comentários</div>
+                                            </div>
+                                            <label class="switch">
+                                                <input type="checkbox" checked/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div>
+                                                <strong>Número de Alunos</strong>
+                                                <div style="font-size: 14px; color: var(--text-secondary);">Quantos alunos matriculados</div>
+                                            </div>
+                                            <label class="switch">
+                                                <input type="checkbox" checked/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div>
+                                                <strong>Promoções</strong>
+                                                <div style="font-size: 14px; color: var(--text-secondary);">Destacar ofertas especiais</div>
+                                            </div>
+                                            <label class="switch">
+                                                <input type="checkbox"/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; gap: 1rem; justify-content: end;">
+                                    <button class="btn-modern btn-modern-secondary" type="button">
+                                        <i class="fas fa-undo"></i> Restaurar Padrão
+                                    </button>
+                                    <button class="btn-modern btn-modern-primary" type="submit">
+                                        <i class="fas fa-save"></i> Salvar Configurações
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script defer src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

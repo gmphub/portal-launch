@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Integração Oracle - GMP</title>
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    .oracle-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { font-weight: bold; display: block; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    .test-button { background:#007bff; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin:5px; }
+    .test-button:hover { background:#0056b3; }
+    .results-area { background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:15px; margin-top:15px; font-family:monospace; white-space:pre-wrap; max-height:400px; overflow-y:auto; }
+    .status-indicator { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; }
+    .status-connected { background:#28a745; }
+    .status-disconnected { background:#dc3545; }
+  </style>
+</head>
+<body>
+  <div class="oracle-container">
+    <h1>Teste de Integração com Oracle</h1>
+
+    <div class="test-section">
+      <h2>Configuração de Conexão</h2>
+      <div class="form-group">
+        <label for="oracle-user">Usuário Oracle:</label>
+        <input type="text" id="oracle-user" value="gmp_user">
+      </div>
+      <div class="form-group">
+        <label for="oracle-password">Senha:</label>
+        <input type="password" id="oracle-password" value="password123">
+      </div>
+      <div class="form-group">
+        <label for="oracle-host">Host:</label>
+        <input type="text" id="oracle-host" value="localhost">
+      </div>
+      <div class="form-group">
+        <label for="oracle-port">Porta:</label>
+        <input type="text" id="oracle-port" value="1521">
+      </div>
+      <div class="form-group">
+        <label for="oracle-service">Serviço:</label>
+        <input type="text" id="oracle-service" value="ORCL">
+      </div>
+      <button class="test-button" onclick="testOracleConnection()">Testar Conexão</button>
+      <button class="test-button" onclick="saveOracleConfig()">Salvar Configuração</button>
+      <div id="connection-status">
+        <span class="status-indicator status-disconnected"></span>
+        <span id="status-text">Desconectado</span>
+      </div>
+      <div id="connection-results" class="results-area"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Operações Oracle</h2>
+      <button class="test-button" onclick="testOracleQuery()">Consulta</button>
+      <button class="test-button" onclick="testOracleExecute()">Execução</button>
+      <button class="test-button" onclick="testOracleProcedure()">Procedimento</button>
+      <button class="test-button" onclick="testOracleTransaction()">Transação</button>
+      <div id="operation-results" class="results-area"></div>
+    </div>
+  </div>
+
+<script src="assets/js/security.js"></script>
+<script src="assets/js/database.js"></script>
+<script>
+let oracleConfig = {
+  user: 'gmp_user',
+  password: 'password123',
+  host: 'localhost',
+  port: '1521',
+  service: 'ORCL'
+};
+
+function logResult(id, message, type = 'info') {
+  const ts = new Date().toLocaleTimeString();
+  const entry = `<div class="${type}">[${ts}] ${type.toUpperCase()}: ${message}</div>`;
+  const container = document.getElementById(id);
+  container.innerHTML += entry;
+  container.scrollTop = container.scrollHeight;
+}
+
+function updateConnectionStatus(connected, message) {
+  const indicator = document.querySelector('.status-indicator');
+  const text = document.getElementById('status-text');
+  indicator.className = 'status-indicator ' + (connected ? 'status-connected' : 'status-disconnected');
+  text.textContent = message;
+}
+
+function getOracleConfig() {
+  return {
+    user: document.getElementById('oracle-user').value,
+    password: document.getElementById('oracle-password').value,
+    connectString: `${document.getElementById('oracle-host').value}:${document.getElementById('oracle-port').value}/${document.getElementById('oracle-service').value}`
+  };
+}
+
+function saveOracleConfig() {
+  oracleConfig = getOracleConfig();
+  localStorage.setItem('oracle_config', JSON.stringify(oracleConfig));
+  logResult('connection-results', 'Configuração Oracle salva com sucesso', 'success');
+}
+
+async function testOracleConnection() {
+  logResult('connection-results', 'Testando conexão com Oracle...', 'info');
+  try {
+    const config = getOracleConfig();
+    const result = await GMP_Database.connectOracle(config);
+    if (result.success) {
+      logResult('connection-results', `Conexão bem-sucedida: ${result.message}`, 'success');
+      updateConnectionStatus(true, 'Conectado');
+    } else {
+      logResult('connection-results', `Falha na conexão: ${result.error}`, 'error');
+      updateConnectionStatus(false, 'Falha');
+    }
+  } catch (e) {
+    logResult('connection-results', `Erro: ${e.message}`, 'error');
+    updateConnectionStatus(false, 'Erro');
+  }
+}
+
+async function testOracleQuery() {
+  logResult('operation-results', 'Executando consulta Oracle...', 'info');
+  try {
+    const result = await GMP_Database.oracleQuery('SELECT * FROM all_tables WHERE ROWNUM <= 5');
+    if (result.success) {
+      logResult('operation-results', `Consulta bem-sucedida: ${result.rowCount} registros`, 'success');
+    } else {
+      logResult('operation-results', `Falha na consulta: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('operation-results', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testOracleExecute() {
+  logResult('operation-results', 'Executando comando Oracle...', 'info');
+  try {
+    const result = await GMP_Database.execute('CREATE TABLE gmp_test (id NUMBER PRIMARY KEY, nome VARCHAR2(100))');
+    if (result.success) {
+      logResult('operation-results', 'Tabela criada com sucesso', 'success');
+    } else {
+      logResult('operation-results', `Erro ao criar tabela: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('operation-results', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testOracleProcedure() {
+  logResult('operation-results', 'Testando procedimento armazenado...', 'info');
+  try {
+    const result = await GMP_Database.callProcedure('gmp_test_proc', []);
+    if (result.success) {
+      logResult('operation-results', `Procedimento executado: ${result.result}`, 'success');
+    } else {
+      logResult('operation-results', `Falha no procedimento: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('operation-results', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function testOracleTransaction() {
+  logResult('operation-results', 'Testando transação Oracle...', 'info');
+  try {
+    const result = await GMP_Database.transaction(async (db) => {
+      await db.execute("INSERT INTO gmp_test (id, nome) VALUES (1, 'Teste 1')");
+            await db.execute("INSERT INTO gmp_test (id, nome) VALUES (2, 'Teste 2')");
+      return 'Transação executada com sucesso';
+    });
+    if (result.success) {
+      logResult('operation-results', `Transação concluída: ${result.result}`, 'success');
+    } else {
+      logResult('operation-results', `Falha na transação: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('operation-results', `Erro: ${e.message}`, 'error');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedConfig = localStorage.getItem('oracle_config');
+  if (savedConfig) {
+    const config = JSON.parse(savedConfig);
+    document.getElementById('oracle-user').value = config.user;
+    document.getElementById('oracle-password').value = config.password;
+    const [host, portService] = config.connectString.split(':');
+    const [port, service] = portService.split('/');
+    document.getElementById('oracle-host').value = host;
+    document.getElementById('oracle-port').value = port;
+    document.getElementById('oracle-service').value = service;
+  }
+
+  logResult('connection-results', 'Página de teste Oracle carregada', 'info');
+  logResult('operation-results', 'Pronto para testes de operação Oracle', 'info');
+});
+</script>
+<div class="test-section">
+  <h2>Sincronização Oracle ↔ SQLite</h2>
+  <button class="test-button" onclick="syncTable('users')">Sincronizar Tabela USERS</button>
+  <button class="test-button" onclick="syncTable('courses')">Sincronizar Tabela COURSES</button>
+  <button class="test-button" onclick="syncAll()">Sincronizar Todas</button>
+  <button class="test-button" onclick="verifySync()">Verificar Status</button>
+  <div id="sync-results" class="results-area"></div>
+</div>
+
+<script>
+async function syncTable(tableName) {
+  logResult('sync-results', `Sincronizando tabela ${tableName}...`, 'info');
+  try {
+    const result = await GMP_Database.syncWithOracle({ tables: [tableName], syncMode: 'full' });
+    if (result.success) {
+      logResult('sync-results', `Tabela ${tableName} sincronizada com ${result.totalRecords} registros`, 'success');
+    } else {
+      logResult('sync-results', `Erro ao sincronizar ${tableName}: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('sync-results', `Falha: ${e.message}`, 'error');
+  }
+}
+
+async function syncAll() {
+  const tables = ['users', 'courses', 'progress'];
+  for (const table of tables) {
+    await syncTable(table);
+  }
+  logResult('sync-results', 'Sincronização completa de todas as tabelas', 'success');
+}
+
+async function verifySync() {
+  logResult('sync-results', 'Verificando status de sincronização...', 'info');
+  try {
+    const result = await GMP_Database.verifySyncData(['users', 'courses', 'progress']);
+    if (result.success && result.valid) {
+      for (const [table, info] of Object.entries(result.tables)) {
+        logResult('sync-results', `${table}: ${info.rowCount} registros, último sync: ${info.lastSync}`, 'info');
+      }
+    } else {
+      logResult('sync-results', `Erro: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('sync-results', `Falha: ${e.message}`, 'error');
+  }
+}
+</script>
+</body>
+</html>

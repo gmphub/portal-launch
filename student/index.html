@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Área do Aluno - gmp Academy</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Student</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Dashboard</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <div class="sidebar-header" style="display: none;">
+                <div class="sidebar-logo">
+                    <span>gmp Academy</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="my-courses.html">
+                    <i class="fas fa-book"></i> Meus Cursos
+                </a>
+                <a class="nav-item" href="classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Aulas
+                </a>
+                <a class="nav-item" href="course-view.html">
+                    <i class="fas fa-eye"></i> Visualizar Curso
+                </a>
+                <a class="nav-item" href="lesson.html">
+                    <i class="fas fa-play-circle"></i> Lição
+                </a>
+                <a class="nav-item" href="progress.html">
+                    <i class="fas fa-chart-line"></i> Progresso
+                </a>
+                <a class="nav-item" href="certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="downloads.html">
+                    <i class="fas fa-download"></i> Downloads
+                </a>
+                <a class="nav-item" href="profile.html">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+            </nav>
+        </div>
+        
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+                
+                    <!-- Modern Course Overview Header -->
+                    <div class="card shadow-hover animate-fade-in-up" style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); border: none; margin-bottom: 2rem; position: relative; overflow: hidden;">
+                        <!-- Decorative Elements -->
+                        <div style="position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.5;"></div>
+                        <div style="position: absolute; bottom: -20px; left: -20px; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%; opacity: 0.3;"></div>
+                        
+                        <div class="card-body" style="position: relative; color: white; padding: 2rem; z-index: 2;">
+                            <div class="d-flex align-items-center justify-content-between" style="flex-wrap: wrap; gap: 2rem;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <i class="fas fa-graduation-cap" style="font-size: 24px; color: white;"></i>
+                                    </div>
+                                    <div>
+                                        <h1 style="margin: 0 0 0.5rem 0; font-weight: 700; font-size: 1.8rem;">Inglês para Iniciantes</h1>
+                                        <p style="margin: 0 0 1rem 0; opacity: 0.9;">Curso completo para dominar o inglês do zero ao avançado</p>
+                                        
+                                        <!-- Progress Bar -->
+                                        <div style="background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; margin-bottom: 0.5rem;">
+                                            <div style="width: 18%; height: 100%; background: rgba(255,255,255,0.9); border-radius: 4px;"></div>
+                                        </div>
+                                        <div style="font-size: 14px; opacity: 0.9;">
+                                            <strong>13 de 71 aulas concluídas</strong> • 18% do curso
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-secondary" onclick="window.location.href='lesson.html'">
+                                        <i class="fas fa-play"></i> Continuar
+                                    </button>
+                                    <button class="btn-modern" onclick="window.location.href='progress.html'" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white;">
+                                        <i class="fas fa-chart-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Student Statistics - Modern Horizontal Layout -->
+                    <div class="modern-metrics-grid animate-slide-in-right">
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon" style="background: var(--primary-blue);"><i class="fas fa-clock"></i></div>
+                            </div>
+                            <div class="metric-value">2h 45m</div>
+                            <div class="metric-label">Tempo Estudado</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon" style="background: var(--success-green);"><i class="fas fa-check-circle"></i></div>
+                            </div>
+                            <div class="metric-value">13</div>
+                            <div class="metric-label">Aulas Concluídas</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon" style="background: var(--primary-orange);"><i class="fas fa-star"></i></div>
+                            </div>
+                            <div class="metric-value">4.8</div>
+                            <div class="metric-label">Avaliação</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon" style="background: var(--primary-yellow); color: #333;"><i class="fas fa-trophy"></i></div>
+                            </div>
+                            <div class="metric-value">3</div>
+                            <div class="metric-label">Certificados</div>
+                        </div>
+                    </div>
+
+                    <!-- Course Modules - Modern Horizontal Layout -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div style="width: 40px; height: 40px; background: var(--primary-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-list-ul" style="color: white; font-size: 16px;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gradient" style="margin: 0; font-size: 20px;">Módulos do Curso</h3>
+                                        <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Continue de onde parou</p>
+                                    </div>
+                                </div>
+                                <span style="background: var(--background-light); color: var(--text-primary); padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;">
+                                    5 de 71 módulos
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            
+                            <!-- Course Modules - Horizontal Cards Grid -->
+                            <div class="cards-grid cards-grid-2">
+                                <!-- Module 1: Greetings -->
+                                <div class="card-horizontal shadow-hover" style="cursor: pointer;" onclick="window.location.href='lesson.html'">
+                                    <div class="card-icon" style="background: var(--success-green);">
+                                        <strong>1</strong>
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">Greetings</h3>
+                                        <p class="card-description">Aprenda cumprimentos básicos em inglês</p>
+                                        <div style="margin-top: var(--spacing-sm);">
+                                            <div class="progress-bar-modern" style="height: 4px;">
+                                                <div class="progress-fill" style="width: 33%; background: var(--success-green);"></div>
+                                            </div>
+                                            <small style="color: var(--success-green); font-weight: 600;">33% Completo</small>
+                                        </div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Module 2: The Alphabet -->
+                                <div class="card-horizontal shadow-hover" style="cursor: pointer;" onclick="window.location.href='lesson.html'">
+                                    <div class="card-icon" style="background: var(--warning-yellow); color: #333;">
+                                        <strong>2</strong>
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">The Alphabet</h3>
+                                        <p class="card-description">Domine todas as letras do alfabeto inglês</p>
+                                        <div style="margin-top: var(--spacing-sm);">
+                                            <div class="progress-bar-modern" style="height: 4px;">
+                                                <div class="progress-fill" style="width: 67%; background: var(--warning-yellow);"></div>
+                                            </div>
+                                            <small style="color: var(--warning-yellow); font-weight: 600;">67% Completo</small>
+                                        </div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Module 3: Numbers (Locked) -->
+                                <div class="card-horizontal" style="cursor: pointer; opacity: 0.6;" onclick="alert('Complete o módulo anterior para desbloquear')">
+                                    <div class="card-icon" style="background: var(--border-color);">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">Numbers</h3>
+                                        <p class="card-description">Aprenda os números em inglês</p>
+                                        <div style="margin-top: var(--spacing-sm);">
+                                            <div class="progress-bar-modern" style="height: 4px;">
+                                                <div class="progress-fill" style="width: 0%;"></div>
+                                            </div>
+                                            <small style="color: var(--text-muted); font-weight: 600;">Bloqueado</small>
+                                        </div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <i class="fas fa-lock" style="color: var(--text-muted);"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Module 4: Colors (Locked) -->
+                                <div class="card-horizontal" style="cursor: pointer; opacity: 0.6;" onclick="alert('Complete o módulo anterior para desbloquear')">
+                                    <div class="card-icon" style="background: var(--border-color);">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h3 class="card-title">Colors</h3>
+                                        <p class="card-description">Identifique e nomeie as cores</p>
+                                        <div style="margin-top: var(--spacing-sm);">
+                                            <div class="progress-bar-modern" style="height: 4px;">
+                                                <div class="progress-fill" style="width: 0%;"></div>
+                                            </div>
+                                            <small style="color: var(--text-muted); font-weight: 600;">Bloqueado</small>
+                                        </div>
+                                    </div>
+                                    <div class="card-actions">
+                                        <i class="fas fa-lock" style="color: var(--text-muted);"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: var(--spacing-lg);">
+                                <button class="btn-modern btn-modern-secondary" onclick="window.location.href='my-courses.html'">
+                                    <i class="fas fa-list"></i> Ver todos os módulos (67 restantes)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions - Horizontal Layout -->
+                    <div class="cards-grid cards-grid-3 animate-slide-in-right">
+                        <!-- Study Now -->
+                        <div class="card-horizontal shadow-hover" style="cursor: pointer;" onclick="window.location.href='lesson.html'">
+                            <div class="card-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Estudar Agora</h3>
+                                <p class="card-description">Continue sua próxima lição</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Practice -->
+                        <div class="card-horizontal shadow-hover" style="cursor: pointer;" onclick="window.location.href='progress.html'">
+                            <div class="card-icon">
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Praticar</h3>
+                                <p class="card-description">Revise o conteúdo aprendido</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-secondary">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Achievements -->
+                        <div class="card-horizontal shadow-hover" style="cursor: pointer;" onclick="window.location.href='certificates.html'">
+                            <div class="card-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Conquistas</h3>
+                                <p class="card-description">Veja suas medalhas e certificados</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-success">
+                                    <i class="fas fa-medal"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Study Streak -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 20px;">Sua Sequência de Estudos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-4" style="margin-bottom: var(--spacing-lg);">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-fire" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 24px; color: var(--text-primary);">7 dias consecutivos!</h3>
+                                    <p style="margin: 4px 0 0 0; color: var(--text-secondary);">Continue estudando para manter sua sequência</p>
+                                </div>
+                            </div>
+
+                            <!-- Weekly Progress -->
+                            <div class="d-flex gap-2 justify-content-center" style="margin-bottom: var(--spacing-md);">
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <strong style="font-size: 14px;">7</strong>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button class="btn-modern btn-modern-primary" onclick="window.location.href='lesson.html'">
+                                    <i class="fas fa-calendar-day"></i> Estudar Hoje
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script defer="defer" src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+</body>
+</html>

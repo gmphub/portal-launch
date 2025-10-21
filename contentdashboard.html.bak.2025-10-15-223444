@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gmp Academy - Dashboard (True Zigzag Version)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            /* Colors */
+            --primary-green: #58cc02;
+            --light-green: #89e219;
+            --dark-green: #4caf50;
+            --blue: #1cb0f6;
+            --purple: #ce82ff;
+            --orange: #ff9600;
+            --red: #ff4b4b;
+            --yellow: #ffc800;
+            --gray: #f7f7f7;
+            --text-dark: #3c3c3c;
+            --text-light: #777;
+            --white: #ffffff;
+            
+            /* Zigzag path parameters */
+            --zigzag-width: 8px;
+            --zigzag-amplitude: 40vw; /* Use viewport width for more dramatic curves */
+            --zigzag-frequency: 200px;
+            --node-size: 60px;
+            --path-opacity: 0.8;
+            
+            /* Responsive adjustments */
+            --container-padding: 40px;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            background: var(--white);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow-x: hidden; /* Prevent horizontal overflow */
+        }
+
+        /* Header */
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            padding: 20px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .app-title::after {
+            content: "Jornada de Aprendizagem";
+            margin-left: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .subtitle::after {
+            content: "Sua jornada para dominar o inglês começa aqui!";
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: var(--white);
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--white);
+        }
+
+        .stat-icon.fire { 
+            background: linear-gradient(135deg, var(--orange), #ff7700); 
+        }
+        .stat-icon.fire::after { content: "🔥"; }
+
+        .stat-icon.gems { 
+            background: linear-gradient(135deg, var(--blue), #0099e0); 
+        }
+        .stat-icon.gems::after { content: "💎"; }
+
+        .stat-icon.hearts { 
+            background: linear-gradient(135deg, var(--red), #ff3333); 
+        }
+        .stat-icon.hearts::after { content: "❤️"; }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Section Header */
+        .section-header {
+            background: var(--red);
+            color: var(--white);
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-header::before {
+            content: "Módulos do Curso";
+        }
+
+        .section-number {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .section-number::after {
+            content: "71 de 71 concluídos - 100% do curso";
+        }
+
+        /* Learning Path with True Zigzag */
+        .learning-path {
+            position: relative;
+            padding: var(--container-padding);
+            padding-left: 60px;
+            padding-right: 60px;
+            background: var(--gray);
+            overflow: visible;
+            padding-bottom: 0;
+            /* Add scattered character background pattern */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600' viewBox='0 0 400 600'%3E%3Ctext x='50' y='80' font-size='28' opacity='0.4' fill='%2358cc02'%3E📚%3C/text%3E%3Ctext x='320' y='150' font-size='26' opacity='0.4' fill='%2389e219'%3E✏️%3C/text%3E%3Ctext x='80' y='280' font-size='27' opacity='0.4' fill='%231cb0f6'%3E🎤%3C/text%3E%3Ctext x='340' y='420' font-size='25' opacity='0.4' fill='%23ce82ff'%3E👂%3C/text%3E%3Ctext x='150' y='200' font-size='22' opacity='0.3' fill='%23ff9600'%3E📖%3C/text%3E%3Ctext x='250' y='350' font-size='24' opacity='0.3' fill='%23ff4b4b'%3E💡%3C/text%3E%3Ctext x='180' y='480' font-size='23' opacity='0.3' fill='%2358cc02'%3E🎯%3C/text%3E%3C/svg%3E"),
+                linear-gradient(to bottom, var(--gray), var(--gray));
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: scroll;
+        }
+
+        /* SVG Zigzag Path Background */
+        .zigzag-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Learning units container */
+        .learning-units {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Unit node positioned along zigzag */
+        .unit-node {
+            position: absolute;
+            display: flex;
+            flex-direction: row; /* Changed from column to row */
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            gap: 12px; /* Add gap between circle and card */
+        }
+
+        .unit-node:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            z-index: 10;
+        }
+
+        /* Unit circle */
+        .unit-circle {
+            width: var(--node-size);
+            height: var(--node-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(var(--node-size) * 0.4);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
+            margin-bottom: 0; /* Removed bottom margin since it's now horizontal */
+            flex-shrink: 0; /* Prevent circle from shrinking */
+        }
+
+        .unit-node:hover .unit-circle {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .unit-circle.completed { 
+            background: linear-gradient(135deg, var(--dark-green), #66bb6a); 
+        }
+        .unit-circle.in-progress { 
+            background: linear-gradient(135deg, var(--orange), #ffb74d); 
+        }
+        .unit-circle.locked { 
+            background: linear-gradient(135deg, #9e9e9e, #757575); 
+        }
+        .unit-circle.available { 
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green)); 
+        }
+        
+        .unit-circle.student { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .unit-circle.student::before {
+            content: "👤";
+            font-size: 24px;
+        }
+        
+        .unit-content.student {
+            background: var(--white);
+            color: #333;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            min-width: 280px;
+            max-width: 320px;
+            opacity: 1;
+        }
+        
+        .unit-content.student .unit-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 800;
+        }
+        
+        .unit-content.student .unit-description {
+            color: #666;
+            margin-bottom: 12px;
+        }
+        
+        .unit-content.student .student-stats-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .unit-content.student .student-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .unit-content.student .student-stat-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--white);
+        }
+        
+        .unit-content.student .student-stat-icon.fire { 
+            background: linear-gradient(135deg, var(--orange), #ff7700); 
+        }
+        
+        .unit-content.student .student-stat-icon.gems { 
+            background: linear-gradient(135deg, var(--blue), #0099e0); 
+        }
+        
+        .unit-content.student .student-stat-icon.hearts { 
+            background: linear-gradient(135deg, var(--red), #ff3333); 
+        }
+        
+        .unit-content.student .student-stat span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        
+        .unit-content.student .student-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 8px;
+        }
+        
+        .unit-content.student .student-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .unit-content.student .progress-bar {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .unit-content.student .progress-fill {
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+        }
+        
+        .unit-content.student .progress-text {
+            color: #333;
+            font-weight: 700;
+        }
+
+        /* Unit number badge */
+        .unit-number {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 28px;
+            height: 28px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Unit content card */
+        .unit-content {
+            background: var(--white);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 200px;
+            max-width: 250px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0.8; /* Set opacity to 80% */
+        }
+
+        .unit-node:hover .unit-content {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .unit-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .unit-description {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .unit-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary-green);
+            min-width: 30px;
+        }
+
+        /* Decorative characters removed - CSS no longer needed */
+
+        .unit-circle.trophy { 
+            background: linear-gradient(135deg, #FFD700, #FFA500); 
+            width: 120px;
+            height: 120px;
+            font-size: 60px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+            border: 4px solid #FFD700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: trophyPulse 3s ease-in-out infinite;
+        }
+        
+        .trophy-glow {
+            font-size: 60px;
+            animation: trophyPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes trophyPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 0 60px rgba(255, 215, 0, 1);
+            }
+        }
+        
+        @keyframes trophyPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .unit-content.trophy-card {
+            background: var(--white);
+            color: #333;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 160px;
+            max-width: 200px;
+            opacity: 0.8;
+            padding: 8px 12px;
+        }
+        
+        .trophy-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 18px;
+            font-weight: 900;
+            font-style: italic;
+            color: #333333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        
+        .trophy-subtitle {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: 800;
+            font-style: italic;
+            color: var(--primary-green);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .trophy-description {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .trophy-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 179, 0, 0.9));
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            text-align: center;
+            max-width: 300px;
+            margin: 40px auto;
+        }
+
+        .trophy-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .trophy-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            :root {
+                --zigzag-amplitude: 38vw;
+                --zigzag-frequency: 180px;
+                --node-size: 55px;
+                --container-padding: 30px;
+            }
+            
+            .learning-path {
+                padding-left: 30px;
+                padding-right: 50px;
+            }
+            
+            .unit-content {
+                min-width: 180px;
+                max-width: 220px;
+            }
+            
+            .unit-content.student {
+                min-width: 240px;
+                max-width: 280px;
+            }
+            
+            .unit-content.trophy-card {
+                min-width: 140px;
+                max-width: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --zigzag-amplitude: 35vw;
+                --zigzag-frequency: 150px;
+                --node-size: 50px;
+                --container-padding: 20px;
+            }
+            
+            .learning-path {
+                padding-left: 30px;
+                padding-right: 45px;
+            }
+            
+            .unit-content {
+                min-width: 160px;
+                max-width: 200px;
+                padding: 10px 12px;
+            }
+            
+            .unit-content.student {
+                min-width: 200px;
+                max-width: 240px;
+            }
+            
+            .unit-content.trophy-card {
+                min-width: 120px;
+                max-width: 160px;
+            }
+            
+            .unit-title {
+                font-size: 13px;
+            }
+            
+            .unit-description {
+                font-size: 11px;
+            }
+            
+            .trophy-title {
+                font-size: 16px;
+            }
+            
+            .trophy-subtitle {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --zigzag-amplitude: 32vw;
+                --zigzag-frequency: 120px;
+                --node-size: 45px;
+                --container-padding: 15px;
+            }
+            
+            .learning-path {
+                padding-left: 25px;
+                padding-right: 40px;
+            }
+            
+            .unit-content {
+                min-width: 140px;
+                max-width: 180px;
+                padding: 8px 10px;
+            }
+            
+            .unit-content.student {
+                min-width: 180px;
+                max-width: 220px;
+            }
+            
+            .unit-content.trophy-card {
+                min-width: 100px;
+                max-width: 140px;
+            }
+            
+            .unit-title {
+                font-size: 12px;
+            }
+            
+            .unit-description {
+                font-size: 10px;
+            }
+            
+            .trophy-title {
+                font-size: 14px;
+            }
+            
+            .trophy-subtitle {
+                font-size: 12px;
+            }
+            
+            .app-title {
+                font-size: 24px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            :root {
+                --zigzag-amplitude: 28vw;
+                --zigzag-frequency: 100px;
+                --node-size: 40px;
+                --container-padding: 10px;
+            }
+            
+            .unit-content {
+                min-width: 120px;
+                max-width: 150px;
+            }
+            
+            .unit-content.student {
+                min-width: 160px;
+                max-width: 200px;
+            }
+            
+            .unit-content.trophy-card {
+                min-width: 90px;
+                max-width: 120px;
+            }
+            
+            .trophy-title {
+                font-size: 12px;
+            }
+            
+            .trophy-subtitle {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header-section">
+            <div class="header-content">
+                <h1 class="app-title">gmp Academy</h1>
+                <p class="subtitle"></p>
+            </div>
+        </header>
+
+        <!-- Course Section Header -->
+        <div class="section-header">
+            <span></span>
+            <span class="section-number"></span>
+        </div>
+
+        <!-- Learning Path with True Zigzag -->
+        <div class="learning-path" id="learningPath">
+            <!-- SVG Zigzag Background -->
+            <svg class="zigzag-background" id="zigzagSvg">
+                <defs>
+                    <linearGradient id="pathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#58cc02;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#89e219;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            
+            <!-- Learning units container -->
+            <div class="learning-units" id="learningUnits">
+                <!-- Units will be positioned along the zigzag -->
+            </div>
+        
+        </div>
+    </div>
+
+    <script>
+        // Learning units data
+        const units = [
+            { 
+                id: 0, 
+                title: "Perfil do Estudante", 
+                description: "Sua jornada de aprendizado", 
+                progress: 18,
+                isStudent: true,
+                studentName: "Alex Johnson",
+                totalProgress: 18,
+                completedLessons: 13,
+                totalLessons: 71,
+                position: -40 // Move student card 40px up
+            },
+            { id: 1, title: "Cumprimentos", description: "Descubra como cumprimentar e se despedir em inglês. O primeiro passo para qualquer conversa!", progress: 100 },
+            { id: 2, title: "Alfabeto", description: "Domine as letras e sons do alfabeto em inglês para soletrar palavras e nomes corretamente.", progress: 100 },
+            { id: 3, title: "Conhecendo alguém", description: "Explore expressões formais e informais para conhecer e cumprimentar pessoas.", progress: 100 },
+            { id: 4, title: "Substantivos", description: "Entenda o que são substantivos e como eles funcionam em inglês, incluindo gênero e número.", progress: 100 },
+            { id: 5, title: "Plurais irregulares + regras", description: "Estude as exceções e regras especiais, pois a maioria dos plurais termina em 's', mas muitos não!", progress: 100 },
+            { id: 6, title: "THE", description: "Conheça o uso do artigo definido 'the' para se referir a coisas específicas.", progress: 100 },
+            { id: 7, title: "A-AN", description: "Descubra como usar os artigos indefinidos 'a' e 'an' para falar de coisas em geral.", progress: 100 },
+            { id: 8, title: "This that these those", description: "Domine os pronomes demonstrativos para apontar para coisas próximas e distantes.", progress: 100 },
+            { id: 9, title: "Adjetivos", description: "Explore o uso de adjetivos para descrever pessoas, lugares e coisas.", progress: 100 },
+            { id: 10, title: "Ordem dos adjetivos", description: "Estude a ordem específica que adjetivos seguem quando se usa mais de um.", progress: 100 },
+            { id: 11, title: "Dias da semana", description: "Conheça os nomes dos dias da semana em inglês e como usá-los em frases.", progress: 100 },
+            { id: 12, title: "Pronomes pessoais I you he she it", description: "Descubra o uso dos pronomes pessoais do caso reto em inglês.", progress: 100 },
+            { id: 13, title: "Verbo TO BE afirmativo", description: "Domine a forma afirmativa do verbo mais fundamental do inglês: 'to be' (ser/estar).", progress: 100 },
+            { id: 14, title: "Verbo TO BE negativo", description: "Explore como fazer frases negativas com o verbo 'to be' (ser/estar).", progress: 100 },
+            { id: 15, title: "Verbo TO BE interrogativo", description: "Estude como fazer perguntas com o verbo 'to be' (ser/estar).", progress: 100 },
+            { id: 16, title: "Verbo TO BE interrogativo negativo", description: "Conheça o uso de perguntas negativas com 'to be', usadas para confirmar informações ou expressar surpresa.", progress: 100 },
+            { id: 17, title: "Present Simple TO WORK - afirmativo", description: "Descubra o uso do Present Simple para falar sobre rotinas, fatos e hábitos.", progress: 100 },
+            { id: 18, title: "Present Simple TO WORK - negativo", description: "Domine a formação de frases negativas no Present Simple usando 'do not' (don't) e 'does not' (doesn't).", progress: 100 },
+            { id: 19, title: "Present Simple TO WORK - interrogativo", description: "Explore como fazer perguntas no Present Simple usando os auxiliares 'Do' e 'Does'.", progress: 100 },
+            { id: 20, title: "Present simple TO WORK - interrogativo negativo", description: "Estude como fazer perguntas negativas no Present Simple, usadas para confirmar ou expressar surpresa.", progress: 100 },
+            { id: 21, title: "Verbo TO HAVE afirmativo", description: "Descubra como usar o verbo 'to have' (ter/possuir) na forma afirmativa.", progress: 100 },
+            { id: 22, title: "Verbo TO HAVE negativo", description: "Explore as duas maneiras principais de negar o verbo 'to have' em inglês.", progress: 100 },
+            { id: 23, title: "Verbo TO HAVE interrogativo", description: "Conheça as duas maneiras principais de fazer perguntas com o verbo 'to have'.", progress: 100 },
+            { id: 24, title: "Verbo TO HAVE interrogativo negativo", description: "Estude como fazer perguntas negativas com 'to have' para expressar surpresa ou confirmar uma suposição.", progress: 100 },
+            { id: 25, title: "Verbo TO HAVE com Do Does Don't Doesn't", description: "Domine uma revisão completa do verbo 'to have' no Present Simple, consolidando todas as formas.", progress: 100 },
+            { id: 26, title: "Verbo NEED afirmativo negativo e interrogativo", description: "Explore o uso do verbo 'need' (precisar) para expressar necessidades e requisitos.", progress: 100 },
+            { id: 27, title: "Present Continuous afirmativo", description: "Conheça o uso do Present Continuous para falar sobre ações acontecendo agora.", progress: 100 },
+            { id: 28, title: "Present Continuous negativo", description: "Descubra como formar frases negativas no Present Continuous para dizer o que não está acontecendo.", progress: 100 },
+            { id: 29, title: "Present Continuous interrogativo", description: "Domine como fazer perguntas sobre ações que estão acontecendo no momento.", progress: 100 },
+            { id: 30, title: "Present Continuous interrogativo negativo", description: "Explore o uso da forma negativo-interrogativa para expressar surpresa sobre uma ação em andamento.", progress: 100 },
+            { id: 31, title: "Resumo present simple vs continuous", description: "Estude uma revisão rápida para decidir quando usar Present Simple e quando usar Present Continuous.", progress: 100 },
+            { id: 32, title: "Quando usar present simple", description: "Conheça os usos específicos do Present Simple, incluindo horários e fatos.", progress: 100 },
+            { id: 33, title: "Quando usar present continuous", description: "Descubra os usos do Present Continuous, incluindo situações temporárias e planos futuros.", progress: 100 },
+            { id: 34, title: "Futuro com present simple", description: "Explore o uso de Present Simple para falar de eventos futuros que fazem parte de uma programação.", progress: 100 },
+            { id: 35, title: "Futuro com present continuous", description: "Domine o uso de Present Continuous para falar de seus planos futuros e arranjos já confirmados.", progress: 100 },
+            { id: 36, title: "Futuro com WILL - afirmativo", description: "Conheça o uso de 'will' para falar de decisões espontâneas, previsões e promessas.", progress: 100 },
+            { id: 37, title: "Futuro com WILL - negativo", description: "Descubra como usar 'will not' e a contração 'won't' para falar do futuro de forma negativa.", progress: 100 },
+            { id: 38, title: "Futuro com WILL - interrogativo", description: "Explore como fazer perguntas sobre o futuro usando 'Will'.", progress: 100 },
+            { id: 39, title: "Futuro WILL - interrogativo negativo", description: "Estude como fazer perguntas negativas com 'Won't' para expressar surpresa, convites ou críticas.", progress: 100 },
+            { id: 40, title: "Verbo CAN afirmativo negativo interrogativo", description: "Domine o uso do verbo modal 'can' para falar de habilidade, permissão e possibilidade.", progress: 100 },
+            { id: 41, title: "Verbo COULD afirmativo negativo interrogativo", description: "Explore o uso de 'could' para falar de habilidades passadas, fazer pedidos educados e falar de possibilidades.", progress: 100 },
+            { id: 42, title: "Verbo MAY/MIGHT afirmativo negativo interrogativo", description: "Conheça o uso de 'may' e 'might' para falar de possibilidades e pedir permissão formalmente.", progress: 100 },
+            { id: 43, title: "Verbo WOULD afirmativo negativo interrogativo", description: "Descubra o uso de 'would' para situações hipotéticas, pedidos educados e falar do futuro no passado.", progress: 100 },
+            { id: 44, title: "Verbo SHOULD afirmativo negativo interrogativo", description: "Estude o uso de 'should' para dar conselhos, fazer recomendações e expressar expectativas.", progress: 100 },
+            { id: 45, title: "MUST", description: "Domine o uso de 'must' para expressar obrigação forte, necessidade e deduções lógicas.", progress: 100 },
+            { id: 46, title: "Perguntas WH", description: "Explore como fazer perguntas de informação usando 'Wh-words'.", progress: 100 },
+            { id: 47, title: "Dizendo as horas", description: "Conheça as diferentes maneiras de perguntar e dizer as horas em inglês.", progress: 100 },
+            { id: 48, title: "Adjetivos possessivos", description: "Descubra como usar 'my', 'your', 'his', 'her', 'its', 'our' e 'their' para indicar posse.", progress: 100 },
+            { id: 49, title: "Pronomes possessivos", description: "Estude como usar 'mine', 'yours', 'his', 'hers', 'ours' e 'theirs' para substituir um substantivo.", progress: 100 },
+            { id: 50, title: "Caso possessivo 's", description: "Domine o uso do 's (caso possessivo) para mostrar posse, principalmente com pessoas.", progress: 100 },
+            { id: 51, title: "Pronomes objetos", description: "Aprenda a usar 'me', 'you', 'him', 'her', 'it', 'us', 'them' como objeto de um verbo ou preposição.", progress: 100 },
+            { id: 52, title: "Preposições OF, ON, IN, AT, TO, FOR, FROM", description: "Domine o uso das preposições mais comuns em inglês para tempo, lugar e propósito.", progress: 100 },
+            { id: 53, title: "Advérbios de frequência", description: "Aprenda a usar 'always', 'usually', 'often', 'sometimes', 'rarely' e 'never' para descrever com que frequência você faz as coisas.", progress: 100 },
+            { id: 54, title: "Rotinas diárias", description: "Aprenda vocabulário e frases para descrever sua rotina diária.", progress: 100 },
+            { id: 55, title: "Adjetivos comparativos", description: "Aprenda a comparar duas coisas usando adjetivos comparativos.", progress: 100 },
+            { id: 56, title: "Adjetivos superlativos", description: "Aprenda a usar adjetivos superlativos para descrever o máximo de uma qualidade em um grupo.", progress: 100 },
+            { id: 57, title: "Advérbios em ...ly", description: "Aprenda a transformar adjetivos em advérbios para descrever como uma ação é feita.", progress: 100 },
+            { id: 58, title: "Some/Any", description: "Aprenda a usar 'some' e 'any' para falar de quantidades indefinidas.", progress: 100 },
+            { id: 59, title: "How much how many how long how far", description: "Aprenda a fazer perguntas sobre quantidade, duração e distância.", progress: 100 },
+            { id: 60, title: "Substantivos contáveis incontáveis", description: "Entenda a diferença crucial entre substantivos contáveis e incontáveis.", progress: 100 },
+            { id: 61, title: "Quantificadores much little a bit of many a lot lots plenty few", description: "Aprenda a usar diferentes quantificadores para expressar quantidade.", progress: 100 },
+            { id: 62, title: "Past Simple verbo TO BE", description: "Aprenda a usar 'was' e 'were' para falar do passado.", progress: 100 },
+            { id: 63, title: "Past Simple verbo TO WORK", description: "Aprenda a falar de ações concluídas no passado com verbos regulares.", progress: 100 },
+            { id: 64, title: "Verbo TO HAVE com DIDN'T", description: "Revise o uso do verbo 'have' no passado simples.", progress: 100 },
+            { id: 65, title: "Verbos irregulares", description: "Aprenda as formas passadas dos verbos irregulares mais comuns.", progress: 100 },
+            { id: 66, title: "Past Continuous verbo TO WORK", description: "Aprenda a falar de ações que estavam em andamento em um ponto específico do passado.", progress: 100 },
+            { id: 67, title: "Encontrando alguém", description: "Aprenda frases úteis e vocabulário para agendar reuniões e se apresentar.", progress: 100 },
+            { id: 68, title: "Países e nacionalidades", description: "Aprenda os nomes de países comuns e como dizer as nacionalidades correspondentes.", progress: 100 },
+            { id: 69, title: "Descrevendo alguém", description: "Aprenda vocabulário para descrever a aparência física e personalidade de alguém.", progress: 100 },
+            { id: 70, title: "No avião", description: "Aprenda vocabulário útil e frases para usar durante um voo.", progress: 100 },
+            { id: 71, title: "No hotel", description: "Aprenda vocabulário e frases para fazer check-in e se hospedar em um hotel.", progress: 100 },
+            { id: 72, title: "Curso Concluído!", description: "Parabéns! Você completou todo o curso de inglês!", progress: 100, isTrophy: true }
+        ];
+
+        // Improved debounce function to prevent multiple calls during resize
+        let resizeTimeout;
+        let isResizing = false;
+        
+        function debounce(func, wait) {
+            return function executedFunction(...args) {
+                const later = () => {
+                    resizeTimeout = null;
+                    isResizing = false;
+                    func(...args);
+                };
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(later, wait);
+            };
+        }
+
+        // Clear existing SVG content before redrawing
+        function clearSVG() {
+            const svg = document.querySelector('.zigzag-background');
+            if (svg) {
+                // Remove all path elements
+                const paths = svg.querySelectorAll('path');
+                paths.forEach(path => path.remove());
+            }
+        }
+
+        // Create true zigzag path and position units along it
+        function createZigzagPath() {
+            // Clear existing SVG content first
+            clearSVG();
+            
+            const learningPath = document.getElementById('learningPath');
+            const svg = document.getElementById('zigzagSvg');
+            const unitsContainer = document.getElementById('learningUnits');
+            
+            // Clear existing content
+            unitsContainer.innerHTML = '';
+            
+            // Get container dimensions
+            const rect = learningPath.getBoundingClientRect();
+            const width = rect.width - 120; // Account for 60px padding on each side
+            const height = units.length * 180;
+            
+            // Set SVG dimensions
+            svg.setAttribute('width', width);
+            svg.setAttribute('height', height); // Removed extra height to eliminate bar
+            svg.style.width = width + 'px';
+            svg.style.height = height + 'px'; // Removed extra height to eliminate bar
+            svg.style.left = '60px'; // Account for left padding
+            svg.style.top = '0px';
+            
+            // Get CSS variables
+            const styles = getComputedStyle(document.documentElement);
+            let amplitude = parseFloat(styles.getPropertyValue('--zigzag-amplitude'));
+            
+            // Convert viewport units to pixels
+            if (amplitude.toString().includes('vw')) {
+                amplitude = (parseFloat(amplitude) / 100) * width;
+            }
+            
+            // Increase amplitude to extend closer to edges (use 90% of available space)
+            const maxAmplitude = (width / 2) * 0.8; // Reduced to 80% to prevent truncation
+            amplitude = Math.min(amplitude, maxAmplitude);
+            
+            const frequency = parseFloat(styles.getPropertyValue('--zigzag-frequency'));
+            const strokeWidth = parseFloat(styles.getPropertyValue('--zigzag-width'));
+            
+            // Calculate zigzag points with more dramatic curves
+            const points = [];
+            const totalUnits = units.length;
+            const actualHeight = height + 50; // Use the reduced extended height
+            const segmentHeight = Math.max(actualHeight / (totalUnits + 1), 180); // Use actual height for calculation
+            
+            for (let i = 0; i < totalUnits; i++) {
+                const y = segmentHeight * (i + 1);
+                const progress = i / (totalUnits - 1);
+                
+                // Create more dramatic zigzag pattern that extends to edges (accounting for padding)
+                let x;
+                if (i === 0) {
+                    x = width / 2; // Start in center
+                } else if (i === totalUnits - 1) {
+                    x = width / 2; // End in center
+                } else {
+                    // Create dramatic zigzag: far edges pattern (with truncation prevention)
+                    const pattern = i % 4;
+                    switch (pattern) {
+                        case 0: // Far left (with padding)
+                            x = width * 0.2; // 20% from left edge
+                            break;
+                        case 1: // Center-left
+                            x = width * 0.35; // 35% from left
+                            break;
+                        case 2: // Far right (with padding)
+                            x = width * 0.8; // 80% from left (20% from right edge)
+                            break;
+                        case 3: // Center-right
+                            x = width * 0.65; // 65% from left
+                            break;
+                    }
+                }
+                
+                points.push({ x, y, index: i });
+            }
+            
+            // Create smooth zigzag path with enhanced bezier curves
+            let pathData = `M ${points[0].x} ${points[0].y}`;
+            
+            for (let i = 1; i < points.length; i++) {
+                const prev = points[i - 1];
+                const curr = points[i];
+                
+                // Create more dramatic smooth curves between points
+                const controlX1 = prev.x + (curr.x - prev.x) * 0.2; // Enhanced control points
+                const controlY1 = prev.y + (curr.y - prev.y) * 0.3;
+                const controlX2 = prev.x + (curr.x - prev.x) * 0.8;
+                const controlY2 = prev.y + (curr.y - prev.y) * 0.7;
+                
+                pathData += ` C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${curr.x} ${curr.y}`;
+            }
+            
+            // Create path element
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('stroke', 'url(#pathGradient)');
+            path.setAttribute('stroke-width', strokeWidth);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', 'round');
+            path.setAttribute('stroke-linejoin', 'round');
+            path.setAttribute('opacity', styles.getPropertyValue('--path-opacity'));
+            
+            // Add decorative dashed line
+            const dashedPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            dashedPath.setAttribute('d', pathData);
+            dashedPath.setAttribute('stroke', '#ffffff');
+            dashedPath.setAttribute('stroke-width', strokeWidth * 0.3);
+            dashedPath.setAttribute('fill', 'none');
+            dashedPath.setAttribute('stroke-dasharray', '10, 10');
+            dashedPath.setAttribute('opacity', '0.5');
+            
+            svg.appendChild(path);
+            svg.appendChild(dashedPath);
+            
+            // Position units along the path
+            points.forEach((point, index) => {
+                const unit = units[index];
+                const status = unit.isStudent ? 'student' :
+                              unit.progress === 100 ? 'completed' : 
+                              unit.progress > 0 ? 'in-progress' : 
+                              index === 0 || units[index - 1].progress > 0 ? 'available' : 'locked';
+                
+                const unitElement = document.createElement('div');
+                unitElement.className = 'unit-node';
+                unitElement.style.left = (point.x + 60) + 'px'; // Account for left padding
+                
+                // Apply position offset if specified
+                let yPos = point.y;
+                if (unit.position) {
+                    yPos += unit.position;
+                }
+                unitElement.style.top = yPos + 'px';
+                
+                if (unit.isStudent) {
+                    // Special rendering for student profile
+                    unitElement.innerHTML = `
+                        <div class="unit-circle student">
+                            <span class="unit-number">👤</span>
+                        </div>
+                        <div class="unit-content student">
+                            <div class="student-stats-icons">
+                                <div class="student-stat">
+                                    <div class="student-stat-icon fire">🔥</div>
+                                    <span>5</span>
+                                </div>
+                                <div class="student-stat">
+                                    <div class="student-stat-icon gems">💎</div>
+                                    <span>50</span>
+                                </div>
+                                <div class="student-stat">
+                                    <div class="student-stat-icon hearts">❤️</div>
+                                    <span>5</span>
+                                </div>
+                            </div>
+                            <div class="student-name">${unit.studentName}</div>
+                            <div class="unit-title">${unit.title}</div>
+                            <div class="unit-description">${unit.description}</div>
+                            <div class="student-stats">
+                                <div>📚 ${unit.completedLessons} de ${unit.totalLessons} lições concluídas</div>
+                                <div>⏱️ Progresso total: ${unit.totalProgress}%</div>
+                                <div>🔥 Sequência atual: 5 dias</div>
+                            </div>
+                            <div class="unit-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${unit.totalProgress}%"></div>
+                                </div>
+                                <span class="progress-text">${unit.totalProgress}%</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (unit.isTrophy) {
+                    // Trophy rendering
+                    unitElement.innerHTML = `
+                        <div class="unit-circle trophy">
+                            <span class="trophy-glow">🏆</span>
+                        </div>
+                        <div class="unit-content trophy-card">
+                            <div class="trophy-title">Curso Concluído!</div>
+                            <div class="trophy-subtitle">Parabéns!</div>
+                        </div>
+                    `;
+                } else {
+                    // Regular unit rendering
+                    unitElement.innerHTML = `
+                        <div class="unit-circle ${status}">
+                            ${unit.progress === 100 ? '<i class="fas fa-check"></i>' : 
+                              unit.progress > 0 ? '<i class="fas fa-play"></i>' : 
+                              '<i class="fas fa-lock"></i>'}
+                            <span class="unit-number">${unit.id}</span>
+                        </div>
+                        <div class="unit-content">
+                            <div class="unit-title">${unit.title}</div>
+                            <div class="unit-description">${unit.description}</div>
+                            <div class="unit-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${unit.progress}%"></div>
+                                </div>
+                                <span class="progress-text">${unit.progress}%</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Add click event
+                unitElement.addEventListener('click', function() {
+                    if (unit.isStudent) {
+                        console.log(`Opening student profile: ${unit.studentName}`);
+                        // Could open a detailed profile modal or navigate to profile page
+                    } else if (status === 'available' || status === 'in-progress') {
+                        console.log(`Starting lesson: ${unit.title}`);
+                    } else if (status === 'completed') {
+                        console.log(`Reviewing lesson: ${unit.title}`);
+                    } else {
+                        console.log(`Locked lesson: ${unit.title} - Complete previous lessons to unlock.`);
+                    }
+                });
+                
+                unitsContainer.appendChild(unitElement);
+            });
+            
+            // Decorative characters removed to avoid positioning issues
+            // The learning path and course modules provide sufficient visual appeal
+        }
+
+        // Initialize on page load
+        let isInitialized = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            createZigzagPath();
+            isInitialized = true;
+        });
+
+        // Recreate on resize with debouncing
+        window.addEventListener('resize', debounce(function() {
+            createZigzagPath();
+        }, 300));
+    </script>
+</body>
+
+</html>

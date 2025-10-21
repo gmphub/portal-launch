@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全管理器测试</title>
+    <link rel="stylesheet" href="assets/css/gmp-portal.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>安全管理器测试</h1>
+        
+        <div class="test-section">
+            <h2>基础功能测试</h2>
+            <button onclick="testBasicAuth()">测试基础认证</button>
+            <button onclick="testPasswordValidation()">测试密码验证</button>
+            <button onclick="testTokenGeneration()">测试令牌生成</button>
+            <div id="basic-results" class="test-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>会话管理测试</h2>
+            <button onclick="testSessionCreation()">创建会话</button>
+            <button onclick="testSessionValidation()">验证会话</button>
+            <button onclick="testSessionDestruction()">销毁会话</button>
+            <div id="session-results" class="test-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>权限管理测试</h2>
+            <button onclick="testPermissionCheck()">检查权限</button>
+            <button onclick="testRoleAssignment()">角色分配</button>
+            <div id="permission-results" class="test-result"></div>
+        </div>
+    </div>
+
+    <script src="assets/js/security.js"></script>
+    <script>
+        let testResults = {
+            basic: [],
+            session: [],
+            permission: []
+        };
+
+        function logResult(category, message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testResults[category].push(logEntry);
+            updateResults(category);
+        }
+
+        function updateResults(category) {
+            const container = document.getElementById(category + '-results');
+            if (container) {
+                container.innerHTML = testResults[category].join('\n');
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        async function testBasicAuth() {
+            try {
+                logResult('basic', '开始基础认证测试...', 'info');
+                
+                // 测试用户认证
+                const authResult = await GMP_Security.authenticateUser('admin', 'admin123');
+                logResult('basic', `用户认证结果: ${JSON.stringify(authResult)}`, 
+                    authResult.success ? 'success' : 'error');
+                
+                // 测试密码验证
+                const passwordValid = await GMP_Security.validatePassword('admin123', 'hashed_password');
+                logResult('basic', `密码验证结果: ${passwordValid}`, passwordValid ? 'success' : 'error');
+                
+            } catch (error) {
+                logResult('basic', `基础认证测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPasswordValidation() {
+            try {
+                logResult('basic', '开始密码验证测试...', 'info');
+                
+                // 测试密码强度检查
+                const strengthResult = GMP_Security.checkPasswordStrength('Test123!@#');
+                logResult('basic', `密码强度检查: ${JSON.stringify(strengthResult)}`, 'success');
+                
+                // 测试弱密码
+                const weakStrength = GMP_Security.checkPasswordStrength('123');
+                logResult('basic', `弱密码检查: ${JSON.stringify(weakStrength)}`, 'info');
+                
+            } catch (error) {
+                logResult('basic', `密码验证测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testTokenGeneration() {
+            try {
+                logResult('basic', '开始令牌生成测试...', 'info');
+                
+                // 测试JWT令牌生成
+                const tokenResult = await GMP_Security.generateToken({
+                    userId: 'test-user',
+                    role: 'admin'
+                });
+                logResult('basic', `令牌生成结果: ${tokenResult.success ? '成功' : '失败'}`, 
+                    tokenResult.success ? 'success' : 'error');
+                
+                if (tokenResult.success) {
+                    logResult('basic', `生成的令牌: ${tokenResult.token.substring(0, 50)}...`, 'info');
+                }
+                
+            } catch (error) {
+                logResult('basic', `令牌生成测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSessionCreation() {
+            try {
+                logResult('session', '开始会话创建测试...', 'info');
+                
+                const sessionResult = await GMP_Security.createSession({
+                    userId: 'test-user',
+                    username: 'testuser',
+                    role: 'user'
+                });
+                logResult('session', `会话创建结果: ${JSON.stringify(sessionResult)}`, 
+                    sessionResult.success ? 'success' : 'error');
+                
+            } catch (error) {
+                logResult('session', `会话创建测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSessionValidation() {
+            try {
+                logResult('session', '开始会话验证测试...', 'info');
+                
+                // 首先创建会话
+                const sessionResult = await GMP_Security.createSession({
+                    userId: 'test-user',
+                    username: 'testuser',
+                    role: 'user'
+                });
+                
+                if (sessionResult.success) {
+                    // 验证会话
+                    const validationResult = await GMP_Security.validateSession(sessionResult.sessionId);
+                    logResult('session', `会话验证结果: ${JSON.stringify(validationResult)}`, 
+                        validationResult.success ? 'success' : 'error');
+                } else {
+                    logResult('session', '无法创建会话进行验证', 'error');
+                }
+                
+            } catch (error) {
+                logResult('session', `会话验证测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSessionDestruction() {
+            try {
+                logResult('session', '开始会话销毁测试...', 'info');
+                
+                // 创建会话然后销毁
+                const sessionResult = await GMP_Security.createSession({
+                    userId: 'test-user',
+                    username: 'testuser',
+                    role: 'user'
+                });
+                
+                if (sessionResult.success) {
+                    const destroyResult = await GMP_Security.destroySession(sessionResult.sessionId);
+                    logResult('session', `会话销毁结果: ${JSON.stringify(destroyResult)}`, 
+                        destroyResult.success ? 'success' : 'error');
+                } else {
+                    logResult('session', '无法创建会话进行销毁', 'error');
+                }
+                
+            } catch (error) {
+                logResult('session', `会话销毁测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPermissionCheck() {
+            try {
+                logResult('permission', '开始权限检查测试...', 'info');
+                
+                // 测试不同权限
+                const permissions = ['read', 'write', 'admin', 'delete'];
+                
+                for (const permission of permissions) {
+                    const hasPermission = await GMP_Security.hasPermission('test-user', permission);
+                    logResult('permission', `权限 '${permission}' 检查结果: ${hasPermission}`, 
+                        hasPermission ? 'success' : 'info');
+                }
+                
+            } catch (error) {
+                logResult('permission', `权限检查测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRoleAssignment() {
+            try {
+                logResult('permission', '开始角色分配测试...', 'info');
+                
+                // 测试角色分配
+                const assignResult = await GMP_Security.assignRole('test-user', 'admin');
+                logResult('permission', `角色分配结果: ${JSON.stringify(assignResult)}`, 
+                    assignResult.success ? 'success' : 'error');
+                
+                // 测试角色检查
+                const userRole = await GMP_Security.getUserRole('test-user');
+                logResult('permission', `用户角色: ${userRole}`, 'info');
+                
+            } catch (error) {
+                logResult('permission', `角色分配测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 页面加载时的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            logResult('basic', '安全管理器测试页面已加载', 'info');
+            logResult('session', '会话管理测试已准备就绪', 'info');
+            logResult('permission', '权限管理测试已准备就绪', 'info');
+        });
+    </script>
+</body>
+</html>

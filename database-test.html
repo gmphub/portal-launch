@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste do Gerenciador de Banco de Dados</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    .test-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .test-result { background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:10px; margin-top:10px; font-family:monospace; white-space:pre-wrap; max-height:300px; overflow-y:auto; }
+    .success { color:#28a745; }
+    .error { color:#dc3545; }
+    .info { color:#17a2b8; }
+    .warning { color:#ffc107; }
+    button { background:#007bff; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; margin:5px; }
+    button:hover { background:#0056b3; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Teste do Gerenciador de Banco de Dados</h1>
+
+    <div class="test-section">
+      <h2>Sessão e conexão</h2>
+      <div class="row">
+        <button onclick="loginDemo()">Login demo</button>
+        <button onclick="testConnection()">Testar conexão</button>
+        <button onclick="testConnectionStatus()">Verificar status</button>
+      </div>
+      <div id="connection-results" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Operações básicas</h2>
+      <div class="row">
+        <button onclick="testCreateTable()">Criar tabela</button>
+        <button onclick="testInsertData()">Inserir dados</button>
+        <button onclick="testQueryData()">Consultar dados</button>
+        <button onclick="testUpdateData()">Atualizar dados</button>
+        <button onclick="testDeleteData()">Excluir dados</button>
+      </div>
+      <div id="basic-results" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Recursos avançados</h2>
+      <div class="row">
+        <button onclick="testTransaction()">Transação</button>
+        <button onclick="testBatch()">Operações em lote</button>
+        <button onclick="testProcedure()">Procedimento armazenado</button>
+      </div>
+      <div id="advanced-results" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Integração Oracle</h2>
+      <div class="row">
+        <button onclick="testOracleConnection()">Conexão Oracle</button>
+        <button onclick="testOracleQuery()">Consulta Oracle</button>
+        <button onclick="testOracleSync()">Sincronização Oracle</button>
+      </div>
+      <div id="oracle-results" class="test-result"></div>
+    </div>
+  </div>
+
+  <!-- Scripts essenciais -->
+  <script src="assets/js/security.js"></script>
+  <script src="assets/js/database.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    function logResult(category, message, type = 'info') {
+      const ts = new Date().toLocaleTimeString();
+      const entry = `[${ts}] ${type.toUpperCase()}: ${message}`;
+      const container = document.getElementById(category + '-results');
+      container.innerHTML += entry + '\n';
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function loginDemo() {
+      const result = await loginUser('demo@gmp.com', 'password');
+      if (result.success) {
+        localStorage.setItem('authToken', result.token);
+        logResult('connection', `Login OK: ${result.user.email}`, 'success');
+      } else {
+        logResult('connection', `Erro no login: ${result.error}`, 'error');
+      }
+    }
+
+    async function testConnection() {
+      const result = await GMP_Database.connect();
+      logResult('connection', result.success ? result.message : result.error, result.success ? 'success' : 'error');
+    }
+
+    function testConnectionStatus() {
+      const status = GMP_Database.getConnectionStatus();
+      logResult('connection', `Status: ${status.connected ? 'Conectado' : 'Desconectado'} (${status.type})`, 'info');
+    }
+
+    async function testCreateTable() {
+      const sql = `
+        CREATE TABLE IF NOT EXISTS test_users (
+          id TEXT PRIMARY KEY,
+          username TEXT,
+          email TEXT
+        )
+      `;
+      const result = await GMP_Database.execute(sql);
+      logResult('basic', result.success ? 'Tabela criada' : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testInsertData() {
+      const id = 'user_' + Date.now();
+      const sql = `INSERT INTO test_users (id, username, email) VALUES ('${id}', '${id}', '${id}@example.com')`;
+      const result = await GMP_Database.execute(sql);
+      logResult('basic', result.success ? 'Dados inseridos' : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testQueryData() {
+      const result = await GMP_Database.query('SELECT * FROM test_users');
+      if (result.rows && result.rows.length > 0) {
+        result.rows.forEach((row, i) => {
+          logResult('basic', `Registro ${i + 1}: ${JSON.stringify(row)}`, 'info');
+        });
+      } else {
+        logResult('basic', 'Nenhum dado encontrado', 'info');
+      }
+    }
+
+    async function testUpdateData() {
+      const sql = `UPDATE test_users SET email = 'atualizado@example.com' WHERE username LIKE 'user_%'`;
+      const result = await GMP_Database.execute(sql);
+      logResult('basic', result.success ? 'Dados atualizados' : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testDeleteData() {
+      const sql = `DELETE FROM test_users WHERE username LIKE 'user_%'`;
+      const result = await GMP_Database.execute(sql);
+      logResult('basic', result.success ? 'Dados excluídos' : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testTransaction() {
+      const result = await GMP_Database.transaction(async (db) => {
+        const t1 = 'user_' + Date.now();
+        const t2 = 'user_' + (Date.now() + 1);
+        await db.execute(`INSERT INTO test_users (id, username) VALUES ('${t1}', '${t1}')`);
+        await db.execute(`INSERT INTO test_users (id, username) VALUES ('${t2}', '${t2}')`);
+        return 'Transação executada';
+      });
+      logResult('advanced', result.success ? result.result : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testBatch() {
+      const base = Date.now();
+      const queries = [
+        `INSERT INTO test_users (id, username) VALUES ('user_${base}', 'user_${base}')`,
+        `INSERT INTO test_users (id, username) VALUES ('user_${base + 1}', 'user_${base + 1}')`,
+        `INSERT INTO test_users (id, username) VALUES ('user_${base + 2}', 'user_${base + 2}')`
+      ];
+      const result = await GMP_Database.batch(queries);
+      logResult('advanced', result.success ? 'Batch executado' : result.error, result.success ? 'success' : 'error');
+    }
+
+    async function testProcedure() {
+      const result = await GMP_Database.callProcedure('test_procedure', []);
+      logResult('advanced', result.success ? result.result : result.error, result.success ? 'success' : 'error');
+    }
+	
+    async function testOracleConnection() {
+      try {
+        logResult('oracle', 'Testando conexão Oracle...', 'info');
+        const res = await fetch('/api/oracle/connect', {
+          headers: GMP_Security.getAuthHeaders()
+        });
+        const data = await res.json();
+        logResult('oracle', data.success ? data.message : data.error, data.success ? 'success' : 'error');
+      } catch (e) {
+        logResult('oracle', `Erro: ${e.message}`, 'error');
+      }
+    }
+
+    async function testOracleQuery() {
+      try {
+        logResult('oracle', 'Executando consulta Oracle...', 'info');
+        const res = await fetch('/api/oracle/query', {
+          method: 'POST',
+          headers: GMP_Security.getAuthHeaders(),
+          body: JSON.stringify({ sql: 'SELECT * FROM all_tables WHERE ROWNUM <= 5' })
+        });
+        const data = await res.json();
+        if (data.success && data.rows) {
+          logResult('oracle', `Consulta OK: ${JSON.stringify(data.rows)}`, 'success');
+        } else {
+          logResult('oracle', `Erro: ${data.error || 'Sem dados'}`, 'error');
+        }
+      } catch (e) {
+        logResult('oracle', `Erro: ${e.message}`, 'error');
+      }
+    }
+
+    async function testOracleSync() {
+      try {
+        logResult('oracle', 'Sincronizando dados Oracle...', 'info');
+        const res = await fetch('/api/oracle/sync', {
+          method: 'POST',
+          headers: GMP_Security.getAuthHeaders()
+        });
+        const data = await res.json();
+        logResult('oracle', data.success ? data.message : data.error, data.success ? 'success' : 'error');
+      } catch (e) {
+        logResult('oracle', `Erro: ${e.message}`, 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      logResult('connection', 'Página carregada', 'info');
+      logResult('basic', 'Pronto para testes básicos', 'info');
+      logResult('advanced', 'Pronto para testes avançados', 'info');
+      logResult('oracle', 'Pronto para testes Oracle', 'info');
+    });
+  </script>
+</body>
+</html>

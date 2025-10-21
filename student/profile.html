@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Meu Perfil - gmp Academy</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Student</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Perfil</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="my-courses.html">
+                    <i class="fas fa-book"></i> Meus Cursos
+                </a>
+                <a class="nav-item" href="classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Aulas
+                </a>
+                <a class="nav-item" href="course-view.html">
+                    <i class="fas fa-eye"></i> Visualizar Curso
+                </a>
+                <a class="nav-item" href="lesson.html">
+                    <i class="fas fa-play-circle"></i> Lição
+                </a>
+                <a class="nav-item" href="progress.html">
+                    <i class="fas fa-chart-line"></i> Progresso
+                </a>
+                <a class="nav-item" href="certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="downloads.html">
+                    <i class="fas fa-download"></i> Downloads
+                </a>
+                <a class="nav-item active" href="profile.html">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+
+                    <!-- Enhanced Navigation Bar -->
+                    <div class="card shadow-hover animate-slide-in-down">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="student-nav-tabs-container" style="display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none;">
+                                <style>
+                                    .student-nav-tabs-container::-webkit-scrollbar { display: none; }
+                                    .student-nav-tab { 
+                                        flex-shrink: 0; 
+                                        padding: 1rem 1.5rem; 
+                                        text-decoration: none; 
+                                        color: var(--text-secondary); 
+                                        border-bottom: 3px solid transparent; 
+                                        transition: all 0.3s ease; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        gap: 0.5rem;
+                                        font-weight: 500;
+                                    }
+                                    .student-nav-tab:hover { 
+                                        color: var(--primary-blue); 
+                                        background: rgba(255, 107, 53, 0.1);
+                                    }
+                                    .student-nav-tab.active { 
+                                        color: #333; 
+                                        background: linear-gradient(45deg, #ffcc00, #ff9500); 
+                                        border-bottom-color: #ffcc00; 
+                                        box-shadow: 0 2px 8px rgba(255, 204, 0, 0.3);
+                                    }
+                                </style>
+                                <a class="student-nav-tab" href="lesson.html">
+                                    <i class="fas fa-play"></i> Continuar Aula
+                                </a>
+                                <a class="student-nav-tab" href="progress.html">
+                                    <i class="fas fa-chart-line"></i> Progresso
+                                </a>
+                                <a class="student-nav-tab" href="certificates.html">
+                                    <i class="fas fa-certificate"></i> Certificados
+                                </a>
+                                <a class="student-nav-tab" href="downloads.html">
+                                    <i class="fas fa-download"></i> Downloads
+                                </a>
+                                <a class="student-nav-tab active" href="profile.html">
+                                    <i class="fas fa-user"></i> Perfil
+                                </a>
+                                <a class="student-nav-tab" href="classes.html">
+                                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                                </a>
+                                <a class="student-nav-tab" href="settings.html">
+                                    <i class="fas fa-cog"></i> Configurações
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Header with Enhanced UX -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">
+                                        <i class="fas fa-user-circle" style="color: var(--primary-blue); margin-right: 12px;"></i>
+                                        Meu Perfil
+                                    </h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Gerencie suas informações pessoais e preferências de aprendizado
+                                    </p>
+                                </div>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-save"></i> Salvar Alterações
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                        
+                        <!-- Profile Sidebar with Enhanced UX -->
+                        <div>
+                            <!-- Profile Picture Card -->
+                            <div class="card shadow-hover animate-slide-in-left">
+                                <div class="card-body" style="text-align: center;">
+                                    <div style="position: relative; display: inline-block; margin-bottom: 1.5rem;">
+                                        <div class="user-avatar" style="width: 100px; height: 100px; font-size: 2.5rem; background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple)); margin: 0 auto;">
+                                            GM
+                                        </div>
+                                        <button class="btn-modern btn-modern-primary btn-sm" style="position: absolute; bottom: 0; right: 0; border-radius: 50%; width: 35px; height: 35px; padding: 0;">
+                                            <i class="fas fa-camera"></i>
+                                        </button>
+                                    </div>
+                                    <h3 class="text-gradient" style="margin-bottom: 0.5rem;">Gabriel Pintus</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">gmpintus@gmail.com</p>
+                                    <div class="d-flex justify-content-center gap-2 mb-3">
+                                        <span class="badge" style="background: var(--success-green); color: white; padding: 0.5rem 1rem; border-radius: 20px;">
+                                            <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
+                                            Aluno Ativo
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Enhanced Progress Summary -->
+                                    <div style="background: linear-gradient(135deg, var(--bg-secondary), rgba(255, 107, 53, 0.05)); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                                        <h5 style="margin-bottom: 1rem; color: var(--primary-blue);">
+                                            <i class="fas fa-chart-line" style="margin-right: 0.5rem;"></i>
+                                            Progresso Geral
+                                        </h5>
+                                        <div class="progress" style="margin-bottom: 1rem; height: 12px; background: var(--border-color); border-radius: 6px;">
+                                            <div class="progress-bar" style="width: 45%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-orange)); border-radius: 6px; transition: width 0.3s ease;"></div>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 1rem;">
+                                            <span style="color: var(--text-secondary);">32 de 71 aulas</span>
+                                            <span style="font-weight: 600; color: var(--primary-blue);">45%</span>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem;">
+                                            <div style="text-align: center; padding: 0.5rem; background: rgba(255, 107, 53, 0.1); border-radius: 6px;">
+                                                <div style="font-weight: 600; color: var(--primary-orange);">7</div>
+                                                <div style="color: var(--text-secondary);">Sequência</div>
+                                            </div>
+                                            <div style="text-align: center; padding: 0.5rem; background: rgba(0, 123, 255, 0.1); border-radius: 6px;">
+                                                <div style="font-weight: 600; color: var(--primary-blue);">24h</div>
+                                                <div style="color: var(--text-secondary);">Estudado</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats with Enhanced UX -->
+                            <div class="card shadow-hover animate-slide-in-left">
+                                <div class="card-header">
+                                    <h4 class="text-gradient" style="margin: 0; font-size: 16px;">
+                                        <i class="fas fa-chart-bar" style="color: var(--primary-green); margin-right: 8px;"></i>
+                                        Estatísticas
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="stats-grid cards-grid cards-grid-1" style="gap: 1rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i class="fas fa-clock" style="color: var(--primary-blue); font-size: 1.1rem;"></i>
+                                                <span>Tempo total de estudo:</span>
+                                            </div>
+                                            <strong style="color: var(--primary-blue);">24h 30min</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i class="fas fa-fire" style="color: var(--primary-orange); font-size: 1.1rem;"></i>
+                                                <span>Sequência atual:</span>
+                                            </div>
+                                            <strong style="color: var(--primary-orange);">7 dias</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i class="fas fa-check-circle" style="color: var(--success-green); font-size: 1.1rem;"></i>
+                                                <span>Aulas concluídas:</span>
+                                            </div>
+                                            <strong style="color: var(--success-green);">32</strong>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px;">
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <i class="fas fa-calendar-plus" style="color: var(--primary-purple); font-size: 1.1rem;"></i>
+                                                <span>Data de inscrição:</span>
+                                            </div>
+                                            <strong style="color: var(--primary-purple);">15/01/2024</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Form with Enhanced UX -->
+                        <div>
+                            <!-- Personal Information -->
+                            <div class="card shadow-hover animate-fade-in-up">
+                                <div class="card-header">
+                                    <h4 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                        <i class="fas fa-user-edit" style="color: var(--primary-blue); margin-right: 8px;"></i>
+                                        Informações Pessoais
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Nome Completo</label>
+                                                <input class="form-control" type="text" value="Gabriel Pintus" style="border-radius: 6px;"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Email</label>
+                                                <input class="form-control" type="email" value="gmpintus@gmail.com" style="border-radius: 6px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Telefone</label>
+                                                <input class="form-control" placeholder="(11) 99999-9999" type="tel" style="border-radius: 6px;"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Data de Nascimento</label>
+                                                <input class="form-control" type="date" style="border-radius: 6px;"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Sobre Mim</label>
+                                            <textarea class="form-control" placeholder="Conte um pouco sobre você e seus objetivos com o curso..." rows="3" style="border-radius: 6px; resize: vertical;"></textarea>
+                                        </div>
+                                        <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">País</label>
+                                                <select class="form-control" style="border-radius: 6px;">
+                                                    <option>Brasil</option>
+                                                    <option>Portugal</option>
+                                                    <option>Estados Unidos</option>
+                                                    <option>Outro</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Fuso Horário</label>
+                                                <select class="form-control" style="border-radius: 6px;">
+                                                    <option>GMT-3 (Brasília)</option>
+                                                    <option>GMT-2 (Fernando de Noronha)</option>
+                                                    <option>GMT-4 (Manaus)</option>
+                                                    <option>GMT-5 (Acre)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Learning Preferences with Enhanced UX -->
+                            <div class="card shadow-hover animate-fade-in-up">
+                                <div class="card-header">
+                                    <h4 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                        <i class="fas fa-graduation-cap" style="color: var(--primary-green); margin-right: 8px;"></i>
+                                        Preferências de Aprendizado
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div class="form-group">
+                                            <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Nível de Inglês Atual</label>
+                                            <select class="form-control" style="border-radius: 6px;">
+                                                <option>Iniciante</option>
+                                                <option>Básico</option>
+                                                <option>Intermediário</option>
+                                                <option>Avançado</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Objetivo Principal</label>
+                                            <select class="form-control" style="border-radius: 6px;">
+                                                <option>Conversação básica</option>
+                                                <option>Inglês para trabalho</option>
+                                                <option>Inglês para viagens</option>
+                                                <option>Inglês acadêmico</option>
+                                                <option>Preparação para exames</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div class="form-group">
+                                            <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Tempo de Estudo Diário</label>
+                                            <select class="form-control" style="border-radius: 6px;">
+                                                <option>15-30 minutos</option>
+                                                <option>30-60 minutos</option>
+                                                <option>1-2 horas</option>
+                                                <option>Mais de 2 horas</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" style="font-weight: 500; margin-bottom: 0.5rem; display: block;">Melhor Horário para Estudar</label>
+                                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.5rem;">
+                                                <label style="display: flex; align-items: center; cursor: pointer; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; transition: all 0.3s ease;">
+                                                    <input style="margin-right: 0.5rem;" type="checkbox"/>
+                                                    <span>Manhã</span>
+                                                </label>
+                                                <label style="display: flex; align-items: center; cursor: pointer; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; transition: all 0.3s ease;">
+                                                    <input style="margin-right: 0.5rem;" type="checkbox"/>
+                                                    <span>Tarde</span>
+                                                </label>
+                                                <label style="display: flex; align-items: center; cursor: pointer; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 6px; transition: all 0.3s ease;">
+                                                    <input style="margin-right: 0.5rem;" type="checkbox"/>
+                                                    <span>Noite</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Notification Settings -->
+                            <div class="card shadow-hover animate-slide-in-right">
+                                <div class="card-header">
+                                    <h4 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                        <i class="fas fa-bell" style="color: var(--primary-orange); margin-right: 8px;"></i>
+                                        Notificações
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="cards-grid cards-grid-1" style="gap: 1rem;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                <i class="fas fa-clock" style="color: var(--primary-blue); font-size: 1.25rem;"></i>
+                                                <div>
+                                                    <strong>Lembretes de Estudo</strong>
+                                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Receba lembretes para manter sua sequência</div>
+                                                </div>
+                                            </div>
+                                            <label class="switch">
+                                                <input checked="" type="checkbox"/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                <i class="fas fa-plus-circle" style="color: var(--primary-green); font-size: 1.25rem;"></i>
+                                                <div>
+                                                    <strong>Novos Conteúdos</strong>
+                                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Seja notificado sobre novas aulas</div>
+                                                </div>
+                                            </div>
+                                            <label class="switch">
+                                                <input checked="" type="checkbox"/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                <i class="fas fa-trophy" style="color: var(--primary-orange); font-size: 1.25rem;"></i>
+                                                <div>
+                                                    <strong>Conquistas</strong>
+                                                    <div style="font-size: 0.875rem; color: var(--text-secondary);">Celebre seus marcos e conquistas</div>
+                                                </div>
+                                            </div>
+                                            <label class="switch">
+                                                <input checked="" type="checkbox"/>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script defer src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+</body>
+</html>

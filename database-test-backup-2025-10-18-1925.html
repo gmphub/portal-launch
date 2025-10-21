@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste do Gerenciador de Banco de Dados</title>
+    <link rel="stylesheet" href="assets/css/gmp-portal.css">
+    <style>
+        .test-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-result { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; margin-top: 10px; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        .warning { color: #ffc107; }
+        button { background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste do Gerenciador de Banco de Dados</h1>
+
+        <div class="test-section">
+            <h2>Sessão e conexão</h2>
+            <div class="row">
+                <button onclick="loginDemo()">Login demo</button>
+                <button onclick="testConnection()">Testar conexão com banco de dados</button>
+                <button onclick="testConnectionStatus()">Verificar status da conexão</button>
+            </div>
+            <div id="connection-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de operações básicas</h2>
+            <div class="row">
+                <button onclick="testCreateTable()">Criar tabela de teste</button>
+                <button onclick="testInsertData()">Inserir dados de teste</button>
+                <button onclick="testQueryData()">Consultar dados de teste</button>
+                <button onclick="testUpdateData()">Atualizar dados de teste</button>
+                <button onclick="testDeleteData()">Excluir dados de teste</button>
+            </div>
+            <div id="basic-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de recursos avançados</h2>
+            <div class="row">
+                <button onclick="testTransaction()">Teste de transação</button>
+                <button onclick="testBatchOperation()">Teste de operações em lote</button>
+                <button onclick="testStoredProcedure()">Teste de procedimento armazenado</button>
+            </div>
+            <div id="advanced-results" class="test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Teste de integração Oracle</h2>
+            <div class="row">
+                <button onclick="testOracleConnection()">Testar conexão Oracle</button>
+                <button onclick="testOracleQuery()">Testar consulta Oracle</button>
+                <button onclick="testOracleSync()">Testar sincronização de dados</button>
+            </div>
+            <div id="oracle-results" class="test-result"></div>
+        </div>
+    </div>
+
+    <!-- Importa security.js antes do database.js -->
+    <script src="assets/js/security.js"></script>
+    <script src="assets/js/database.js"></script>
+    <script>
+        let testResults = { connection: [], basic: [], advanced: [], oracle: [] };
+
+        function logResult(category, message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testResults[category].push(logEntry);
+            updateResults(category);
+        }
+        function updateResults(category) {
+            const container = document.getElementById(category + '-results');
+            if (container) {
+                container.innerHTML = testResults[category].join('\n');
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        async function loginDemo() {
+            try {
+                logResult('connection', 'Iniciando login demo...', 'info');
+                const result = await loginUser('demo@gmp.com', 'password');
+                if (result.success) {
+                    logResult('connection', `Login demo OK: ${JSON.stringify({ email: result.user.email, role: result.user.role })}`, 'success');
+                } else {
+                    logResult('connection', `Falha no login demo: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                logResult('connection', `Exceção no login demo: ${error.message}`, 'error');
+            }
+        }
+
+        async function testConnection() {
+            try {
+                logResult('connection', 'Iniciando teste de conexão com banco de dados...', 'info');
+                const connectionResult = await GMP_Database.connect();
+                logResult('connection', `Resultado da conexão: ${JSON.stringify(connectionResult)}`,
+                    connectionResult.success ? 'success' : 'error');
+                if (connectionResult.success) {
+                    logResult('connection', 'Conexão estabelecida com sucesso', 'success');
+                } else {
+                    logResult('connection', `Falha na conexão: ${connectionResult.error}`, 'error');
+                }
+            } catch (error) {
+                logResult('connection', `Exceção no teste de conexão: ${error.message}`, 'error');
+            }
+        }
+
+        async function testConnectionStatus() {
+            try {
+                logResult('connection', 'Verificando status da conexão...', 'info');
+                const status = GMP_Database.getConnectionStatus();
+                logResult('connection', `Status da conexão: ${JSON.stringify(status)}`, 'info');
+                if (status.connected) {
+                    logResult('connection', `Conexão ativa, tipo de banco: ${status.type}`, 'success');
+                } else {
+                    logResult('connection', 'Conexão não estabelecida ou desconectada', 'warning');
+                }
+            } catch (error) {
+                logResult('connection', `Exceção na verificação de status: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCreateTable() {
+            try {
+                logResult('basic', 'Iniciando criação de tabela de teste...', 'info');
+                const createTableSQL = `
+                    CREATE TABLE IF NOT EXISTS test_users (
+                        id NUMBER PRIMARY KEY,
+                        username VARCHAR2(50) UNIQUE NOT NULL,
+                        email VARCHAR2(100),
+                        created_at DATE DEFAULT SYSDATE,
+                        status VARCHAR2(20) DEFAULT 'active'
+                    )
+                `;
+                const result = await GMP_Database.execute(createTableSQL);
+                logResult('basic', `Resultado da criação da tabela: ${JSON.stringify(result)}`,
+                    result.success ? 'success' : 'error');
+            } catch (error) {
+                logResult('basic', `Falha na criação da tabela: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInsertData() {
+            try {
+                logResult('basic', 'Iniciando inserção de dados de teste...', 'info');
+                const now = Date.now();
+                const username = 'user_' + now;
+                const insertSQL = `
+                    INSERT INTO test_users (id, username, email)
+                    VALUES (${now}, '${username}', '${username}@example.com')
+                `;
+                const result = await GMP_Database.execute(insertSQL);
+                logResult('basic', `Resultado da inserção de dados: ${JSON.stringify(result)}`,
+                    result.success ? 'success' : 'error');
+                if (result.success) {
+                    logResult('basic', `Linhas inseridas: ${result.rowsAffected || 1}`, 'info');
+                }
+            } catch (error) {
+                logResult('basic', `Falha na inserção de dados: ${error.message}`, 'error');
+            }
+        }
+
+        async function testQueryData() {
+            try {
+                logResult('basic', 'Iniciando consulta de dados de teste...', 'info');
+                const querySQL = 'SELECT * FROM test_users';
+                const result = await GMP_Database.query(querySQL);
+                logResult('basic', `Resultado da consulta: ${JSON.stringify(result)}`,
+                    result.success ? 'success' : 'error');
+                if (result.success && result.data) {
+                    logResult('basic', `Consultados ${result.data.length} registros`, 'info');
+                    result.data.forEach((row, index) => {
+                        logResult('basic', `Registro ${index + 1}: ${JSON.stringify(row)}`, '
+						                        logResult('basic', `Registro ${index + 1}: ${JSON.stringify(row)}`, 'info');
+                    });
+                }
+            } catch (error) {
+                logResult('basic', `Falha na consulta de dados: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUpdateData() {
+            try {
+                logResult('basic', 'Iniciando atualização de dados de teste...', 'info');
+                const updateSQL = `
+                    UPDATE test_users
+                    SET email = 'updated@example.com'
+                    WHERE username LIKE 'user_%'
+                `;
+                const result = await GMP_Database.execute(updateSQL);
+                logResult('basic', `Resultado da atualização: ${JSON.stringify(result)}`,
+                    result.success ? 'success' : 'error');
+                if (result.success) {
+                    logResult('basic', `Linhas atualizadas: ${result.rowsAffected || 1}`, 'info');
+                }
+            } catch (error) {
+                logResult('basic', `Falha na atualização de dados: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDeleteData() {
+            try {
+                logResult('basic', 'Iniciando exclusão de dados de teste...', 'info');
+                const deleteSQL = "DELETE FROM test_users WHERE username LIKE 'user_%'";
+                const result = await GMP_Database.execute(deleteSQL);
+                logResult('basic', `Resultado da exclusão: ${JSON.stringify(result)}`,
+                    result.success ? 'success' : 'error');
+                if (result.success) {
+                    logResult('basic', `Linhas excluídas: ${result.rowsAffected || 1}`, 'info');
+                }
+            } catch (error) {
+                logResult('basic', `Falha na exclusão de dados: ${error.message}`, 'error');
+            }
+        }
+
+        async function testTransaction() {
+            try {
+                logResult('advanced', 'Iniciando teste de transação...', 'info');
+                const transactionResult = await GMP_Database.transaction(async (connection) => {
+                    const t1 = Date.now();
+                    const t2 = t1 + 1;
+                    await connection.execute(`INSERT INTO test_users (id, username) VALUES (${t1}, 'user_${t1}')`);
+                    await connection.execute(`INSERT INTO test_users (id, username) VALUES (${t2}, 'user_${t2}')`);
+                    return { success: true, message: 'Transação executada com sucesso' };
+                });
+                logResult('advanced', `Resultado da transação: ${JSON.stringify(transactionResult)}`,
+                    transactionResult.success ? 'success' : 'error');
+            } catch (error) {
+                logResult('advanced', `Falha no teste de transação: ${error.message}`, 'error');
+            }
+        }
+
+        async function testBatchOperation() {
+            try {
+                logResult('advanced', 'Iniciando teste de operações em lote...', 'info');
+                const base = Date.now();
+                const batchSQL = [
+                    `INSERT INTO test_users (id, username) VALUES (${base}, 'user_${base}')`,
+                    `INSERT INTO test_users (id, username) VALUES (${base + 1}, 'user_${base + 1}')`,
+                    `INSERT INTO test_users (id, username) VALUES (${base + 2}, 'user_${base + 2}')`
+                ];
+                const batchResult = await GMP_Database.batch(batchSQL);
+                logResult('advanced', `Resultado das operações em lote: ${JSON.stringify(batchResult)}`,
+                    batchResult.success ? 'success' : 'error');
+            } catch (error) {
+                logResult('advanced', `Falha no teste de operações em lote: ${error.message}`, 'error');
+            }
+        }
+
+        async function testStoredProcedure() {
+            try {
+                logResult('advanced', 'Iniciando teste de procedimento armazenado...', 'info');
+                const createProcedureSQL = `
+                    CREATE OR REPLACE PROCEDURE test_procedure(p_result OUT VARCHAR2) AS
+                    BEGIN
+                        p_result := 'Hello from stored procedure';
+                    END;
+                `;
+                const createResult = await GMP_Database.execute(createProcedureSQL);
+                logResult('advanced', `Resultado da criação do procedimento: ${JSON.stringify(createResult)}`,
+                    createResult.success ? 'success' : 'error');
+                if (createResult.success) {
+                    const callResult = await GMP_Database.callProcedure('test_procedure', []);
+                    logResult('advanced', `Resultado da chamada do procedimento: ${JSON.stringify(callResult)}`,
+                        callResult.success ? 'success' : 'error');
+                }
+            } catch (error) {
+                logResult('advanced', `Falha no teste de procedimento armazenado: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOracleConnection() {
+            try {
+                logResult('oracle', 'Iniciando teste de conexão Oracle...', 'info');
+                const oracleConfig = { user: 'your_oracle_user', password: 'your_oracle_password', connectString: 'localhost:1521/XE' };
+                const oracleResult = await GMP_Database.connectOracle(oracleConfig);
+                logResult('oracle', `Resultado da conexão Oracle: ${JSON.stringify(oracleResult)}`,
+                    oracleResult.success ? 'success' : 'error');
+            } catch (error) {
+                logResult('oracle', `Falha no teste de conexão Oracle: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOracleQuery() {
+            try {
+                logResult('oracle', 'Iniciando teste de consulta Oracle...', 'info');
+                const oracleQuery = 'SELECT * FROM all_tables WHERE ROWNUM <= 5';
+                const queryResult = await GMP_Database.oracleQuery(oracleQuery);
+                logResult('oracle', `Resultado da consulta Oracle: ${JSON.stringify(queryResult)}`,
+                    queryResult.success ? 'success' : 'error');
+                if (queryResult.success && queryResult.data) {
+                    logResult('oracle', `Consultados ${queryResult.data.length} tabelas`, 'info');
+                }
+            } catch (error) {
+                logResult('oracle', `Falha no teste de consulta Oracle: ${error.message}`, 'error');
+            }
+        }
+
+        async function testOracleSync() {
+            try {
+                logResult('oracle', 'Iniciando teste de sincronização de dados Oracle...', 'info');
+                const syncConfig = { sourceTable: 'oracle_table', targetTable: 'local_table', syncMode: 'full' };
+                const syncResult = await GMP_Database.syncWithOracle(syncConfig);
+                logResult('oracle', `Resultado da sincronização: ${JSON.stringify(syncResult)}`,
+                    syncResult.success ? 'success' : 'error');
+            } catch (error) {
+                logResult('oracle', `Falha no teste de sincronização de dados: ${error.message}`, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            logResult('connection', 'Página de teste do gerenciador de banco de dados carregada', 'info');
+            logResult('basic', 'Teste de operações básicas pronto', 'info');
+            logResult('advanced', 'Teste de recursos avançados pronto', 'info');
+            logResult('oracle', 'Teste de integração Oracle pronto', 'info');
+        });
+    </script>
+</body>
+</html>

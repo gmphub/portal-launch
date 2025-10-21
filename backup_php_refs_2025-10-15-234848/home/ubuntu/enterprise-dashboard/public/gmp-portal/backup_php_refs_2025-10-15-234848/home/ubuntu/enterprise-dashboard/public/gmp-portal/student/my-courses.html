@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Meus Cursos - gmp Academy</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Student</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Meus Cursos</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <div class="sidebar-header" style="display: none;">
+                <div class="sidebar-logo">
+                    <span>gmp Academy</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item active" href="my-courses.html">
+                    <i class="fas fa-book"></i> Meus Cursos
+                </a>
+                <a class="nav-item" href="classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Aulas
+                </a>
+                <a class="nav-item" href="course-view.html">
+                    <i class="fas fa-eye"></i> Visualizar Curso
+                </a>
+                <a class="nav-item" href="lesson.html">
+                    <i class="fas fa-play-circle"></i> Lição
+                </a>
+                <a class="nav-item" href="progress.html">
+                    <i class="fas fa-chart-line"></i> Progresso
+                </a>
+                <a class="nav-item" href="certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="downloads.html">
+                    <i class="fas fa-download"></i> Downloads
+                </a>
+                <a class="nav-item" href="profile.html">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+                    
+                    <!-- Navigation Bar -->
+                    <div class="card">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="student-nav-tabs-container">
+                                <a class="student-nav-tab" href="lesson.html">
+                                    <i class="fas fa-play"></i> Continuar Aula
+                                </a>
+                                <a class="student-nav-tab" href="progress.html">
+                                    <i class="fas fa-chart-line"></i> Progresso
+                                </a>
+                                <a class="student-nav-tab" href="certificates.html">
+                                    <i class="fas fa-certificate"></i> Certificados
+                                </a>
+                                <a class="student-nav-tab" href="downloads.html">
+                                    <i class="fas fa-download"></i> Downloads
+                                </a>
+                                <a class="student-nav-tab" href="profile.html">
+                                    <i class="fas fa-user"></i> Perfil
+                                </a>
+                                <a class="student-nav-tab" href="classes.html">
+                                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                                </a>
+                                <a class="student-nav-tab active" href="my-courses.html">
+                                    <i class="fas fa-book"></i> Meus Cursos
+                                </a>
+                                <a class="student-nav-tab" href="settings.html">
+                                    <i class="fas fa-cog"></i> Configurações
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Header -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">Meus Cursos</h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Aqui estão todos os cursos em que você está matriculado
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-secondary">
+                                        <i class="fas fa-search"></i> Buscar
+                                    </button>
+                                    <button class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-plus"></i> Explorar Cursos
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Progress Overview -->
+                    <div class="modern-metrics-grid animate-fade-in-up">
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-book-open"></i></div>
+                            </div>
+                            <div class="metric-value">2</div>
+                            <div class="metric-label">Cursos Ativos</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-clock"></i></div>
+                            </div>
+                            <div class="metric-value">12h</div>
+                            <div class="metric-label">Tempo Estudado</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+                            </div>
+                            <div class="metric-value">18%</div>
+                            <div class="metric-label">Progresso Médio</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-fire"></i></div>
+                            </div>
+                            <div class="metric-value">7</div>
+                            <div class="metric-label">Dias Consecutivos</div>
+                        </div>
+                    </div>
+
+                    <!-- Modern Course Cards - Horizontal Layout -->
+                    <div class="course-cards-horizontal animate-slide-in-right">
+                        
+                        <!-- English Course -->
+                        <div class="course-card-modern shadow-hover">
+                            <div class="course-image">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <div class="course-content">
+                                <div class="course-header">
+                                    <h4>Inglês para Iniciantes</h4>
+                                    <div class="course-meta">Professor: John Doe • 71 aulas</div>
+                                </div>
+                                
+                                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md); line-height: 1.4;">
+                                    Aprenda o básico do inglês de forma divertida e interativa com exercícios práticos.
+                                </p>
+
+                                <div class="progress-section">
+                                    <div class="d-flex align-items-center justify-content-between margin-bottom: var(--spacing-xs);">
+                                        <span style="font-size: 14px; color: var(--text-secondary);">Progresso</span>
+                                        <span style="font-size: 14px; font-weight: 600;">18%</span>
+                                    </div>
+                                    <div class="progress-bar-modern">
+                                        <div class="progress-fill" style="width: 18%;"></div>
+                                    </div>
+                                    <small style="color: var(--text-secondary);">13 de 71 aulas concluídas</small>
+                                </div>
+
+                                <div class="d-flex gap-2" style="margin-top: var(--spacing-md);">
+                                    <button class="btn-modern btn-modern-primary" onclick="window.location.href='course-view.html'">
+                                        <i class="fas fa-play-circle"></i> Continuar
+                                    </button>
+                                    <button class="btn-modern btn-modern-secondary">
+                                        <i class="fas fa-chart-line"></i> Progresso
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Spanish Course -->
+                        <div class="course-card-modern shadow-hover">
+                            <div class="course-image" style="background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <div class="course-content">
+                                <div class="course-header">
+                                    <h4>Espanhol Básico</h4>
+                                    <div class="course-meta">Professor: Maria Garcia • 45 aulas</div>
+                                </div>
+                                
+                                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md); line-height: 1.4;">
+                                    Comece a falar espanhol com este curso introdutório e metodologia comprovada.
+                                </p>
+
+                                <div class="progress-section">
+                                    <div class="d-flex align-items-center justify-content-between margin-bottom: var(--spacing-xs);">
+                                        <span style="font-size: 14px; color: var(--text-secondary);">Progresso</span>
+                                        <span style="font-size: 14px; font-weight: 600;">0%</span>
+                                    </div>
+                                    <div class="progress-bar-modern">
+                                        <div class="progress-fill" style="width: 0%;"></div>
+                                    </div>
+                                    <small style="color: var(--text-secondary);">Curso não iniciado</small>
+                                </div>
+
+                                <div class="d-flex gap-2" style="margin-top: var(--spacing-md);">
+                                    <button class="btn-modern btn-modern-primary" onclick="window.location.href='course-view.html'">
+                                        <i class="fas fa-play-circle"></i> Iniciar Curso
+                                    </button>
+                                    <button class="btn-modern btn-modern-secondary">
+                                        <i class="fas fa-info-circle"></i> Detalhes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="cards-grid cards-grid-3 animate-fade-in-up">
+                        <!-- Continue Learning -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Continuar Aprendendo</h3>
+                                <p class="card-description">Retome de onde parou na última aula</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Practice Mode -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Modo Prática</h3>
+                                <p class="card-description">Exercite o que aprendeu com atividades</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-secondary">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Study Schedule -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Cronograma</h3>
+                                <p class="card-description">Organize seus estudos com metas diárias</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-success">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Study Streak -->
+                    <div class="card shadow-hover animate-slide-in-right">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 20px;">Sequência de Estudos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-4" style="margin-bottom: var(--spacing-lg);">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-fire" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 24px; color: var(--text-primary);">7 dias consecutivos!</h3>
+                                    <p style="margin: 4px 0 0 0; color: var(--text-secondary);">Continue assim para manter sua sequência de estudos</p>
+                                </div>
+                            </div>
+
+                            <!-- Weekly Progress -->
+                            <div class="d-flex gap-2 justify-content-center" style="margin-bottom: var(--spacing-md);">
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-check" style="font-size: 16px;"></i>
+                                </div>
+                                <div style="width: 40px; height: 40px; background: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <strong style="font-size: 14px;">7</strong>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-calendar-day"></i> Estudar Hoje
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script defer="defer" src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

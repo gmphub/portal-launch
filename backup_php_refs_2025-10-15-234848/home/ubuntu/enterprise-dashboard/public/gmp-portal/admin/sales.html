@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Vendas - gmp Academy Admin</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Admin</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Vendas</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="../student/profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html" data-title="Início">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="products.html" data-title="Produtos">
+                    <i class="fas fa-box"></i> Produtos
+                </a>
+                <a class="nav-item has-submenu" href="#" data-title="Menu">
+                    <i class="fas fa-edit"></i> Gerenciar Conteúdo
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="content-manager.html" title="Visão Geral"><i class="fas fa-eye"></i>Visão Geral</a></li>
+                    <li><a class="sub-item" href="video-upload.html" title="Upload de Vídeos"><i class="fas fa-video"></i>Upload de Vídeos</a></li>
+                    <li><a class="sub-item" href="bulk-upload.html" title="Upload em Lote"><i class="fas fa-upload"></i>Upload em Lote</a></li>
+                    <li><a class="sub-item" href="media-library.html" title="Biblioteca de Mídia"><i class="fas fa-photo-video"></i>Biblioteca de Mídia</a></li>
+                </ul>
+                <a class="nav-item" href="students.html" data-title="Alunos">
+                    <i class="fas fa-users"></i> Alunos
+                </a>
+                <a class="nav-item" href="classes.html" data-title="Turmas">
+                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                </a>
+                <a class="nav-item" href="analytics.html" data-title="Analytics">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a class="nav-item" href="certificates.html" data-title="Certificados">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="gamification.html" data-title="Gamificação">
+                    <i class="fas fa-trophy"></i> Gamificação
+                </a>
+                <a class="nav-item active" href="sales.html" data-title="Vendas">
+                    <i class="fas fa-dollar-sign"></i> Vendas
+                </a>
+                <a class="nav-item" href="comments.html" data-title="Comentários">
+                    <i class="fas fa-comments"></i> Comentários
+                </a>
+                <a class="nav-item" href="showcase.html" data-title="Vitrine">
+                    <i class="fas fa-store"></i> Vitrine
+                </a>
+                <a class="nav-item has-submenu" href="#" data-title="Menu">
+                    <i class="fas fa-cog"></i> Configurações
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="settings.html" title="Configurações Gerais"><i class="fas fa-cogs"></i>Geral</a></li>
+                    <li><a class="sub-item" href="personalization.html" title="Personalização"><i class="fas fa-palette"></i>Personalização</a></li>
+                    <li><a class="sub-item" href="payment-setup.html" title="Configuração de Pagamento"><i class="fas fa-credit-card"></i>Config. Pagamento</a></li>
+                    <li><a class="sub-item" href="payment-history.html" title="Histórico de Pagamento"><i class="fas fa-history"></i>Histórico Pagamento</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+
+                    <!-- Enhanced Navigation Bar -->
+                    <div class="card shadow-hover animate-slide-in-down">
+                        <div class="card-body" style="padding: 0;">
+                            <div class="admin-nav-tabs-container" style="display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none;">
+                                <style>
+                                    .admin-nav-tabs-container::-webkit-scrollbar { display: none; }
+                                    .admin-nav-tab { 
+                                        flex-shrink: 0; 
+                                        padding: 1rem 1.5rem; 
+                                        text-decoration: none; 
+                                        color: var(--text-secondary); 
+                                        border-bottom: 3px solid transparent; 
+                                        transition: all 0.3s ease; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        gap: 0.5rem;
+                                        font-weight: 500;
+                                    }
+                                    .admin-nav-tab:hover { 
+                                        color: var(--primary-blue); 
+                                        background: rgba(255, 107, 53, 0.1);
+                                    }
+                                    .admin-nav-tab.active { 
+                                        color: #333; 
+                                        background: linear-gradient(45deg, #ffcc00, #ff9500); 
+                                        border-bottom-color: #ffcc00; 
+                                        box-shadow: 0 2px 8px rgba(255, 204, 0, 0.3);
+                                    }
+                                </style>
+                                <a class="admin-nav-tab" href="index.html">
+                                    <i class="fas fa-home"></i> Dashboard
+                                </a>
+                                <a class="admin-nav-tab" href="products.html">
+                                    <i class="fas fa-box"></i> Produtos
+                                </a>
+                                <a class="admin-nav-tab" href="content-manager.html">
+                                    <i class="fas fa-edit"></i> Conteúdo
+                                </a>
+                                <a class="admin-nav-tab" href="students.html">
+                                    <i class="fas fa-users"></i> Alunos
+                                </a>
+                                <a class="admin-nav-tab" href="classes.html">
+                                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                                </a>
+                                <a class="admin-nav-tab" href="analytics.html">
+                                    <i class="fas fa-chart-bar"></i> Analytics
+                                </a>
+                                <a class="admin-nav-tab" href="certificates.html">
+                                    <i class="fas fa-certificate"></i> Certificados
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Header with Enhanced UX -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">
+                                        <i class="fas fa-dollar-sign" style="color: var(--primary-blue); margin-right: 12px;"></i>
+                                        Dashboard de Vendas
+                                    </h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Acompanhe as vendas, receitas e métricas de conversão em tempo real
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-secondary">
+                                        <i class="fas fa-download"></i> Exportar Relatório
+                                    </button>
+                                    <button class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-plus-circle"></i> Nova Venda Manual
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Sales Statistics -->
+                    <div class="cards-grid cards-grid-4 animate-fade-in-up">
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--success-green);">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Receita Total</h3>
+                                <div class="card-value">R$ 42.8K</div>
+                                <p class="card-description" style="color: var(--success-green);">
+                                    <i class="fas fa-arrow-up"></i> +15.3% este mês
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-blue);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Vendas</h3>
+                                <div class="card-value">287</div>
+                                <p class="card-description" style="color: var(--success-green);">
+                                    <i class="fas fa-arrow-up"></i> +8.2% este mês
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-orange);">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Ticket Médio</h3>
+                                <div class="card-value">R$ 149</div>
+                                <p class="card-description" style="color: var(--success-green);">
+                                    <i class="fas fa-arrow-up"></i> +6.8% este mês
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-purple);">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Taxa de Conversão</h3>
+                                <div class="card-value">12.4%</div>
+                                <p class="card-description" style="color: var(--warning-yellow);">
+                                    <i class="fas fa-arrow-down"></i> -2.1% este mês
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Recent Sales -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-receipt" style="color: var(--primary-green); margin-right: 8px;"></i>
+                                Vendas Recentes
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Individual Sales Cards -->
+                            <div class="cards-grid cards-grid-1" style="gap: 1rem;">
+                                
+                                <!-- Sale 1 - Completed -->
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--success-green);">
+                                    <div style="display: flex; justify-content: between; align-items: center;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+                                                <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #4CAF50, #45a049); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
+                                                    <i class="fas fa-check"></i>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <div>
+                                                            <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">#V0287 - Maria Silva</h4>
+                                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Inglês para Iniciantes • 18/08/2025 14:23</p>
+                                                        </div>
+                                                        <span class="badge-modern badge-success">
+                                                            <i class="fas fa-check"></i> Aprovado
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(76, 175, 80, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--success-green);">R$ 149,90</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Valor</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(33, 150, 243, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--primary-blue);">Cartão</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Pagamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--primary-orange);">À Vista</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Parcelamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(156, 39, 176, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--primary-purple);">Stripe</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Gateway</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-left: 1rem;">
+                                            <button class="btn-modern btn-modern-secondary btn-sm">
+                                                <i class="fas fa-eye"></i> Detalhes
+                                            </button>
+                                            <button class="btn-modern btn-modern-primary btn-sm">
+                                                <i class="fas fa-receipt"></i> Nota Fiscal
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sale 2 - Pending -->
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--warning-yellow);">
+                                    <div style="display: flex; justify-content: between; align-items: center;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+                                                <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #FF9800, #F57C00); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
+                                                    <i class="fas fa-clock"></i>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <div>
+                                                            <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">#V0286 - João Santos</h4>
+                                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Conversação Avançada • 18/08/2025 13:45</p>
+                                                        </div>
+                                                        <span class="badge-modern badge-warning">
+                                                            <i class="fas fa-clock"></i> Processando
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--warning-yellow);">R$ 199,90</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Valor</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(33, 150, 243, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--primary-blue);">PIX</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Pagamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--primary-orange);">À Vista</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Parcelamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(255, 152, 0, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--warning-yellow);">PagSeguro</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Gateway</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-left: 1rem;">
+                                            <button class="btn-modern btn-modern-secondary btn-sm">
+                                                <i class="fas fa-eye"></i> Detalhes
+                                            </button>
+                                            <button class="btn-modern btn-modern-warning btn-sm">
+                                                <i class="fas fa-clock"></i> Aguardar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sale 3 - Cancelled -->
+                                <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--error-red);">
+                                    <div style="display: flex; justify-content: between; align-items: center;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+                                                <div style="width: 45px; height: 45px; background: linear-gradient(45deg, #f44336, #d32f2f); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
+                                                    <i class="fas fa-times"></i>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <div>
+                                                            <h4 style="margin: 0; font-size: 16px; color: var(--text-primary);">#V0285 - Ana Costa</h4>
+                                                            <p style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 14px;">Gramática Essencial • 17/08/2025 16:30</p>
+                                                        </div>
+                                                        <span class="badge-modern badge-danger">
+                                                            <i class="fas fa-times"></i> Cancelado
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(244, 67, 54, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--error-red);">R$ 129,90</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Valor</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(158, 158, 158, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--text-secondary);">Cartão</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Pagamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(158, 158, 158, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--text-secondary);">À Vista</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Parcelamento</div>
+                                                </div>
+                                                <div style="text-align: center; padding: 0.75rem; background: rgba(158, 158, 158, 0.1); border-radius: 6px;">
+                                                    <div style="font-size: 16px; font-weight: bold; color: var(--text-secondary);">Stripe</div>
+                                                    <div style="font-size: 12px; color: var(--text-secondary);">Gateway</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-left: 1rem;">
+                                            <button class="btn-modern btn-modern-secondary btn-sm">
+                                                <i class="fas fa-eye"></i> Detalhes
+                                            </button>
+                                            <button class="btn-modern btn-modern-danger btn-sm">
+                                                <i class="fas fa-undo"></i> Estorno
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 2rem;">
+                                <button class="btn-modern btn-modern-secondary btn-sm">
+                                    <i class="fas fa-chevron-left"></i> Anterior
+                                </button>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn-modern btn-modern-primary btn-sm">1</button>
+                                    <button class="btn-modern btn-modern-secondary btn-sm">2</button>
+                                    <button class="btn-modern btn-modern-secondary btn-sm">3</button>
+                                </div>
+                                <button class="btn-modern btn-modern-secondary btn-sm">
+                                    Próximo <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Sales Analytics -->
+                    <div class="card shadow-hover animate-slide-in-right">
+                        <div class="card-header">
+                            <h3 class="text-gradient" style="margin: 0; font-size: 18px;">
+                                <i class="fas fa-chart-line" style="color: var(--primary-orange); margin-right: 8px;"></i>
+                                Análise de Vendas
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Top Selling Courses -->
+                            <div style="margin-bottom: 2rem;">
+                                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Top Cursos Mais Vendidos</h4>
+                                <div class="cards-grid cards-grid-1" style="gap: 1rem;">
+                                    
+                                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                        <div style="width: 30px; height: 30px; background: var(--primary-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">
+                                            1
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <h5 style="margin: 0; color: var(--text-primary);">Inglês para Iniciantes</h5>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">156 vendas • R$ 23.844,00</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 16px; font-weight: bold; color: var(--success-green);">54%</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">do total</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                        <div style="width: 30px; height: 30px; background: #C0C0C0; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">
+                                            2
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <h5 style="margin: 0; color: var(--text-primary);">Conversação Avançada</h5>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">89 vendas • R$ 17.791,00</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 16px; font-weight: bold; color: var(--primary-blue);">31%</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">do total</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                                        <div style="width: 30px; height: 30px; background: #CD7F32; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">
+                                            3
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <h5 style="margin: 0; color: var(--text-primary);">Gramática Essencial</h5>
+                                            <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">42 vendas • R$ 5.456,00</p>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 16px; font-weight: bold; color: var(--primary-orange);">15%</div>
+                                            <div style="font-size: 12px; color: var(--text-secondary);">do total</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Payment Methods Distribution -->
+                            <div>
+                                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">Métodos de Pagamento</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                                    
+                                    <div style="text-align: center; padding: 1rem; background: rgba(33, 150, 243, 0.1); border-radius: 8px;">
+                                        <i class="fas fa-credit-card" style="font-size: 24px; color: var(--primary-blue); margin-bottom: 0.5rem;"></i>
+                                        <div style="font-size: 18px; font-weight: bold; color: var(--primary-blue);">67%</div>
+                                        <div style="font-size: 14px; color: var(--text-secondary);">Cartão de Crédito</div>
+                                    </div>
+                                    
+                                    <div style="text-align: center; padding: 1rem; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+                                        <i class="fas fa-qrcode" style="font-size: 24px; color: var(--success-green); margin-bottom: 0.5rem;"></i>
+                                        <div style="font-size: 18px; font-weight: bold; color: var(--success-green);">28%</div>
+                                        <div style="font-size: 14px; color: var(--text-secondary);">PIX</div>
+                                    </div>
+                                    
+                                    <div style="text-align: center; padding: 1rem; background: rgba(255, 152, 0, 0.1); border-radius: 8px;">
+                                        <i class="fas fa-barcode" style="font-size: 24px; color: var(--primary-orange); margin-bottom: 0.5rem;"></i>
+                                        <div style="font-size: 18px; font-weight: bold; color: var(--primary-orange);">5%</div>
+                                        <div style="font-size: 14px; color: var(--text-secondary);">Boleto</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script defer src="../assets/js/main.js" type="text/javascript"></script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

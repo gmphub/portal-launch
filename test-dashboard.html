@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Dashboard - GMP</title>
+  <link rel="stylesheet" href="assets/css/gmp-portal.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    .dashboard-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .result-area { background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; padding:10px; margin-top:10px; font-family:monospace; white-space:pre-wrap; max-height:300px; overflow-y:auto; }
+    .success { color:#28a745; }
+    .error { color:#dc3545; }
+    .info { color:#17a2b8; }
+    button { background:#007bff; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; margin:5px; }
+    button:hover { background:#0056b3; }
+    input { padding:8px; margin:5px; border:1px solid #ccc; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Teste de Dashboard do Sistema</h1>
+
+    <div class="section">
+      <h2>Login</h2>
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Senha">
+      <button onclick="login()">Entrar</button>
+      <div id="login-results" class="result-area"></div>
+    </div>
+
+    <div class="section">
+      <h2>Dados do Usuário</h2>
+      <button onclick="fetchUserData()">Buscar Dados do Usuário</button>
+      <div id="user-results" class="result-area"></div>
+    </div>
+
+    <div class="section">
+      <h2>Progresso e Cursos</h2>
+      <button onclick="fetchProgress()">Buscar Progresso</button>
+      <button onclick="fetchCourses()">Buscar Cursos Ativos</button>
+      <div id="progress-results" class="result-area"></div>
+    </div>
+
+    <div class="section">
+      <h2>Resumo Completo</h2>
+      <button onclick="fetchDashboard()">Carregar Dashboard</button>
+      <div id="dashboard-results" class="result-area"></div>
+    </div>
+  </div>
+
+<script src="assets/js/security.js"></script>
+<script>
+function logResult(id, message, type = 'info') {
+  const ts = new Date().toLocaleTimeString();
+  const entry = `<div class="${type}">[${ts}] ${type.toUpperCase()}: ${message}</div>`;
+  const container = document.getElementById(id);
+  container.innerHTML += entry;
+  container.scrollTop = container.scrollHeight;
+}
+
+async function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) {
+    logResult('login-results', 'Email e senha são obrigatórios', 'error');
+    return;
+  }
+  try {
+    const result = await GMP_Security.authenticateUser(email, password);
+    if (result.success) {
+      logResult('login-results', `Login bem-sucedido para ${result.username}`, 'success');
+    } else {
+      logResult('login-results', `Falha no login: ${result.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('login-results', `Erro: ${e.message}`, 'error');
+  }
+}
+
+async function fetchUserData() {
+  try {
+    logResult('user-results', 'Buscando dados do usuário...', 'info');
+    const res = await fetch('/api/dashboard', {
+      headers: { 'Authorization': 'Bearer ' + (window.securityManager?.token || '') }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      logResult('user-results', `Usuário: ${JSON.stringify(data.user)}`, 'success');
+    } else {
+      logResult('user-results', `Erro: ${data.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('user-results', `Falha: ${e.message}`, 'error');
+  }
+}
+
+async function fetchProgress() {
+  try {
+    logResult('progress-results', 'Buscando progresso do usuário...', 'info');
+    const res = await fetch('/api/dashboard', {
+      headers: { 'Authorization': 'Bearer ' + (window.securityManager?.token || '') }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      logResult('progress-results', `Progresso: ${JSON.stringify(data.progress)}`, 'success');
+    } else {
+      logResult('progress-results', `Erro: ${data.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('progress-results', `Falha: ${e.message}`, 'error');
+  }
+}
+
+async function fetchCourses() {
+  try {
+    logResult('progress-results', 'Buscando cursos ativos...', 'info');
+    const res = await fetch('/api/dashboard', {
+      headers: { 'Authorization': 'Bearer ' + (window.securityManager?.token || '') }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      logResult('progress-results', `Cursos: ${JSON.stringify(data.courses)}`, 'success');
+    } else {
+      logResult('progress-results', `Erro: ${data.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('progress-results', `Falha: ${e.message}`, 'error');
+  }
+}
+
+async function fetchDashboard() {
+  try {
+    logResult('dashboard-results', 'Carregando dados completos do dashboard...', 'info');
+    const res = await fetch('/api/dashboard', {
+      headers: { 'Authorization': 'Bearer ' + (window.securityManager?.token || '') }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      logResult('dashboard-results', `Resumo: ${JSON.stringify(data)}`, 'success');
+    } else {
+      logResult('dashboard-results', `Erro: ${data.error}`, 'error');
+    }
+  } catch (e) {
+    logResult('dashboard-results', `Falha: ${e.message}`, 'error');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  logResult('login-results', 'Página de dashboard carregada', 'info');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aula - gmp Academy</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="../assets/css/lesson.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Student</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Lição</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <div class="sidebar-header" style="display: none;">
+                <div class="sidebar-logo">
+                    <span>gmp Academy</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="my-courses.html">
+                    <i class="fas fa-book"></i> Meus Cursos
+                </a>
+                <a class="nav-item" href="classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Aulas
+                </a>
+                <a class="nav-item" href="course-view.html">
+                    <i class="fas fa-eye"></i> Visualizar Curso
+                </a>
+                <a class="nav-item active" href="lesson.html">
+                    <i class="fas fa-play-circle"></i> Lição
+                </a>
+                <a class="nav-item" href="progress.html">
+                    <i class="fas fa-chart-line"></i> Progresso
+                </a>
+                <a class="nav-item" href="certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="downloads.html">
+                    <i class="fas fa-download"></i> Downloads
+                </a>
+                <a class="nav-item" href="profile.html">
+                    <i class="fas fa-user"></i> Perfil
+                </a>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i> Configurações
+                </a>
+            </nav>
+        </div>
+        
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="lesson-navigation-row">
+                    <div class="voltar-text" onclick="window.history.back()" style="cursor: pointer; color: var(--text-primary); font-size: 14px;">
+                        <i class="fas fa-arrow-left" style="color: var(--text-primary); margin-right: 6px;"></i>Voltar
+                    </div>
+                </div>
+                
+                <div class="lesson-layout">
+                    <!-- Main Video Area -->
+                    <div class="lesson-main">
+                        <!-- Lesson Header -->
+                        <div class="lesson-header">
+                            <div class="lesson-header-left">
+                                <div class="lesson-header-icon">
+                                    <i class="fas fa-play" style="color: white; font-size: 16px;"></i>
+                                </div>
+                                <div class="lesson-header-info">
+                                    <h2 id="currentLessonTitle">Vídeo Animação - Saudações</h2>
+                                    <p id="currentLessonInfo">Módulo 1: Greetings • Aula 1 de 3</p>
+                                </div>
+                            </div>
+                            <div class="lesson-header-right">
+                                <div class="lesson-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="status-badge">
+                                    <i class="fas fa-check"></i> Concluído
+                                </span>
+                                <span class="lesson-points">+10</span>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Controls -->
+                        <div class="lesson-nav-controls">
+                            <button class="nav-previous circular-nav-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="lesson-status-info">
+                                <div class="rating-stars-display">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="status-completed">Concluído</span>
+                            </div>
+                            <button class="nav-next circular-nav-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Modern Video Player -->
+                        <div class="modern-video-player animate-fade-in-up">
+                            <div class="video-placeholder">
+                                <div class="video-content">
+                                    <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                        <i class="fas fa-play" style="font-size: 32px;"></i>
+                                    </div>
+                                    <h3 id="videoTitle" style="margin: 0 0 0.5rem 0;">Greetings - Explicação</h3>
+                                    <p style="margin: 0; opacity: 0.9;">Clique para reproduzir o vídeo</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Video Controls -->
+                            <div class="video-controls">
+                                <div class="d-flex align-items-center gap-3">
+                                    <button class="video-btn">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div class="video-progress">
+                                        <div class="progress-track">
+                                            <div class="progress-fill" style="width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <span style="font-size: 14px; color: white;">2:45 / 2:45</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button class="video-btn">
+                                        <i class="fas fa-volume-up"></i>
+                                    </button>
+                                    <button class="video-btn">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <button class="video-btn">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Lesson Description -->
+                        <div class="card shadow-hover animate-fade-in-up" style="margin: 0 1rem var(--spacing-lg) 1rem;">
+                            <div class="card-header">
+                                <h3 style="margin: 0; font-size: 18px; color: var(--text-primary);">Descrição da Aula</h3>
+                            </div>
+                            <div class="card-body" style="line-height: 1.8;">
+                                <h4 id="lessonSectionTitle" style="color: var(--primary-blue); margin-bottom: 1rem;">1. GREETINGS</h4>
+                                <p>Você sabia que existem várias formas de cumprimentar alguém em inglês?</p>
+                                
+                                <div style="background: var(--background-light); padding: var(--spacing-md); border-radius: 8px; margin: var(--spacing-md) 0;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); font-size: 14px;">
+                                        <div><strong>Hello</strong> → Oi <em>/hêlou/</em></div>
+                                        <div><strong>Hi</strong> → Oi <em>/hái/</em></div>
+                                        <div><strong>Good morning</strong> → Bom dia <em>/guúd mórnin'/</em></div>
+                                        <div><strong>Good afternoon</strong> → Boa tarde <em>/guúd áfternuun/</em></div>
+                                        <div><strong>Good evening</strong> → Boa noite (tardinha) <em>/guúd ívnin'/</em></div>
+                                        <div><strong>Good night</strong> → Boa noite <em>/guúd náit/</em></div>
+                                    </div>
+                                </div>
+                                <p>Para se despedir, use <strong>Goodbye → Até mais /guúd bái/</strong></p>
+                                <p>Para perguntar como alguém está: <strong>How are you? → Como você está? /háu arr yu/</strong></p>
+                                <p>Quando quiser ser educado: <strong>Please → Por favor /plíz/</strong></p>
+                                <p>Para agradecer: <strong>Thank you → Obrigada/Obrigado /th-enk yu/</strong></p>
+                                
+                                <div style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); color: white; padding: var(--spacing-md); border-radius: 8px; margin-top: var(--spacing-lg);">
+                                    <h5 style="margin: 0 0 0.5rem 0;"><i class="fas fa-lightbulb"></i> Dica Importante</h5>
+                                    <p style="margin: 0;">Em ambientes profissionais, <strong>"Nice to meet you"</strong> é uma ótima maneira de se apresentar. Para despedidas mais descontraídas, prefira <strong>"Bye"</strong> ou <strong>"See you later"</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div class="card shadow-hover animate-fade-in-up" style="margin: var(--spacing-lg) 1rem;">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h3 style="margin: 0; font-size: 18px; color: var(--text-primary);">Comentários</h3>
+                                    <span style="background: var(--background-light); color: var(--text-primary); padding: 4px 8px; border-radius: 12px; font-size: 12px;">0</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-3" style="margin-bottom: var(--spacing-md);">
+                                    <div class="user-avatar" style="width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">GP</div>
+                                    <input class="form-control" placeholder="Comente algo sobre a aula..." type="text" style="flex: 1;"/>
+                                    <button class="btn-modern btn-modern-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Empty State -->
+                                <div style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
+                                    <div style="width: 60px; height: 60px; background: var(--background-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                        <i class="fas fa-comments" style="font-size: 24px; opacity: 0.5;"></i>
+                                    </div>
+                                    <h4 style="margin: 0 0 0.5rem 0;">Ainda sem comentários por aqui</h4>
+                                    <p style="margin: 0;">Seja a primeira pessoa a comentar algo e inicie um tópico para trocar ideias sobre a aula.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lesson Sidebar - Dynamic Content -->
+                    <div class="lesson-sidebar" id="lessonSidebar">
+                        <div class="lesson-sidebar-header">
+                            <h3>Lista de Conteúdos</h3>
+                            <div class="d-flex gap-1">
+                                <div class="settings-dropdown">
+                                    <button class="btn-icon" id="settingsDropdown" title="Configurações">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                    <div class="dropdown-menu" id="settingsMenu">
+                                        <div class="dropdown-header">Posição da Barra</div>
+                                        <button class="dropdown-item" onclick="setSidebarPosition('right')">
+                                            <svg width="14" height="12" viewBox="0 0 14 12" fill="currentColor">
+                                                <rect x="0" y="0" width="14" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
+                                                <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                                                <rect x="10" y="2" width="4" height="10" fill="currentColor" opacity="0.7"/>
+                                            </svg>
+                                            Direita
+                                        </button>
+                                        <button class="dropdown-item" onclick="setSidebarPosition('left')">
+                                            <svg width="14" height="12" viewBox="0 0 14 12" fill="currentColor">
+                                                <rect x="0" y="0" width="14" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
+                                                <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                                                <rect x="0" y="2" width="4" height="10" fill="currentColor" opacity="0.7"/>
+                                            </svg>
+                                            Esquerda
+                                        </button>
+                                    </div>
+                                </div>
+                                <button class="btn-icon" id="toggleSidebar" title="Recolher">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                        <line x1="4" y1="2" x2="4" y2="14" stroke="currentColor" stroke-width="2"/>
+                                        <polyline points="8,6 12,8 8,10" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Search -->
+                        <div class="lesson-search">
+                            <input type="text" id="searchInput" placeholder="Buscar conteúdo" class="search-input"/>
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <!-- Dynamic Units List -->
+                        <div class="units-container" id="unitsContainer">
+                            <!-- Units will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Collapsed Controls (when collapsed) -->
+                <div class="collapsed-sidebar-controls" id="collapsedSidebarControls" style="display: none;">
+                    <!-- Expand button when collapsed -->
+                    <div class="collapsed-control-btn">
+                        <button class="btn-icon" id="collapsedExpandBtn" title="Expandir">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <line x1="12" y1="2" x2="12" y2="14" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="8,6 4,8 8,10" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Search when collapsed -->
+                    <div class="collapsed-control-btn">
+                        <button class="btn-icon" id="collapsedSearchBtn" title="Buscar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Settings when collapsed -->
+                    <div class="collapsed-control-btn">
+                        <div class="settings-dropdown">
+                            <button class="btn-icon" id="collapsedSettingsDropdown" title="Configurações">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <div class="dropdown-menu" id="collapsedSettingsMenu">
+                                <div class="dropdown-header">Posição da Barra</div>
+                                <button class="dropdown-item" onclick="setSidebarPosition('right')">
+                                    <svg width="14" height="12" viewBox="0 0 14 12" fill="currentColor">
+                                        <rect x="0" y="0" width="14" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
+                                        <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="10" y="2" width="4" height="10" fill="currentColor" opacity="0.7"/>
+                                    </svg>
+                                    Direita
+                                </button>
+                                <button class="dropdown-item" onclick="setSidebarPosition('left')">
+                                    <svg width="14" height="12" viewBox="0 0 14 12" fill="currentColor">
+                                        <rect x="0" y="0" width="14" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
+                                        <rect x="0" y="0" width="14" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                                        <rect x="0" y="2" width="4" height="10" fill="currentColor" opacity="0.7"/>
+                                    </svg>
+                                    Esquerda
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script defer="defer" src="../assets/js/main.js" type="text/javascript"></script>
+    <script defer="defer" src="../assets/js/lesson.js" type="text/javascript"></script>
+
+<script>
+/* auto-expands lesson-sidebar before first paint */
+document.addEventListener('DOMContentLoaded',()=>{
+  const sb = document.getElementById('lessonSidebar');
+  if(sb) sb.classList.remove('collapsed');
+});
+</script>
+
+<script>
+/* closes all dropdown menus on first paint */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.dropdown-menu').forEach(d=>d.classList.remove('show'));
+});
+</script>
+
+<!-- DISABLED: Conflicting script that was overwriting content -->
+<!-- <script>
+/* Handle URL parameters from dashboard integration */
+document.addEventListener('DOMContentLoaded',()=>{
+  // Parse URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const unit = urlParams.get('unit');
+  const title = urlParams.get('title');
+  const lessonPath = urlParams.get('lessonPath');
+  
+  // Update lesson content based on parameters
+  if (unit && title) {
+    // Update lesson title
+    const titleElement = document.getElementById('currentLessonTitle');
+    if (titleElement) {
+      titleElement.textContent = decodeURIComponent(title);
+    }
+    
+    // Update video title
+    const videoTitleElement = document.getElementById('videoTitle');
+    if (videoTitleElement) {
+      videoTitleElement.textContent = decodeURIComponent(title) + ' - Vídeo Aula';
+    }
+    
+    // Update lesson section title
+    const sectionTitleElement = document.getElementById('lessonSectionTitle');
+    if (sectionTitleElement) {
+      sectionTitleElement.textContent = `${unit}. ${decodeURIComponent(title).toUpperCase()}`;
+    }
+    
+    // Update lesson info
+    const lessonInfoElement = document.getElementById('currentLessonInfo');
+    if (lessonInfoElement) {
+      lessonInfoElement.textContent = `Módulo ${unit} • Aula Interativa`;
+    }
+    
+    // Update breadcrumb
+    const breadcrumbActive = document.querySelector('.breadcrumb-item.active span');
+    if (breadcrumbActive) {
+      breadcrumbActive.textContent = decodeURIComponent(title);
+    }
+    
+    // Add unit-specific content based on unit ID
+    updateUnitContent(unit);
+  }
+  
+  function updateUnitContent(unitId) {
+    const contentMap = {
+      '1': {
+        description: 'Nesta aula você vai aprender o alfabeto em inglês, essencial para qualquer início de aprendizado.',
+        vocabulary: ['A → Apple', 'B → Ball', 'C → Cat', 'D → Dog', 'E → Elephant'],
+        tips: 'Pratique pronunciando cada letra claramente. Use músicas do alfabeto para ajudar na memorização.'
+      },
+      '2': {
+        description: 'Aprenda a falar sobre sua família em inglês, apresentando seus pais, irmãos e outros parentes.',
+        vocabulary: ['Father → Pai', 'Mother → Mãe', 'Brother → Irmão', 'Sister → Irmã', 'Family → Família'],
+        tips: 'Use "my" para indicar posse: "my father", "my mother".'
+      },
+      '3': {
+        description: 'Descubra as cores em inglês e como usá-las para descrever objetos ao seu redor.',
+        vocabulary: ['Red → Vermelho', 'Blue → Azul', 'Green → Verde', 'Yellow → Amarelo', 'Black → Preto'],
+        tips: 'Cores são adjetivos, então geralmente vêm antes do substantivo: "red car", "blue sky".'
+      },
+      '4': {
+        description: 'Conheça os animais em inglês, desde animais de estimação até animais selvagens.',
+        vocabulary: ['Dog → Cachorro', 'Cat → Gato', 'Bird → Pássaro', 'Lion → Leão', 'Elephant → Elefante'],
+        tips: 'Pratique fazendo os sons dos animais enquanto aprende os nomes em inglês.'
+      },
+      '5': {
+        description: 'Aprenda o vocabulário de alimentos e como pedir comida em inglês.',
+        vocabulary: ['Apple → Maçã', 'Bread → Pão', 'Milk → Leite', 'Water → Água', 'Rice → Arroz'],
+        tips: 'Use "some" para alimentos incontáveis: "some water", "some rice".'
+      },
+      'student': {
+        description: 'Veja seu progresso geral, conquistas e estatísticas de aprendizado.',
+        vocabulary: ['Progress → Progresso', 'Achievement → Conquista', 'Score → Pontuação', 'Level → Nível'],
+        tips: 'Mantenha uma rotina de estudos para maximizar seu progresso.'
+      },
+      'trophy': {
+        description: 'Parabéns! Você completou o curso. Veja seu certificado e conquistas.',
+        vocabulary: ['Certificate → Certificado', 'Complete → Completo', 'Success → Sucesso', 'Graduate → Formar-se'],
+        tips: 'Continue praticando para manter seu inglês afiado!'
+      }
+    };
+    
+    const content = contentMap[unitId];
+    if (content) {
+      // Update description
+      const descriptionElements = document.querySelectorAll('.card-body p');
+      if (descriptionElements.length > 0) {
+        descriptionElements[0].textContent = content.description;
+      }
+      
+      // Update vocabulary section if exists
+      const vocabSection = document.querySelector('.card-body .grid');
+      if (vocabSection && content.vocabulary) {
+        vocabSection.innerHTML = content.vocabulary.map(item => 
+          `<div><strong>${item.split(' → ')[0]}</strong> → ${item.split(' → ')[1]}</div>`
+        ).join('');
+      }
+      
+      // Update tips section
+      const tipSection = document.querySelector('.card-body .bg-gradient');
+      if (tipSection) {
+        tipSection.querySelector('p').textContent = content.tips;
+      }
+    }
+  }
+});
+</script> -->
+
+<script>
+// Handle Dashboard Integration Parameters
+(function() {
+    'use strict';
+    
+    // Unit content data - matching actual dashboard units
+    const unitContent = {
+        1: {
+            title: 'Cumprimentos',
+            module: 'Módulo 1: Basics',
+            lessonNumber: 'Aula 1 de 71',
+            videoTitle: 'Greetings - Cumprimentos em Inglês',
+            sectionTitle: '1. GREETINGS',
+            description: 'Descubra como cumprimentar e se despedir em inglês. O primeiro passo para qualquer conversa!',
+            content: {
+                vocabulary: [
+                    { en: 'Hello', pt: 'Oi' },
+                    { en: 'Hi', pt: 'Oi' },
+                    { en: 'Good morning', pt: 'Bom dia' },
+                    { en: 'Good afternoon', pt: 'Boa tarde' },
+                    { en: 'Good evening', pt: 'Boa noite (tardinha)' },
+                    { en: 'Good night', pt: 'Boa noite (ao dormir)' },
+                    { en: 'Goodbye', pt: 'Tchau' },
+                    { en: 'Bye', pt: 'Tchau' }
+                ],
+                tips: 'Em ambientes profissionais, "Nice to meet you" é uma ótima maneira de se apresentar. Para despedidas mais descontraídas, prefira "Bye" ou "See you later".'
+            }
+        },
+        2: {
+            title: 'Alfabeto',
+            module: 'Módulo 1: Basics',
+            lessonNumber: 'Aula 2 de 71',
+            videoTitle: 'Alphabet - O Alfabeto em Inglês',
+            sectionTitle: '2. ALPHABET',
+            description: 'Domine as letras e sons do alfabeto em inglês para soletrar palavras e nomes corretamente.',
+            content: {
+                vocabulary: [
+                    { en: 'A - B - C', pt: 'Ei - Bi - Si' },
+                    { en: 'D - E - F', pt: 'Di - I - Éf' },
+                    { en: 'G - H - I', pt: 'Dji - Eitch - Ai' },
+                    { en: 'J - K - L', pt: 'Djêi - Kei - Él' },
+                    { en: 'M - N - O', pt: 'Ém - Én - Ôu' },
+                    { en: 'P - Q - R', pt: 'Pi - Kiu - Ar' },
+                    { en: 'S - T - U', pt: 'És - Ti - Iu' },
+                    { en: 'V - W - X', pt: 'Vi - Dâbliu - Écs' },
+                    { en: 'Y - Z', pt: 'Uai - Zé' }
+                ],
+                tips: 'Pratique pronunciando cada letra claramente. O som das vogais em inglês é diferente do português!'
+            }
+        },
+        3: {
+            title: 'Conhecendo alguém',
+            module: 'Módulo 1: Basics',
+            lessonNumber: 'Aula 3 de 71',
+            videoTitle: 'Meeting People - Conhecendo Pessoas',
+            sectionTitle: '3. MEETING PEOPLE',
+            description: 'Explore expressões formais e informais para conhecer e cumprimentar pessoas.',
+            content: {
+                vocabulary: [
+                    { en: 'Nice to meet you', pt: 'Prazer em conhecer' },
+                    { en: 'How are you?', pt: 'Como vai você?' },
+                    { en: "I'm fine, thank you", pt: 'Estou bem, obrigado(a)' },
+                    { en: 'What\'s your name?', pt: 'Qual é o seu nome?' },
+                    { en: 'My name is...', pt: 'Meu nome é...' },
+                    { en: 'Where are you from?', pt: 'De onde você é?' }
+                ],
+                tips: 'Lembre-se: em inglês, "How are you?" é uma saudação, não sempre uma pergunta real sobre como você está!'
+            }
+        },
+        4: {
+            title: 'Substantivos',
+            module: 'Módulo 1: Grammar',
+            lessonNumber: 'Aula 4 de 71',
+            videoTitle: 'Nouns - Os Substantivos em Inglês',
+            sectionTitle: '4. NOUNS',
+            description: 'Entenda o que são substantivos e como eles funcionam em inglês, incluindo gênero e número.',
+            content: {
+                vocabulary: [
+                    { en: 'Book', pt: 'Livro' },
+                    { en: 'Teacher', pt: 'Professor(a)' },
+                    { en: 'Student', pt: 'Estudante' },
+                    { en: 'Car', pt: 'Carro' },
+                    { en: 'House', pt: 'Casa' },
+                    { en: 'Friend', pt: 'Amigo(a)' }
+                ],
+                tips: 'Em inglês, a maioria dos substantivos não tem gênero. "The teacher" pode ser professor ou professora dependendo do contexto!'
+            }
+        },
+        5: {
+            title: 'Plurais irregulares + regras',
+            module: 'Módulo 1: Grammar',
+            lessonNumber: 'Aula 5 de 71',
+            videoTitle: 'Irregular Plurals - Plurais Irregulares',
+            sectionTitle: '5. IRREGULAR PLURALS',
+            description: 'Estude as exceções e regras especiais, pois a maioria dos plurais termina em \'s\', mas muitos não!',
+            content: {
+                vocabulary: [
+                    { en: 'Child - Children', pt: 'Criança - Crianças' },
+                    { en: 'Man - Men', pt: 'Homem - Homens' },
+                    { en: 'Woman - Women', pt: 'Mulher - Mulheres' },
+                    { en: 'Person - People', pt: 'Pessoa - Pessoas' },
+                    { en: 'Foot - Feet', pt: 'Pé - Pés' },
+                    { en: 'Tooth - Teeth', pt: 'Dente - Dentes' }
+                ],
+                tips: 'Os plurais irregulares são os mais comuns no dia a dia. Memorize-os pois não seguem regras!'
+            }
+        },
+        6: {
+            title: 'THE',
+            module: 'Módulo 1: Grammar',
+            lessonNumber: 'Aula 6 de 71',
+            videoTitle: 'The Article - O Artigo Definido THE',
+            sectionTitle: '6. THE DEFINITE ARTICLE',
+            description: 'Conheça o uso do artigo definido \'the\' para se referir a coisas específicas.',
+            content: {
+                vocabulary: [
+                    { en: 'The book', pt: 'O livro' },
+                    { en: 'The teacher', pt: 'O/a professor(a)' },
+                    { en: 'The car', pt: 'O carro' },
+                    { en: 'The house', pt: 'A casa' },
+                    { en: 'The sun', pt: 'O sol' },
+                    { en: 'The moon', pt: 'A lua' }
+                ],
+                tips: 'Use "the" para coisas específicas que ambos interlocutores conhecem. Ex: "The teacher is here" (o professor que ambos conhecem).'
+            }
+        },
+        7: {
+            title: 'A-AN',
+            module: 'Módulo 1: Grammar',
+            lessonNumber: 'Aula 7 de 71',
+            videoTitle: 'A/AN Articles - Artigos Indefinidos',
+            sectionTitle: '7. INDEFINITE ARTICLES',
+            description: 'Descubra como usar os artigos indefinidos \'a\' e \'an\' para falar de coisas em geral.',
+            content: {
+                vocabulary: [
+                    { en: 'A book', pt: 'Um livro' },
+                    { en: 'An apple', pt: 'Uma maçã' },
+                    { en: 'A car', pt: 'Um carro' },
+                    { en: 'An egg', pt: 'Um ovo' },
+                    { en: 'A house', pt: 'Uma casa' },
+                    { en: 'An hour', pt: 'Uma hora' }
+                ],
+                tips: 'Use "an" antes de palavras que começam com som de vogal (a, e, i, o, u), não apenas a letra!'
+            }
+        },
+        8: {
+            title: 'This that these those',
+            module: 'Módulo 1: Grammar',
+            lessonNumber: 'Aula 8 de 71',
+            videoTitle: 'Demonstratives - Pronomes Demonstrativos',
+            sectionTitle: '8. DEMONSTRATIVE PRONOUNS',
+            description: 'Domine os pronomes demonstrativos para apontar para coisas próximas e distantes.',
+            content: {
+                vocabulary: [
+                    { en: 'This', pt: 'Este/Esta (perto)' },
+                    { en: 'That', pt: 'Esse/Essa/Aquele/Aquela (longe)' },
+                    { en: 'These', pt: 'Estes/Estas (perto, plural)' },
+                    { en: 'Those', pt: 'Esses/Essas/Aqueles/Aquelas (longe, plural)' }
+                ],
+                tips: 'This/These = aqui (perto). That/Those = lá (longe). Simples assim!'
+            }
+        },
+        // Default content for any other unit
+        default: {
+            title: 'Lição',
+            module: 'Módulo de Estudo',
+            lessonNumber: 'Aula de Revisão',
+            videoTitle: 'Conteúdo da Lição',
+            sectionTitle: 'CONTEÚDO DA LIÇÃO',
+            description: 'Estudo e revisão do conteúdo.',
+            content: {
+                vocabulary: [
+                    { en: 'Lesson', pt: 'Lição' },
+                    { en: 'Study', pt: 'Estudar' },
+                    { en: 'Learn', pt: 'Aprender' },
+                    { en: 'Practice', pt: 'Praticar' }
+                ],
+                tips: 'Continue praticando para melhorar seu inglês!'
+            }
+        },
+        'student': {
+            title: 'Perfil do Aluno',
+            module: 'Área do Aluno',
+            lessonNumber: 'Visão Geral',
+            videoTitle: 'Seu Progresso',
+            sectionTitle: 'SEU DESEMPENHO',
+            description: 'Veja seu progresso e conquistas!',
+            content: {
+                vocabulary: [],
+                tips: 'Continue praticando todos os dias para manter seu progresso!'
+            }
+        },
+        'trophy': {
+            title: 'Conquistas',
+            module: 'Área de Conquistas',
+            lessonNumber: 'Certificados',
+            videoTitle: 'Suas Conquistas',
+            sectionTitle: 'CERTIFICADOS E BADGES',
+            description: 'Celebre suas conquistas!',
+            content: {
+                vocabulary: [],
+                tips: 'Parabéns por chegar até aqui! Você está indo muito bem!'
+            }
+        }
+    };
+    
+    // Get URL parameters
+    function getUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            unit: params.get('unit'),
+            title: params.get('title'),
+            lessonPath: params.get('lessonPath')
+        };
+    }
+    
+    // Load unit content
+    function loadUnitContent(unitId) {
+        console.log('Loading unit content for:', unitId);
+        let content = unitContent[unitId];
+        
+        // If no specific content, use default
+        if (!content) {
+            console.log('No specific content found for unit', unitId, 'using default');
+            content = unitContent.default;
+            // Update the title with the actual unit title from URL
+            const params = getUrlParams();
+            if (params.title) {
+                content.title = decodeURIComponent(params.title);
+            }
+        }
+        
+        if (!content) return;
+        
+        console.log('Using content:', content);
+        
+        // Update lesson title
+        const titleElement = document.getElementById('currentLessonTitle');
+        if (titleElement) {
+            titleElement.textContent = content.title;
+        }
+        
+        // Update lesson info
+        const infoElement = document.getElementById('currentLessonInfo');
+        if (infoElement) {
+            infoElement.textContent = `${content.module} • ${content.lessonNumber}`;
+        }
+        
+        // Update video title
+        const videoTitleElement = document.getElementById('videoTitle');
+        if (videoTitleElement) {
+            videoTitleElement.textContent = content.videoTitle;
+        }
+        
+        // Update section title
+        const sectionTitleElement = document.getElementById('lessonSectionTitle');
+        if (sectionTitleElement) {
+            sectionTitleElement.textContent = content.sectionTitle;
+        }
+        
+        // Update description content
+        updateDescriptionContent(content);
+        
+        // Update breadcrumb
+        updateBreadcrumb(content);
+    }
+    
+    // Update description content based on unit
+    function updateDescriptionContent(content) {
+        const cardBody = document.querySelector('.card-body');
+        if (!cardBody) return;
+        
+        if (content.content.vocabulary.length > 0) {
+            // Create vocabulary grid
+            let vocabHTML = '<p>' + content.description + '</p>';
+            vocabHTML += '<div style="background: var(--background-light); padding: var(--spacing-md); border-radius: 8px; margin: var(--spacing-md) 0;">';
+            vocabHTML += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-sm); font-size: 14px;">';
+            
+            content.content.vocabulary.forEach(item => {
+                vocabHTML += `<div><strong>${item.en}</strong> → ${item.pt}</div>`;
+            });
+            
+            vocabHTML += '</div></div>';
+            vocabHTML += `<div style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); color: white; padding: var(--spacing-md); border-radius: 8px; margin-top: var(--spacing-lg);">`;
+            vocabHTML += `<h5 style="margin: 0 0 0.5rem 0;"><i class="fas fa-lightbulb"></i> Dica Importante</h5>`;
+            vocabHTML += `<p style="margin: 0;">${content.content.tips}</p></div>`;
+            
+            cardBody.innerHTML = vocabHTML;
+        } else {
+            // For special units (student, trophy)
+            cardBody.innerHTML = '<p>' + content.description + '</p>' +
+                '<div style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green)); color: white; padding: var(--spacing-md); border-radius: 8px; margin-top: var(--spacing-lg);">' +
+                '<h5 style="margin: 0 0 0.5rem 0;"><i class="fas fa-lightbulb"></i> Dica Importante</h5>' +
+                '<p style="margin: 0;">' + content.content.tips + '</p></div>';
+        }
+    }
+    
+    // Update breadcrumb
+    function updateBreadcrumb(content) {
+        const breadcrumbActive = document.querySelector('.breadcrumb-item.active span');
+        if (breadcrumbActive) {
+            breadcrumbActive.textContent = content.title;
+        }
+    }
+    
+    // Initialize on page load
+    function init() {
+        const params = getUrlParams();
+        
+        if (params.unit) {
+            loadUnitContent(params.unit);
+        }
+        
+        // Add back to dashboard button
+        addBackToDashboardButton();
+    }
+    
+    // Add back to dashboard button
+    function addBackToDashboardButton() {
+        const voltarElement = document.querySelector('.voltar-text');
+        if (voltarElement) {
+            voltarElement.onclick = function() {
+                window.location.href = '../dashboard.html';
+            };
+        }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
+<
+
+<script src="assets/js/admin-tabs.js"></script>
+<
+
+<script src="assets/js/admin-dropdown.js"></script>
+<
+/body>
+</html>

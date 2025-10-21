@@ -1,0 +1,219 @@
+<script src="assets/js/security.js"></script>
+<script>
+    // Tab switching
+    function switchTab(tab) {
+        const tabs = document.querySelectorAll('.auth-tab');
+        const forms = document.querySelectorAll('.auth-form');
+
+        tabs.forEach(t => t.classList.remove('active'));
+        forms.forEach(f => f.classList.remove('active'));
+
+        if (tab === 'login') {
+            tabs[0].classList.add('active');
+            document.getElementById('loginForm').classList.add('active');
+        } else {
+            tabs[1].classList.add('active');
+            document.getElementById('registerForm').classList.add('active');
+        }
+
+        clearMessages();
+    }
+
+    // Password toggle
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            button.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            button.textContent = '👁️';
+        }
+    }
+
+    // Clear messages
+    function clearMessages() {
+        document.getElementById('successMessage').classList.remove('show');
+        document.getElementById('generalError').classList.remove('show');
+
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => {
+            msg.classList.remove('show');
+            msg.textContent = '';
+        });
+
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => input.classList.remove('error'));
+    }
+
+    // Show error
+    function showError(inputId, message) {
+        const input = document.getElementById(inputId);
+        const errorElement = document.getElementById(inputId + 'Error');
+
+        input.classList.add('error');
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+
+    // Show general message
+    function showGeneralMessage(message, isError = false) {
+        const successElement = document.getElementById('successMessage');
+        const errorElement = document.getElementById('generalError');
+
+        if (isError) {
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+            successElement.classList.remove('show');
+        } else {
+            successElement.textContent = message;
+            successElement.classList.add('show');
+            errorElement.classList.remove('show');
+        }
+    }
+
+    // Validate email
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Handle login
+    async function handleLogin(event) {
+        event.preventDefault();
+        clearMessages();
+
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+
+        let hasError = false;
+
+        if (!email) {
+            showError('loginEmail', 'Email is required');
+            hasError = true;
+        } else if (!validateEmail(email)) {
+            showError('loginEmail', 'Invalid email format');
+            hasError = true;
+        }
+
+        if (!password) {
+            showError('loginPassword', 'Password is required');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        const loginBtn = document.getElementById('loginBtn');
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Signing in...';
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, rememberMe })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.token) {
+                if (rememberMe) {
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                } else {
+                    sessionStorage.setItem('authToken', data.token);
+                    sessionStorage.setItem('user', JSON.stringify(data.user));
+                }
+
+                showGeneralMessage('Login successful! Redirecting...');
+
+                setTimeout(() => {
+                    window.location.href = 'student/index.html';
+                }, 1500);
+            } else {
+                showGeneralMessage(data.error || 'Login failed', true);
+            }
+        } catch (error) {
+            showGeneralMessage('Network error. Please try again.', true);
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Sign In';
+        }
+    }
+
+    // Handle register
+    async function handleRegister(event) {
+        event.preventDefault();
+        clearMessages();
+
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        let hasError = false;
+
+        if (!name) {
+            showError('registerName', 'Full name is required');
+            hasError = true;
+        }
+
+        if (!email) {
+            showError('registerEmail', 'Email is required');
+            hasError = true;
+        } else if (!validateEmail(email)) {
+            showError('registerEmail', 'Invalid email format');
+            hasError = true;
+        }
+
+        if (!password) {
+            showError('registerPassword', 'Password is required');
+            hasError = true;
+        } else if (password.length < 8) {
+            showError('registerPassword', 'Password must be at least 8 characters');
+            hasError = true;
+        }
+
+        if (!confirmPassword) {
+            showError('confirmPassword', 'Please confirm your password');
+            hasError = true;
+        } else if (password !== confirmPassword) {
+            showError('confirmPassword', 'Passwords do not match');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        const registerBtn = document.getElementById('registerBtn');
+        registerBtn.disabled = true;
+        registerBtn.textContent = 'Creating Account...';
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.token) {
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                showGeneralMessage('Registration successful! Redirecting...');
+
+                setTimeout(() => {
+                    window.location.href = 'student/index.html';
+                }, 2000);
+            } else {
+                showGeneralMessage(data.error || 'Registration failed', true);
+            }
+        } catch (error) {
+            showGeneralMessage('Network error. Please try again.', true);
+        } finally {
+            registerBtn.disabled = false;
+            registerBtn.textContent = 'Create Account';
+        }
+    }
+</script>
