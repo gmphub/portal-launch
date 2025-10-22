@@ -9,7 +9,7 @@ const multer = require('multer');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 const ORACLE_NAMESPACE = process.env.ORACLE_NAMESPACE;
@@ -53,6 +53,7 @@ db.serialize(() => {
     password TEXT NOT NULL,
     role TEXT DEFAULT 'STUDENT',
     isEmailVerified INTEGER DEFAULT 0,
+    avatarUrl TEXT,
     lastLogin TEXT,
     createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
     updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
@@ -110,6 +111,72 @@ db.serialize(() => {
     templateId TEXT,
     issuedAt TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (templateId) REFERENCES certificate_templates(id)
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS classes (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    courseId TEXT,
+    instructorId TEXT,
+    schedule TEXT,
+    maxStudents INTEGER,
+    isActive INTEGER DEFAULT 1,
+    createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (courseId) REFERENCES courses(id),
+    FOREIGN KEY (instructorId) REFERENCES users(id)
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS products (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    price REAL DEFAULT 0,
+    category TEXT,
+    level TEXT,
+    duration INTEGER DEFAULT 0,
+    lessonsCount INTEGER DEFAULT 0,
+    isActive INTEGER DEFAULT 1,
+    createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS enrollments (
+    id TEXT PRIMARY KEY,
+    studentId TEXT,
+    classId TEXT,
+    courseId TEXT,
+    enrolledAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'active',
+    FOREIGN KEY (studentId) REFERENCES users(id),
+    FOREIGN KEY (classId) REFERENCES classes(id),
+    FOREIGN KEY (courseId) REFERENCES courses(id)
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS sales (
+    id TEXT PRIMARY KEY,
+    userId TEXT,
+    productId TEXT,
+    amount REAL,
+    status TEXT,
+    paymentMethod TEXT,
+    transactionId TEXT,
+    createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (productId) REFERENCES products(id)
+  )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS comments (
+    id TEXT PRIMARY KEY,
+    userId TEXT,
+    courseId TEXT,
+    content TEXT,
+    rating INTEGER,
+    isApproved INTEGER DEFAULT 0,
+    createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (courseId) REFERENCES courses(id)
   )`);
 });
 
@@ -439,6 +506,1158 @@ app.delete('/api/oracle/object/:name', authenticateToken, async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`gmp portal server running at http://localhost:${PORT}`);
+// ===== STUDENTS MANAGEMENT API =====
+
+// Listar todos os alunos com filtros e paginação
+app.get('/api/admin/students', authenticateToken, (req, res) => {
+  const { page = 1, limit = 10, search = '', status = 'all' } = req.query;
+  const offset = (page - 1) * limit;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (search) {
+    whereClause += ' AND (name LIKE ? OR email LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  
+  if (status !== 'all') {
+    whereClause += ' AND isEmailVerified = ?';
+    params.push(status === 'verified' ? 1 : 0);
+  }
+  
+  const countQuery = `SELECT COUNT(*) as total FROM users ${whereClause}`;
+  const dataQuery = `
+    SELECT id, name, email, role, isEmailVerified, lastLogin, createdAt,
+           (SELECT COUNT(*) FROM progress WHERE userId = users.id) as coursesEnrolled,
+           (SELECT COUNT(*) FROM progress WHERE userId = users.id AND progressPercentage >= 100) as coursesCompleted
+    FROM users 
+    ${whereClause}
+    ORDER BY createdAt DESC 
+    LIMIT ? OFFSET ?
+  `;
+  
+  params.push(parseInt(limit), offset);
+  
+  db.get(countQuery, params.slice(0, -2), (err, countResult) => {
+    if (err) return res.status(500).json({ error: 'Erro ao contar alunos' });
+    
+    db.all(dataQuery, params, (err, students) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar alunos' });
+      
+      res.json({
+        success: true,
+        students,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: countResult.total,
+          pages: Math.ceil(countResult.total / limit)
+        }
+      });
+    });
+  });
+});
+
+// Obter detalhes de um aluno específico
+app.get('/api/admin/students/:id', authenticateToken, (req, res) => {
+  const studentId = req.params.id;
+  
+  db.get(`
+    SELECT u.*, 
+           (SELECT COUNT(*) FROM progress WHERE userId = u.id) as totalCourses,
+           (SELECT COUNT(*) FROM progress WHERE userId = u.id AND progressPercentage >= 100) as completedCourses,
+           (SELECT AVG(progressPercentage) FROM progress WHERE userId = u.id) as averageProgress
+    FROM users u 
+    WHERE u.id = ?
+  `, [studentId], (err, student) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar aluno' });
+    if (!student) return res.status(404).json({ error: 'Aluno não encontrado' });
+    
+    // Buscar progresso dos cursos
+    db.all(`
+      SELECT p.*, c.title, c.description, c.category, c.level
+      FROM progress p 
+      JOIN courses c ON p.courseId = c.id 
+      WHERE p.userId = ?
+      ORDER BY p.updatedAt DESC
+    `, [studentId], (err, progress) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar progresso' });
+      
+      res.json({
+        success: true,
+        student: {
+          ...student,
+          progress: progress || []
+        }
+      });
+    });
+  });
+});
+
+// Criar novo aluno
+app.post('/api/admin/students', authenticateToken, async (req, res) => {
+  const { name, email, password, role = 'STUDENT' } = req.body;
+  
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Nome, email e senha são obrigatórios' });
+  }
+  
+  // Verificar se email já existe
+  db.get('SELECT id FROM users WHERE email = ?', [email], async (err, existingUser) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar email' });
+    if (existingUser) return res.status(409).json({ error: 'Email já cadastrado' });
+    
+    try {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const userId = generateId('student');
+      
+      db.run(`
+        INSERT INTO users (id, name, email, password, role, isEmailVerified, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+      `, [userId, name, email, hashedPassword, role, 1], function(err) {
+        if (err) return res.status(500).json({ error: 'Erro ao criar aluno' });
+        
+        res.json({
+          success: true,
+          student: {
+            id: userId,
+            name,
+            email,
+            role,
+            isEmailVerified: 1,
+            createdAt: new Date().toISOString()
+          }
+        });
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao processar senha' });
+    }
+  });
+});
+
+// Atualizar aluno
+app.put('/api/admin/students/:id', authenticateToken, async (req, res) => {
+  const studentId = req.params.id;
+  const { name, email, role, isEmailVerified } = req.body;
+  
+  const updateFields = [];
+  const params = [];
+  
+  if (name) {
+    updateFields.push('name = ?');
+    params.push(name);
+  }
+  
+  if (email) {
+    updateFields.push('email = ?');
+    params.push(email);
+  }
+  
+  if (role) {
+    updateFields.push('role = ?');
+    params.push(role);
+  }
+  
+  if (isEmailVerified !== undefined) {
+    updateFields.push('isEmailVerified = ?');
+    params.push(isEmailVerified ? 1 : 0);
+  }
+  
+  if (updateFields.length === 0) {
+    return res.status(400).json({ error: 'Nenhum campo para atualizar' });
+  }
+  
+  updateFields.push('updatedAt = CURRENT_TIMESTAMP');
+  params.push(studentId);
+  
+  db.run(`
+    UPDATE users 
+    SET ${updateFields.join(', ')}
+    WHERE id = ?
+  `, params, function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao atualizar aluno' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Aluno não encontrado' });
+    
+    res.json({ success: true, changes: this.changes });
+  });
+});
+
+// Deletar aluno
+app.delete('/api/admin/students/:id', authenticateToken, (req, res) => {
+  const studentId = req.params.id;
+  
+  // Verificar se aluno tem progresso antes de deletar
+  db.get('SELECT COUNT(*) as count FROM progress WHERE userId = ?', [studentId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar progresso' });
+    
+    if (result.count > 0) {
+      return res.status(400).json({ 
+        error: 'Não é possível deletar aluno com progresso registrado. Desative o aluno em vez de deletá-lo.' 
+      });
+    }
+    
+    db.run('DELETE FROM users WHERE id = ?', [studentId], function(err) {
+      if (err) return res.status(500).json({ error: 'Erro ao deletar aluno' });
+      if (this.changes === 0) return res.status(404).json({ error: 'Aluno não encontrado' });
+      
+      res.json({ success: true, deleted: this.changes });
+    });
+  });
+});
+
+// Estatísticas de alunos
+app.get('/api/admin/students/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM users WHERE role = "STUDENT"',
+    'SELECT COUNT(*) as verified FROM users WHERE role = "STUDENT" AND isEmailVerified = 1',
+    'SELECT COUNT(*) as active FROM users WHERE role = "STUDENT" AND lastLogin > datetime("now", "-30 days")',
+    'SELECT COUNT(*) as newThisMonth FROM users WHERE role = "STUDENT" AND createdAt > datetime("now", "-30 days")'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        verified: results[1].verified,
+        active: results[2].active,
+        newThisMonth: results[3].newThisMonth
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
+
+// Upload de avatar do aluno
+app.post('/api/admin/students/:id/avatar', authenticateToken, upload.single('avatar'), async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'Arquivo de avatar ausente' });
+    }
+
+    // Verificar se aluno existe
+    db.get('SELECT id FROM users WHERE id = ?', [studentId], async (err, student) => {
+      if (err) return res.status(500).json({ success: false, error: 'Erro ao verificar aluno' });
+      if (!student) return res.status(404).json({ success: false, error: 'Aluno não encontrado' });
+
+      try {
+        // Upload para Oracle Object Storage
+        const avatarName = `avatars/${studentId}_${Date.now()}.${req.file.originalname.split('.').pop()}`;
+        const url = `${oracleBaseUrl()}/o/${encodeURIComponent(avatarName)}`;
+        
+        await axios.put(url, req.file.buffer, {
+          headers: {
+            Authorization: `Bearer ${ORACLE_AUTH_TOKEN}`,
+            'Content-Type': req.file.mimetype,
+            'Content-Length': req.file.size
+          }
+        });
+
+        // Atualizar URL do avatar no banco
+        db.run(
+          'UPDATE users SET avatarUrl = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
+          [`${oracleBaseUrl()}/o/${encodeURIComponent(avatarName)}`, studentId],
+          function(err) {
+            if (err) return res.status(500).json({ success: false, error: 'Erro ao salvar avatar' });
+            
+            res.json({
+              success: true,
+              avatarUrl: `${oracleBaseUrl()}/o/${encodeURIComponent(avatarName)}`,
+              message: 'Avatar atualizado com sucesso'
+            });
+          }
+        );
+      } catch (error) {
+        console.error('Oracle avatar upload error:', error.message);
+        res.status(500).json({ success: false, error: 'Falha ao enviar avatar para Oracle Object Storage' });
+      }
+    });
+  } catch (error) {
+    console.error('Avatar upload error:', error);
+    res.status(500).json({ success: false, error: 'Erro interno do servidor' });
+  }
+});
+
+// Obter avatar do aluno
+app.get('/api/admin/students/:id/avatar', authenticateToken, async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    
+    db.get('SELECT avatarUrl FROM users WHERE id = ?', [studentId], async (err, user) => {
+      if (err) return res.status(500).json({ success: false, error: 'Erro ao buscar avatar' });
+      if (!user || !user.avatarUrl) return res.status(404).json({ success: false, error: 'Avatar não encontrado' });
+
+      try {
+        // Redirecionar para o avatar no Oracle
+        res.redirect(user.avatarUrl);
+      } catch (error) {
+        console.error('Avatar get error:', error.message);
+        res.status(500).json({ success: false, error: 'Falha ao obter avatar do Oracle Object Storage' });
+      }
+    });
+  } catch (error) {
+    console.error('Avatar get error:', error);
+    res.status(500).json({ success: false, error: 'Erro interno do servidor' });
+  }
+});
+
+// ===== CLASSES MANAGEMENT API =====
+
+// Create classes table
+db.run(`CREATE TABLE IF NOT EXISTS classes (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  courseId TEXT,
+  instructorId TEXT,
+  schedule TEXT,
+  maxStudents INTEGER,
+  isActive INTEGER DEFAULT 1,
+  createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (courseId) REFERENCES courses(id),
+  FOREIGN KEY (instructorId) REFERENCES users(id)
+)`);
+
+// Listar todas as turmas com filtros e paginação
+app.get('/api/admin/classes', authenticateToken, (req, res) => {
+  const { page = 1, limit = 10, search = '', status = 'all' } = req.query;
+  const offset = (page - 1) * limit;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (search) {
+    whereClause += ' AND (title LIKE ? OR description LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  
+  if (status !== 'all') {
+    whereClause += ' AND isActive = ?';
+    params.push(status === 'active' ? 1 : 0);
+  }
+  
+  const countQuery = `SELECT COUNT(*) as total FROM classes ${whereClause}`;
+  const dataQuery = `
+    SELECT c.*, 
+           (SELECT COUNT(*) FROM enrollments WHERE classId = c.id) as studentCount,
+           co.title as courseTitle,
+           u.name as instructorName
+    FROM classes c
+    LEFT JOIN courses co ON c.courseId = co.id
+    LEFT JOIN users u ON c.instructorId = u.id
+    ${whereClause}
+    ORDER BY c.createdAt DESC 
+    LIMIT ? OFFSET ?
+  `;
+  
+  params.push(parseInt(limit), offset);
+  
+  db.get(countQuery, params.slice(0, -2), (err, countResult) => {
+    if (err) return res.status(500).json({ error: 'Erro ao contar turmas' });
+    
+    db.all(dataQuery, params, (err, classes) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar turmas' });
+      
+      res.json({
+        success: true,
+        classes,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: countResult.total,
+          pages: Math.ceil(countResult.total / limit)
+        }
+      });
+    });
+  });
+});
+
+// Obter detalhes de uma turma específica
+app.get('/api/admin/classes/:id', authenticateToken, (req, res) => {
+  const classId = req.params.id;
+  
+  db.get(`
+    SELECT c.*, 
+           co.title as courseTitle,
+           u.name as instructorName,
+           (SELECT COUNT(*) FROM enrollments WHERE classId = c.id) as studentCount
+    FROM classes c
+    LEFT JOIN courses co ON c.courseId = co.id
+    LEFT JOIN users u ON c.instructorId = u.id
+    WHERE c.id = ?
+  `, [classId], (err, classData) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar turma' });
+    if (!classData) return res.status(404).json({ error: 'Turma não encontrada' });
+    
+    // Buscar alunos matriculados
+    db.all(`
+      SELECT e.*, u.name, u.email
+      FROM enrollments e
+      JOIN users u ON e.studentId = u.id
+      WHERE e.classId = ?
+      ORDER BY e.enrolledAt DESC
+    `, [classId], (err, students) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar alunos matriculados' });
+      
+      res.json({
+        success: true,
+        class: {
+          ...classData,
+          students: students || []
+        }
+      });
+    });
+  });
+});
+
+// Criar nova turma
+app.post('/api/admin/classes', authenticateToken, (req, res) => {
+  const { title, description, courseId, instructorId, schedule, maxStudents } = req.body;
+  
+  if (!title) {
+    return res.status(400).json({ error: 'Título é obrigatório' });
+  }
+  
+  const classId = generateId('class');
+  
+  db.run(`
+    INSERT INTO classes (id, title, description, courseId, instructorId, schedule, maxStudents, isActive, createdAt)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+  `, [classId, title, description, courseId, instructorId, schedule, maxStudents, 1], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao criar turma' });
+    
+    res.json({
+      success: true,
+      class: {
+        id: classId,
+        title,
+        description,
+        courseId,
+        instructorId,
+        schedule,
+        maxStudents,
+        isActive: 1,
+        createdAt: new Date().toISOString()
+      }
+    });
+  });
+});
+
+// Atualizar turma
+app.put('/api/admin/classes/:id', authenticateToken, (req, res) => {
+  const classId = req.params.id;
+  const { title, description, courseId, instructorId, schedule, maxStudents, isActive } = req.body;
+  
+  const updateFields = [];
+  const params = [];
+  
+  if (title !== undefined) {
+    updateFields.push('title = ?');
+    params.push(title);
+  }
+  
+  if (description !== undefined) {
+    updateFields.push('description = ?');
+    params.push(description);
+  }
+  
+  if (courseId !== undefined) {
+    updateFields.push('courseId = ?');
+    params.push(courseId);
+  }
+  
+  if (instructorId !== undefined) {
+    updateFields.push('instructorId = ?');
+    params.push(instructorId);
+  }
+  
+  if (schedule !== undefined) {
+    updateFields.push('schedule = ?');
+    params.push(schedule);
+  }
+  
+  if (maxStudents !== undefined) {
+    updateFields.push('maxStudents = ?');
+    params.push(maxStudents);
+  }
+  
+  if (isActive !== undefined) {
+    updateFields.push('isActive = ?');
+    params.push(isActive ? 1 : 0);
+  }
+  
+  if (updateFields.length === 0) {
+    return res.status(400).json({ error: 'Nenhum campo para atualizar' });
+  }
+  
+  updateFields.push('updatedAt = CURRENT_TIMESTAMP');
+  params.push(classId);
+  
+  db.run(`
+    UPDATE classes 
+    SET ${updateFields.join(', ')}
+    WHERE id = ?
+  `, params, function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao atualizar turma' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Turma não encontrada' });
+    
+    res.json({ success: true, changes: this.changes });
+  });
+});
+
+// Deletar turma
+app.delete('/api/admin/classes/:id', authenticateToken, (req, res) => {
+  const classId = req.params.id;
+  
+  // Verificar se turma tem alunos matriculados
+  db.get('SELECT COUNT(*) as count FROM enrollments WHERE classId = ?', [classId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar matrículas' });
+    
+    if (result.count > 0) {
+      return res.status(400).json({ 
+        error: 'Não é possível deletar turma com alunos matriculados.' 
+      });
+    }
+    
+    db.run('DELETE FROM classes WHERE id = ?', [classId], function(err) {
+      if (err) return res.status(500).json({ error: 'Erro ao deletar turma' });
+      if (this.changes === 0) return res.status(404).json({ error: 'Turma não encontrada' });
+      
+      res.json({ success: true, deleted: this.changes });
+    });
+  });
+});
+
+// Estatísticas de turmas
+app.get('/api/admin/classes/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM classes',
+    'SELECT COUNT(*) as active FROM classes WHERE isActive = 1',
+    'SELECT COUNT(*) as students FROM enrollments',
+    'SELECT AVG(maxStudents) as avgStudents FROM classes'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        active: results[1].active,
+        students: results[2].students,
+        avgStudents: Math.round(results[3].avgStudents || 0)
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
+
+// ===== PRODUCTS/COURSES MANAGEMENT API =====
+
+// Criar nova tabela de produtos se não existir
+db.run(`CREATE TABLE IF NOT EXISTS products (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  price REAL DEFAULT 0,
+  category TEXT,
+  level TEXT,
+  duration INTEGER DEFAULT 0,
+  lessonsCount INTEGER DEFAULT 0,
+  isActive INTEGER DEFAULT 1,
+  createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
+)`);
+
+// Listar todos os produtos com filtros e paginação
+app.get('/api/admin/products', authenticateToken, (req, res) => {
+  const { page = 1, limit = 10, search = '', status = 'all' } = req.query;
+  const offset = (page - 1) * limit;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (search) {
+    whereClause += ' AND (title LIKE ? OR description LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  
+  if (status !== 'all') {
+    whereClause += ' AND isActive = ?';
+    params.push(status === 'active' ? 1 : 0);
+  }
+  
+  const countQuery = `SELECT COUNT(*) as total FROM products ${whereClause}`;
+  const dataQuery = `
+    SELECT *, 
+           (SELECT COUNT(*) FROM progress WHERE courseId = products.id) as enrollments
+    FROM products 
+    ${whereClause}
+    ORDER BY createdAt DESC 
+    LIMIT ? OFFSET ?
+  `;
+  
+  params.push(parseInt(limit), offset);
+  
+  db.get(countQuery, params.slice(0, -2), (err, countResult) => {
+    if (err) return res.status(500).json({ error: 'Erro ao contar produtos' });
+    
+    db.all(dataQuery, params, (err, products) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar produtos' });
+      
+      res.json({
+        success: true,
+        products,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: countResult.total,
+          pages: Math.ceil(countResult.total / limit)
+        }
+      });
+    });
+  });
+});
+
+// Obter detalhes de um produto específico
+app.get('/api/admin/products/:id', authenticateToken, (req, res) => {
+  const productId = req.params.id;
+  
+  db.get(`
+    SELECT *, 
+           (SELECT COUNT(*) FROM progress WHERE courseId = products.id) as enrollments
+    FROM products 
+    WHERE id = ?
+  `, [productId], (err, product) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar produto' });
+    if (!product) return res.status(404).json({ error: 'Produto não encontrado' });
+    
+    res.json({
+      success: true,
+      product
+    });
+  });
+});
+
+// Criar novo produto
+app.post('/api/admin/products', authenticateToken, (req, res) => {
+  const { title, description, price, category, level, duration, lessonsCount } = req.body;
+  
+  if (!title) {
+    return res.status(400).json({ error: 'Título é obrigatório' });
+  }
+  
+  const productId = generateId('product');
+  
+  db.run(`
+    INSERT INTO products (id, title, description, price, category, level, duration, lessonsCount, isActive, createdAt)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+  `, [productId, title, description, price || 0, category, level, duration || 0, lessonsCount || 0, 1], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao criar produto' });
+    
+    res.json({
+      success: true,
+      product: {
+        id: productId,
+        title,
+        description,
+        price: price || 0,
+        category,
+        level,
+        duration: duration || 0,
+        lessonsCount: lessonsCount || 0,
+        isActive: 1,
+        createdAt: new Date().toISOString()
+      }
+    });
+  });
+});
+
+// Atualizar produto
+app.put('/api/admin/products/:id', authenticateToken, (req, res) => {
+  const productId = req.params.id;
+  const { title, description, price, category, level, duration, lessonsCount, isActive } = req.body;
+  
+  const updateFields = [];
+  const params = [];
+  
+  if (title !== undefined) {
+    updateFields.push('title = ?');
+    params.push(title);
+  }
+  
+  if (description !== undefined) {
+    updateFields.push('description = ?');
+    params.push(description);
+  }
+  
+  if (price !== undefined) {
+    updateFields.push('price = ?');
+    params.push(price);
+  }
+  
+  if (category !== undefined) {
+    updateFields.push('category = ?');
+    params.push(category);
+  }
+  
+  if (level !== undefined) {
+    updateFields.push('level = ?');
+    params.push(level);
+  }
+  
+  if (duration !== undefined) {
+    updateFields.push('duration = ?');
+    params.push(duration);
+  }
+  
+  if (lessonsCount !== undefined) {
+    updateFields.push('lessonsCount = ?');
+    params.push(lessonsCount);
+  }
+  
+  if (isActive !== undefined) {
+    updateFields.push('isActive = ?');
+    params.push(isActive ? 1 : 0);
+  }
+  
+  if (updateFields.length === 0) {
+    return res.status(400).json({ error: 'Nenhum campo para atualizar' });
+  }
+  
+  updateFields.push('updatedAt = CURRENT_TIMESTAMP');
+  params.push(productId);
+  
+  db.run(`
+    UPDATE products 
+    SET ${updateFields.join(', ')}
+    WHERE id = ?
+  `, params, function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao atualizar produto' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Produto não encontrado' });
+    
+    res.json({ success: true, changes: this.changes });
+  });
+});
+
+// Deletar produto
+app.delete('/api/admin/products/:id', authenticateToken, (req, res) => {
+  const productId = req.params.id;
+  
+  // Verificar se produto tem matrículas
+  db.get('SELECT COUNT(*) as count FROM progress WHERE courseId = ?', [productId], (err, result) => {
+    if (err) return res.status(500).json({ error: 'Erro ao verificar matrículas' });
+    
+    if (result.count > 0) {
+      return res.status(400).json({ 
+        error: 'Não é possível deletar produto com matrículas registradas.' 
+      });
+    }
+    
+    db.run('DELETE FROM products WHERE id = ?', [productId], function(err) {
+      if (err) return res.status(500).json({ error: 'Erro ao deletar produto' });
+      if (this.changes === 0) return res.status(404).json({ error: 'Produto não encontrado' });
+      
+      res.json({ success: true, deleted: this.changes });
+    });
+  });
+});
+
+// Estatísticas de produtos
+app.get('/api/admin/products/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM products',
+    'SELECT COUNT(*) as active FROM products WHERE isActive = 1',
+    'SELECT COUNT(*) as enrollments FROM progress',
+    'SELECT AVG(price) as avgPrice FROM products'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        active: results[1].active,
+        enrollments: results[2].enrollments,
+        avgPrice: Math.round(results[3].avgPrice || 0)
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
+
+// ===== ENROLLMENTS MANAGEMENT API =====
+
+// Create enrollments table
+db.run(`CREATE TABLE IF NOT EXISTS enrollments (
+  id TEXT PRIMARY KEY,
+  studentId TEXT,
+  classId TEXT,
+  courseId TEXT,
+  enrolledAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  status TEXT DEFAULT 'active',
+  FOREIGN KEY (studentId) REFERENCES users(id),
+  FOREIGN KEY (classId) REFERENCES classes(id),
+  FOREIGN KEY (courseId) REFERENCES courses(id)
+)`);
+
+// Matricular aluno em uma turma
+app.post('/api/admin/enrollments', authenticateToken, (req, res) => {
+  const { studentId, classId, courseId } = req.body;
+  
+  if (!studentId || (!classId && !courseId)) {
+    return res.status(400).json({ error: 'Student ID e Class ID ou Course ID são obrigatórios' });
+  }
+  
+  const enrollmentId = generateId('enrollment');
+  
+  db.run(`
+    INSERT INTO enrollments (id, studentId, classId, courseId, enrolledAt, status)
+    VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 'active')
+  `, [enrollmentId, studentId, classId, courseId], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao matricular aluno' });
+    
+    res.json({
+      success: true,
+      enrollment: {
+        id: enrollmentId,
+        studentId,
+        classId,
+        courseId,
+        enrolledAt: new Date().toISOString(),
+        status: 'active'
+      }
+    });
+  });
+});
+
+// Listar matrículas com filtros
+app.get('/api/admin/enrollments', authenticateToken, (req, res) => {
+  const { studentId, classId, courseId, status = 'all' } = req.query;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (studentId) {
+    whereClause += ' AND e.studentId = ?';
+    params.push(studentId);
+  }
+  
+  if (classId) {
+    whereClause += ' AND e.classId = ?';
+    params.push(classId);
+  }
+  
+  if (courseId) {
+    whereClause += ' AND e.courseId = ?';
+    params.push(courseId);
+  }
+  
+  if (status !== 'all') {
+    whereClause += ' AND e.status = ?';
+    params.push(status);
+  }
+  
+  const dataQuery = `
+    SELECT e.*, 
+           u.name as studentName,
+           u.email as studentEmail,
+           c.title as classTitle,
+           co.title as courseTitle
+    FROM enrollments e
+    LEFT JOIN users u ON e.studentId = u.id
+    LEFT JOIN classes c ON e.classId = c.id
+    LEFT JOIN courses co ON e.courseId = co.id
+    ${whereClause}
+    ORDER BY e.enrolledAt DESC
+  `;
+  
+  db.all(dataQuery, params, (err, enrollments) => {
+    if (err) return res.status(500).json({ error: 'Erro ao buscar matrículas' });
+    
+    res.json({
+      success: true,
+      enrollments
+    });
+  });
+});
+
+// Desmatricular aluno
+app.delete('/api/admin/enrollments/:id', authenticateToken, (req, res) => {
+  const enrollmentId = req.params.id;
+  
+  db.run('DELETE FROM enrollments WHERE id = ?', [enrollmentId], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao desmatricular aluno' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Matrícula não encontrada' });
+    
+    res.json({ success: true, deleted: this.changes });
+  });
+});
+
+// ===== SALES MANAGEMENT API =====
+
+// Create sales table
+db.run(`CREATE TABLE IF NOT EXISTS sales (
+  id TEXT PRIMARY KEY,
+  userId TEXT,
+  productId TEXT,
+  amount REAL,
+  status TEXT,
+  paymentMethod TEXT,
+  transactionId TEXT,
+  createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id),
+  FOREIGN KEY (productId) REFERENCES products(id)
+)`);
+
+// Listar vendas com filtros e paginação
+app.get('/api/admin/sales', authenticateToken, (req, res) => {
+  const { page = 1, limit = 10, search = '', status = 'all' } = req.query;
+  const offset = (page - 1) * limit;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (search) {
+    whereClause += ' AND (u.name LIKE ? OR u.email LIKE ? OR p.title LIKE ?)';
+    params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+  }
+  
+  if (status !== 'all') {
+    whereClause += ' AND s.status = ?';
+    params.push(status);
+  }
+  
+  const countQuery = `SELECT COUNT(*) as total FROM sales s ${whereClause.replace(/ u\./g, ' u2.').replace(/ p\./g, ' p2.')}`;
+  const dataQuery = `
+    SELECT s.*, 
+           u.name as customerName,
+           u.email as customerEmail,
+           p.title as productTitle
+    FROM sales s
+    LEFT JOIN users u ON s.userId = u.id
+    LEFT JOIN products p ON s.productId = p.id
+    ${whereClause}
+    ORDER BY s.createdAt DESC 
+    LIMIT ? OFFSET ?
+  `;
+  
+  params.push(parseInt(limit), offset);
+  
+  db.get(countQuery, params.slice(0, -2), (err, countResult) => {
+    if (err) return res.status(500).json({ error: 'Erro ao contar vendas' });
+    
+    db.all(dataQuery, params, (err, sales) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar vendas' });
+      
+      res.json({
+        success: true,
+        sales,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: countResult.total,
+          pages: Math.ceil(countResult.total / limit)
+        }
+      });
+    });
+  });
+});
+
+// Estatísticas de vendas
+app.get('/api/admin/sales/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM sales',
+    'SELECT COUNT(*) as completed FROM sales WHERE status = "completed"',
+    'SELECT SUM(amount) as revenue FROM sales WHERE status = "completed"',
+    'SELECT AVG(amount) as avgSale FROM sales WHERE status = "completed"'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        completed: results[1].completed,
+        revenue: Math.round(results[2].revenue || 0),
+        avgSale: Math.round(results[3].avgSale || 0)
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
+
+// ===== COMMENTS MANAGEMENT API =====
+
+// Create comments table
+db.run(`CREATE TABLE IF NOT EXISTS comments (
+  id TEXT PRIMARY KEY,
+  userId TEXT,
+  courseId TEXT,
+  content TEXT,
+  rating INTEGER,
+  isApproved INTEGER DEFAULT 0,
+  createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userId) REFERENCES users(id),
+  FOREIGN KEY (courseId) REFERENCES courses(id)
+)`);
+
+// Listar comentários com filtros e paginação
+app.get('/api/admin/comments', authenticateToken, (req, res) => {
+  const { page = 1, limit = 10, status = 'all', courseId } = req.query;
+  const offset = (page - 1) * limit;
+  
+  let whereClause = 'WHERE 1=1';
+  let params = [];
+  
+  if (status !== 'all') {
+    whereClause += ' AND c.isApproved = ?';
+    params.push(status === 'approved' ? 1 : 0);
+  }
+  
+  if (courseId) {
+    whereClause += ' AND c.courseId = ?';
+    params.push(courseId);
+  }
+  
+  const countQuery = `SELECT COUNT(*) as total FROM comments c ${whereClause}`;
+  const dataQuery = `
+    SELECT c.*, 
+           u.name as userName,
+           u.email as userEmail,
+           co.title as courseTitle
+    FROM comments c
+    LEFT JOIN users u ON c.userId = u.id
+    LEFT JOIN courses co ON c.courseId = co.id
+    ${whereClause}
+    ORDER BY c.createdAt DESC 
+    LIMIT ? OFFSET ?
+  `;
+  
+  params.push(parseInt(limit), offset);
+  
+  db.get(countQuery, params.slice(0, -2), (err, countResult) => {
+    if (err) return res.status(500).json({ error: 'Erro ao contar comentários' });
+    
+    db.all(dataQuery, params, (err, comments) => {
+      if (err) return res.status(500).json({ error: 'Erro ao buscar comentários' });
+      
+      res.json({
+        success: true,
+        comments,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: countResult.total,
+          pages: Math.ceil(countResult.total / limit)
+        }
+      });
+    });
+  });
+});
+
+// Aprovar comentário
+app.put('/api/admin/comments/:id/approve', authenticateToken, (req, res) => {
+  const commentId = req.params.id;
+  
+  db.run('UPDATE comments SET isApproved = 1, updatedAt = CURRENT_TIMESTAMP WHERE id = ?', [commentId], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao aprovar comentário' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Comentário não encontrado' });
+    
+    res.json({ success: true, changes: this.changes });
+  });
+});
+
+// Rejeitar comentário
+app.put('/api/admin/comments/:id/reject', authenticateToken, (req, res) => {
+  const commentId = req.params.id;
+  
+  db.run('UPDATE comments SET isApproved = 0, updatedAt = CURRENT_TIMESTAMP WHERE id = ?', [commentId], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao rejeitar comentário' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Comentário não encontrado' });
+    
+    res.json({ success: true, changes: this.changes });
+  });
+});
+
+// Deletar comentário
+app.delete('/api/admin/comments/:id', authenticateToken, (req, res) => {
+  const commentId = req.params.id;
+  
+  db.run('DELETE FROM comments WHERE id = ?', [commentId], function(err) {
+    if (err) return res.status(500).json({ error: 'Erro ao deletar comentário' });
+    if (this.changes === 0) return res.status(404).json({ error: 'Comentário não encontrado' });
+    
+    res.json({ success: true, deleted: this.changes });
+  });
+});
+
+// Estatísticas de comentários
+app.get('/api/admin/comments/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM comments',
+    'SELECT COUNT(*) as approved FROM comments WHERE isApproved = 1',
+    'SELECT AVG(rating) as avgRating FROM comments WHERE isApproved = 1',
+    'SELECT COUNT(DISTINCT userId) as uniqueUsers FROM comments'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        approved: results[1].approved,
+        avgRating: Math.round(results[2].avgRating || 0),
+        uniqueUsers: results[3].uniqueUsers
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`gmp portal server running at http://0.0.0.0:${PORT}`);
 });
