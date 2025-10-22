@@ -42,6 +42,12 @@ app.use('/gmp-portal', express.static(path.join(__dirname)));
 // Também permite acessar sem prefixo, ex.: /admin/index.html
 app.use('/', express.static(path.join(__dirname)));
 
+app.use('/', express.static(path.join(__dirname)));
+
+// Redireciona access-denied.html para login.html
+app.get('/access-denied.html', (req, res) => {
+  res.redirect('/login.html');
+});
 
 const db = new sqlite3.Database('./gmp.db');
 
