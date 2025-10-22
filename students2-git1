@@ -46,41 +46,58 @@
                 <div class="sidebar-logo">
                     <span>gmp Academy</span>
             <nav class="sidebar-nav">
-                <a class="nav-item" href="index.html">
-                    <i class="fas fa-home"></i> Início
-                </a>
-                <a class="nav-item" href="products.html">
-                    <i class="fas fa-box"></i> Produtos
-                <a class="nav-item has-submenu" href="#">
-                    <i class="fas fa-edit"></i> Gerenciar Conteúdo
-                    <i class="fas fa-chevron-down nav-arrow"></i>
-                <ul class="submenu">
-                    <li><a class="sub-item" href="content-manager.html" title="Visão Geral"><i class="fas fa-eye"></i>Visão Geral</a></li>
-                    <li><a class="sub-item" href="video-upload.html" title="Upload de Vídeos"><i class="fas fa-video"></i>Upload de Vídeos</a></li>
-                    <li><a class="sub-item" href="bulk-upload.html" title="Upload em Lote"><i class="fas fa-upload"></i>Upload em Lote</a></li>
-                    <li><a class="sub-item" href="media-library.html" title="Biblioteca de Mídia"><i class="fas fa-photo-video"></i>Biblioteca de Mídia</a></li>
-                </ul>
-                <a class="nav-item active" href="students.html">
-                    <i class="fas fa-users"></i> Alunos
-                <a class="nav-item" href="classes.html">
-                    <i class="fas fa-chalkboard-teacher"></i> Turmas
-                <a class="nav-item" href="analytics.html">
-                    <i class="fas fa-chart-bar"></i> Analytics
-                <a class="nav-item" href="certificates.html">
-                    <i class="fas fa-certificate"></i> Certificados
-                <a class="nav-item" href="gamification.html">
-                    <i class="fas fa-trophy"></i> Gamificação
-                <a class="nav-item" href="sales.html">
-                    <i class="fas fa-dollar-sign"></i> Vendas
-                <a class="nav-item" href="comments.html">
-                    <i class="fas fa-comments"></i> Comentários
-                <a class="nav-item" href="showcase.html">
-                    <i class="fas fa-store"></i> Vitrine
-                    <i class="fas fa-cog"></i> Configurações
-                    <li><a class="sub-item" href="settings.html" title="Configurações Gerais"><i class="fas fa-cogs"></i>Geral</a></li>
-                    <li><a class="sub-item" href="personalization.html" title="Personalização"><i class="fas fa-palette"></i>Personalização</a></li>
-                    <li><a class="sub-item" href="payment-setup.html" title="Configuração de Pagamento"><i class="fas fa-credit-card"></i>Config. Pagamento</a></li>
-                    <li><a class="sub-item" href="payment-history.html" title="Histórico de Pagamento"><i class="fas fa-history"></i>Histórico Pagamento</a></li>
+  <a class="nav-item" href="index.html">
+    <i class="fas fa-home"></i> Início
+  </a>
+  <a class="nav-item" href="products.html">
+    <i class="fas fa-box"></i> Produtos
+  </a>
+  <div class="nav-item has-submenu">
+    <a href="#">
+      <i class="fas fa-edit"></i> Gerenciar Conteúdo
+      <i class="fas fa-chevron-down nav-arrow"></i>
+    </a>
+    <ul class="submenu">
+      <li><a class="sub-item" href="content-manager.html"><i class="fas fa-eye"></i> Visão Geral</a></li>
+      <li><a class="sub-item" href="video-upload.html"><i class="fas fa-video"></i> Upload de Vídeos</a></li>
+      <li><a class="sub-item" href="bulk-upload.html"><i class="fas fa-upload"></i> Upload em Lote</a></li>
+      <li><a class="sub-item" href="media-library.html"><i class="fas fa-photo-video"></i> Biblioteca de Mídia</a></li>
+    </ul>
+  </div>
+  <a class="nav-item active" href="students.html">
+    <i class="fas fa-users"></i> Alunos
+  </a>
+  <a class="nav-item" href="classes.html">
+    <i class="fas fa-chalkboard-teacher"></i> Turmas
+  </a>
+  <a class="nav-item" href="analytics.html">
+    <i class="fas fa-chart-bar"></i> Analytics
+  </a>
+  <a class="nav-item" href="certificates.html">
+    <i class="fas fa-certificate"></i> Certificados
+  </a>
+  <a class="nav-item" href="gamification.html">
+    <i class="fas fa-trophy"></i> Gamificação
+  </a>
+  <a class="nav-item" href="sales.html">
+    <i class="fas fa-dollar-sign"></i> Vendas
+  </a>
+  <a class="nav-item" href="comments.html">
+    <i class="fas fa-comments"></i> Comentários
+  </a>
+  <div class="nav-item has-submenu">
+    <a href="showcase.html">
+      <i class="fas fa-store"></i> Vitrine
+      <i class="fas fa-cog"></i> Configurações
+    </a>
+    <ul class="submenu">
+      <li><a class="sub-item" href="settings.html"><i class="fas fa-cogs"></i> Geral</a></li>
+      <li><a class="sub-item" href="personalization.html"><i class="fas fa-palette"></i> Personalização</a></li>
+      <li><a class="sub-item" href="payment-setup.html"><i class="fas fa-credit-card"></i> Config. Pagamento</a></li>
+      <li><a class="sub-item" href="payment-history.html"><i class="fas fa-history"></i> Histórico Pagamento</a></li>
+    </ul>
+  </div>
+</nav>
         <main class="main-content" id="mainContent">
             <div class="container full-width">
                 <div class="container" style="padding: 2rem;">
