@@ -1,3 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+JS="$HOME/gmp-portal/assets/js/students.js"
+cp "$JS" "$JS.bak.$(date +%s)"
+
+cat <<'JS' > "$JS"
 /**
  * StudentsManager (versão corrigida e completa)
  */
@@ -150,3 +157,6 @@ class StudentsManager {
 }
 
 document.addEventListener('DOMContentLoaded',()=>{window.studentsManager=new StudentsManager();});
+JS
+
+echo "students.js reescrito com sucesso."

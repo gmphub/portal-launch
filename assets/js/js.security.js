@@ -125,7 +125,7 @@ class SecurityManager {
   const currentPath = window.location.pathname;
 
   if (currentPath.includes('/admin/') && role !== 'ADMIN') {
-    window.location.href = '/gmp-portal/access-denied.html';
+    window.location.href = '/gmp-portal/login.html';
     return false;
   }
   return true;

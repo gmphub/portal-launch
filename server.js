@@ -44,8 +44,8 @@ app.use('/', express.static(path.join(__dirname)));
 
 app.use('/', express.static(path.join(__dirname)));
 
-// Redireciona access-denied.html para login.html
-app.get('/access-denied.html', (req, res) => {
+// Redireciona login.html para login.html
+app.get('/login.html', (req, res) => {
   res.redirect('/login.html');
 });
 

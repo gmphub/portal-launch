@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Alunos - gmp Academy Admin</title>
     <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="../assets/css/students.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
 </head>
 <body>
@@ -32,7 +32,7 @@
                 <div class="gm-dropdown">
                     <a href="../student/profile.html">Perfil</a>
                     <a href="settings.html">Configurações</a>
-                    <a href="../login.html">Sair</a>
+                    <a href="../login.html" onclick="event.preventDefault(); securityManager.logout();">Sair</a>
                 </div>
             </div>
         </div>
@@ -251,13 +251,13 @@
                                     </p>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <button class="btn-modern btn-modern-secondary">
+                                    <button class="btn-modern btn-modern-secondary" id="exportBtn">
                                         <i class="fas fa-download"></i> Exportar Lista
                                     </button>
                                     <button class="btn-modern btn-modern-secondary">
                                         <i class="fas fa-upload"></i> Importar Usuários
                                     </button>
-                                    <button class="btn-modern btn-modern-primary">
+                                    <button class="btn-modern btn-modern-primary" id="addStudentBtn">
                                         <i class="fas fa-plus"></i> Nova Segmentação
                                     </button>
                                 </div>
@@ -266,34 +266,120 @@
                     </div>
 
                     <!-- Modern Student Metrics -->
-                    <div class="modern-metrics-grid animate-fade-in-up">
-                        <div class="modern-metric-card">
-                            <div class="metric-header">
-                                <div class="metric-icon"><i class="fas fa-users"></i></div>
+                    <div class="modern-metrics-grid animate-fade-in-up" id="statsContainer">
+                        <!-- Stats will be loaded here by JavaScript -->
+                    </div>
+
+                    <!-- Student Management Actions - Horizontal Cards -->
+                    <div class="cards-grid cards-grid-3 animate-slide-in-right">
+                        <!-- Search & Filter Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-blue);">
+                                <i class="fas fa-search"></i>
                             </div>
-                            <div class="metric-value">6</div>
-                            <div class="metric-label">Total de Alunos</div>
+                            <div class="card-content">
+                                <h3 class="card-title">Buscar Alunos</h3>
+                                <p class="card-description">Encontre alunos por nome, email ou progresso</p>
+                                <div class="search-input-container">
+                                    <input type="text" class="form-control" id="searchInput" placeholder="Buscar alunos...">
+                                    <i class="fas fa-filter search-filter-icon"></i>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modern-metric-card">
-                            <div class="metric-header">
-                                <div class="metric-icon"><i class="fas fa-graduation-cap"></i></div>
+
+                        <!-- Engagement Analysis Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-orange);">
+                                <i class="fas fa-chart-pie"></i>
                             </div>
-                            <div class="metric-value">17%</div>
-                            <div class="metric-label">Taxa de Conclusão</div>
+                            <div class="card-content">
+                                <h3 class="card-title">Análise de Engajamento</h3>
+                                <p class="card-description">Monitore o engajamento dos alunos</p>
+                                <div class="engagement-indicator">
+                                    <div class="indicator-dot" style="background: var(--primary-orange);"></div>
+                                    <span>Análise em tempo real</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modern-metric-card">
-                            <div class="metric-header">
-                                <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+
+                        <!-- Communication Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon" style="background: var(--primary-green);">
+                                <i class="fas fa-envelope"></i>
                             </div>
-                            <div class="metric-value">18%</div>
-                            <div class="metric-label">Progresso Médio</div>
+                            <div class="card-content">
+                                <h3 class="card-title">Comunicação</h3>
+                                <p class="card-description">Envie mensagens para os alunos</p>
+                                <div class="communication-indicator">
+                                    <i class="fas fa-paper-plane" style="color: var(--primary-green);"></i>
+                                    <span>Mensagens ativas</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modern-metric-card">
-                            <div class="metric-header">
-                                <div class="metric-icon"><i class="fas fa-heart"></i></div>
+                    </div>
+
+                    <!-- Student List Section -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <input type="text" class="form-control" id="searchInputTable" placeholder="Buscar alunos..." style="max-width: 300px;">
+                                    <select class="form-control" id="statusFilter" style="max-width: 150px;">
+                                        <option value="all">Todos os status</option>
+                                        <option value="active">Ativo</option>
+                                        <option value="inactive">Inativo</option>
+                                        <option value="completed">Concluído</option>
+                                    </select>
+                                    <select class="form-control" id="levelFilter" style="max-width: 150px;">
+                                        <option value="all">Todos os níveis</option>
+                                        <option value="beginner">Iniciante</option>
+                                        <option value="intermediate">Intermediário</option>
+                                        <option value="advanced">Avançado</option>
+                                    </select>
+                                    <button class="btn btn-outline-primary" onclick="studentsManager.loadStudents()">
+                                        <i class="fas fa-filter"></i> Filtrar
+                                    </button>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary" id="addStudentBtn">
+                                        <i class="fas fa-plus"></i> Novo Aluno
+                                    </button>
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="fas fa-cog"></i> Configurações
+                                    </button>
+                                </div>
                             </div>
-                            <div class="metric-value" style="color: var(--warning-yellow);">Baixo</div>
-                            <div class="metric-label">Engajamento</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Aluno</th>
+                                            <th>Último Acesso</th>
+                                            <th>Status</th>
+                                            <th>Engajamento</th>
+                                            <th>Progresso</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="studentsTableBody">
+                                        <!-- Students will be loaded here by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div id="paginationInfo">
+                                    <!-- Pagination info will be loaded here -->
+                                </div>
+                                <nav>
+                                    <ul class="pagination pagination-sm" id="paginationContainer">
+                                        <!-- Pagination will be loaded here by JavaScript -->
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
 
@@ -637,99 +723,5 @@
         </main>
     </div>
 
-    <script>
-    // Enhanced horizontal scrolling for admin navigation tabs
-    document.addEventListener('DOMContentLoaded', function() {
-        const navContainer = document.querySelector('.admin-nav-tabs-container');
-        const leftFade = document.querySelector('.scroll-fade-left');
-        const rightFade = document.querySelector('.scroll-fade-right');
-        
-        if (navContainer && leftFade && rightFade) {
-            // Update fade visibility based on scroll position
-            function updateFades() {
-                const scrollLeft = navContainer.scrollLeft;
-                const maxScroll = navContainer.scrollWidth - navContainer.clientWidth;
-                
-                leftFade.style.opacity = scrollLeft > 10 ? '1' : '0';
-                rightFade.style.opacity = scrollLeft < maxScroll - 10 ? '1' : '0';
-            }
-            
-            // Initial check
-            updateFades();
-            
-            // Update on scroll
-            navContainer.addEventListener('scroll', updateFades);
-            
-            // Smooth scrolling with arrow keys when focused
-            navContainer.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    navContainer.scrollBy({ left: -100, behavior: 'smooth' });
-                } else if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    navContainer.scrollBy({ left: 100, behavior: 'smooth' });
-                }
-            });
-        }
-    });
     
-    // More Dropdown Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const moreBtn = document.getElementById('moreDropdown');
-        const moreMenu = document.getElementById('moreDropdownMenu');
-        
-        if (moreBtn && moreMenu) {
-            let isOpen = false;
-            
-            // Toggle dropdown on button click
-            moreBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                isOpen = !isOpen;
-                moreMenu.style.display = isOpen ? 'block' : 'none';
-                
-                // Rotate chevron
-                const chevron = moreBtn.querySelector('.fa-chevron-down');
-                if (chevron) {
-                    chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-                }
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
-                    isOpen = false;
-                    moreMenu.style.display = 'none';
-                    const chevron = moreBtn.querySelector('.fa-chevron-down');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    }
-                }
-            });
-            
-            // Close dropdown on ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && isOpen) {
-                    isOpen = false;
-                    moreMenu.style.display = 'none';
-                    const chevron = moreBtn.querySelector('.fa-chevron-down');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    }
-                    moreBtn.focus();
-                }
-            });
-        }
-    });
-    </script>
-    <script defer="defer" src="../assets/js/main.js" type="text/javascript"></script>
-<
-
-<script src="assets/js/admin-tabs.js"></script>
-<
-
-<script src="assets/js/admin-dropdown.js"></script>
-<
-</body>
-</html>
+</body></html>

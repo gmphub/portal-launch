@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Analytics - gmp Academy Admin</title>
@@ -120,7 +121,7 @@
     document.addEventListener('DOMContentLoaded', async function () {
       const session = GMP_Security.getSession();
       if (!session || session.user.role !== 'ADMIN') {
-        window.location.href = '/gmp-portal/access-denied.html';
+        window.location.href = '/gmp-portal/login.html';
         return;
       }
 
