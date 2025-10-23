@@ -6,10 +6,7 @@
     <title>Alunos - gmp Academy Admin</title>
     <link href="../assets/css/main.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-   <style>.admin-nav-tabs-container::-webkit-scrollbar { display: none; }
-                .admin-nav-tab { flex-shrink: 0; }
-                .admin-nav-tab:last-child { margin-right: 0; } </style>
-</head>
+ </head>
 <body>
     <header id="header">
         <div class="d-flex align-items-center">
