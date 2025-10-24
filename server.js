@@ -233,7 +233,7 @@ seedDemoUser();
 
 // Root route (use new root)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'login.html'));
 });
 
 app.post('/api/auth/login', (req, res) => {
@@ -258,6 +258,7 @@ app.post('/api/auth/login', (req, res) => {
       JWT_SECRET,
       { expiresIn: '7d' }
     );
+      const redirectUrl = (role === 'ADMIN') ? '/admin/index.html' : '/dashboard.html';
 
     db.all(
       'SELECT p.*, c.title, c.description FROM progress p JOIN courses c ON p.courseId = c.id WHERE p.userId = ?',
@@ -269,7 +270,7 @@ app.post('/api/auth/login', (req, res) => {
           user: userWithoutPassword,
           progress: progress || [],
           token,
-          redirect: role === 'ADMIN' ? '/gmp-portal/admin/index.html' : '/gmp-portal/student/index.html'
+          redirectUrl: role === 'ADMIN' ? '/gmp-portal/admin/index.html' : '/gmp-portal/student/index.html'
         });
       }
     );
