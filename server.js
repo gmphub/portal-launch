@@ -567,6 +567,35 @@ app.get('/api/admin/students', authenticateToken, (req, res) => {
 });
 
 // Obter detalhes de um aluno específico
+app.get('/api/admin/students/stats', authenticateToken, (req, res) => {
+  const queries = [
+    'SELECT COUNT(*) as total FROM users WHERE role = "STUDENT"',
+    'SELECT COUNT(*) as verified FROM users WHERE role = "STUDENT" AND isEmailVerified = 1',
+    'SELECT COUNT(*) as active FROM users WHERE role = "STUDENT" AND lastLogin > datetime("now", "-30 days")',
+    'SELECT COUNT(*) as newThisMonth FROM users WHERE role = "STUDENT" AND createdAt > datetime("now", "-30 days")'
+  ];
+  
+  Promise.all(queries.map(query => 
+    new Promise((resolve, reject) => {
+      db.get(query, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    })
+  )).then(results => {
+    res.json({
+      success: true,
+      stats: {
+        total: results[0].total,
+        verified: results[1].verified,
+        active: results[2].active,
+        newThisMonth: results[3].newThisMonth
+      }
+    });
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
+  });
+});
 app.get('/api/admin/students/:id', authenticateToken, (req, res) => {
   const studentId = req.params.id;
   
@@ -714,35 +743,6 @@ app.delete('/api/admin/students/:id', authenticateToken, (req, res) => {
 });
 
 // Estatísticas de alunos
-app.get('/api/admin/students/stats', authenticateToken, (req, res) => {
-  const queries = [
-    'SELECT COUNT(*) as total FROM users WHERE role = "STUDENT"',
-    'SELECT COUNT(*) as verified FROM users WHERE role = "STUDENT" AND isEmailVerified = 1',
-    'SELECT COUNT(*) as active FROM users WHERE role = "STUDENT" AND lastLogin > datetime("now", "-30 days")',
-    'SELECT COUNT(*) as newThisMonth FROM users WHERE role = "STUDENT" AND createdAt > datetime("now", "-30 days")'
-  ];
-  
-  Promise.all(queries.map(query => 
-    new Promise((resolve, reject) => {
-      db.get(query, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    })
-  )).then(results => {
-    res.json({
-      success: true,
-      stats: {
-        total: results[0].total,
-        verified: results[1].verified,
-        active: results[2].active,
-        newThisMonth: results[3].newThisMonth
-      }
-    });
-  }).catch(err => {
-    res.status(500).json({ error: 'Erro ao buscar estatísticas' });
-  });
-});
 
 // Upload de avatar do aluno
 app.post('/api/admin/students/:id/avatar', authenticateToken, upload.single('avatar'), async (req, res) => {
