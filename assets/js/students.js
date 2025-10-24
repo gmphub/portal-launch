@@ -1,5 +1,5 @@
 /**
- * StudentsManager - Complete working version matching students.html structure
+ * StudentsManager - Complete working version
  */
 
 async function safeFetchJSON(url, options={}) {
@@ -15,7 +15,6 @@ class StudentsManager {
     this.pageSize = 10;
     this.searchTerm = '';
     this.statusFilter = 'all';
-    this.levelFilter = 'all';
     this.students = [];
     this.stats = {};
     this.pagination = {page: 1, totalPages: 1, total: 0};
@@ -71,28 +70,23 @@ class StudentsManager {
   }
 
   renderStats() {
-    // Update the metric cards in modern-metrics-grid
     const metricCards = document.querySelectorAll('.modern-metric-card');
     if (metricCards.length >= 4) {
-      // Total students
       const totalValue = metricCards[0].querySelector('.metric-value');
       if (totalValue) totalValue.textContent = this.stats.total || 0;
       
-      // Completion rate (calculate from active/total)
       const completionValue = metricCards[1].querySelector('.metric-value');
       if (completionValue) {
         const rate = this.stats.total > 0 ? Math.round((this.stats.verified / this.stats.total) * 100) : 0;
         completionValue.textContent = rate + '%';
       }
       
-      // Average progress
       const progressValue = metricCards[2].querySelector('.metric-value');
       if (progressValue) {
         const avgProgress = this.stats.total > 0 ? Math.round((this.stats.active / this.stats.total) * 100) : 0;
         progressValue.textContent = avgProgress + '%';
       }
       
-      // Engagement (based on active users)
       const engagementValue = metricCards[3].querySelector('.metric-value');
       if (engagementValue) {
         const engagement = this.stats.active > this.stats.total * 0.7 ? 'Alto' : 
@@ -118,9 +112,14 @@ class StudentsManager {
   renderStudentRow(s) {
     const initials = (s.name || s.email || '?').split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
     const lastAccess = s.lastLogin ? new Date(s.lastLogin).toLocaleDateString('pt-BR') : 'Nunca';
-    const status = s.status || 'Ativo';
-    const statusClass = status === 'Ativo' ? 'btn-success' : status === 'Concluído' ? 'btn-primary' : 'btn-secondary';
-    const progress = s.progressPercentage || 0;
+    const lastAccessTime = s.lastLogin ? new Date(s.lastLogin).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}) : '';
+    const status = s.isEmailVerified ? 'Ativo' : 'Inativo';
+    const statusClass = s.isEmailVerified ? 'btn-success' : 'btn-secondary';
+    
+    // Calculate progress from coursesEnrolled and coursesCompleted
+    const coursesEnrolled = s.coursesEnrolled || 0;
+    const coursesCompleted = s.coursesCompleted || 0;
+    const progress = coursesEnrolled > 0 ? Math.round((coursesCompleted / coursesEnrolled) * 100) : 0;
     const engagement = progress > 70 ? 'Alto' : progress > 40 ? 'Médio' : 'Baixo';
     const engagementPct = progress > 70 ? 75 : progress > 40 ? 50 : 25;
     
@@ -128,7 +127,7 @@ class StudentsManager {
       <tr data-id="${s.id}">
         <td>
           <div class="d-flex align-items-center gap-3">
-            <div class="user-avatar">${initials}</div>
+            <div class="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), var(--primary-yellow)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">${initials}</div>
             <div>
               <div style="font-weight: 500; font-size: 16px;">${s.name || s.email}</div>
               <div style="font-size: 14px; color: var(--text-secondary);">${s.email}</div>
@@ -138,7 +137,7 @@ class StudentsManager {
         </td>
         <td>
           <div style="font-weight: 500;">${lastAccess}</div>
-          <div style="font-size: 14px; color: var(--text-secondary);">${s.lastLogin ? new Date(s.lastLogin).toLocaleTimeString('pt-BR') : ''}</div>
+          ${lastAccessTime ? `<div style="font-size: 14px; color: var(--text-secondary);">${lastAccessTime}</div>` : ''}
           <small style="color: var(--text-secondary);">● ${s.isEmailVerified ? 'Verificado' : 'Não verificado'}</small>
         </td>
         <td>
@@ -156,8 +155,9 @@ class StudentsManager {
             <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
               <div class="progress-bar" style="width: ${progress}%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
             </div>
-            <span style="font-size: 14px; font-weight: 500;">${Math.round(progress)}%</span>
+            <span style="font-size: 14px; font-weight: 500;">${progress}%</span>
           </div>
+          <small style="color: var(--text-muted);">${coursesCompleted} de ${coursesEnrolled} cursos</small>
         </td>
         <td>
           <div class="d-flex gap-1">
@@ -198,24 +198,20 @@ class StudentsManager {
       paginationText.textContent = `Mostrando ${this.students.length} de ${this.pagination.total} alunos`;
     }
     
-    // Update pagination buttons
     const paginationBtns = document.querySelectorAll('.d-flex.gap-1 button');
     if (paginationBtns.length >= 4) {
-      // Previous button
       paginationBtns[0].disabled = this.currentPage <= 1;
       paginationBtns[0].onclick = () => this.goToPage(this.currentPage - 1);
       
-      // Page 1
       paginationBtns[1].textContent = '1';
       paginationBtns[1].className = this.currentPage === 1 ? 'btn-modern btn-modern-primary' : 'btn-modern btn-modern-secondary';
       paginationBtns[1].onclick = () => this.goToPage(1);
       
-      // Page 2
       paginationBtns[2].textContent = '2';
       paginationBtns[2].className = this.currentPage === 2 ? 'btn-modern btn-modern-primary' : 'btn-modern btn-modern-secondary';
       paginationBtns[2].onclick = () => this.goToPage(2);
+      paginationBtns[2].style.display = this.pagination.totalPages >= 2 ? '' : 'none';
       
-      // Next button
       paginationBtns[3].disabled = this.currentPage >= this.pagination.totalPages;
       paginationBtns[3].onclick = () => this.goToPage(this.currentPage + 1);
     }
@@ -228,23 +224,26 @@ class StudentsManager {
   }
 
   setupEventListeners() {
-    // Export button
     const exportBtn = document.querySelector('button[onclick*="exportar"], .btn-modern-primary');
     if (exportBtn && exportBtn.textContent.includes('Exportar')) {
-      exportBtn.onclick = () => this.exportStudents();
+      exportBtn.onclick = (e) => {
+        e.preventDefault();
+        this.exportStudents();
+      };
     }
     
-    // New student button (the one with + icon)
     const newStudentBtns = document.querySelectorAll('.btn-modern-primary');
     newStudentBtns.forEach(btn => {
       if (btn.textContent.includes('Novo Aluno')) {
-        btn.onclick = () => this.showAddStudentModal();
+        btn.onclick = (e) => {
+          e.preventDefault();
+          this.showAddStudentModal();
+        };
       }
     });
   }
 
   setupSearchAndFilters() {
-    // Search input
     const searchInput = document.querySelector('input[placeholder*="Buscar"]');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
@@ -257,31 +256,29 @@ class StudentsManager {
       });
     }
     
-    // Status filter
     const statusSelect = document.querySelectorAll('select.form-control')[0];
     if (statusSelect) {
       statusSelect.addEventListener('change', (e) => {
-        this.statusFilter = e.target.value === 'Todos os status' ? 'all' : e.target.value;
+        const value = e.target.value;
+        if (value === 'Todos os status') this.statusFilter = 'all';
+        else if (value === 'Ativo') this.statusFilter = 'verified';
+        else if (value === 'Inativo') this.statusFilter = 'unverified';
+        else this.statusFilter = 'all';
+        
         this.currentPage = 1;
         this.loadStudents();
       });
     }
     
-    // Level/engagement filter
-    const levelSelect = document.querySelectorAll('select.form-control')[1];
-    if (levelSelect) {
-      levelSelect.addEventListener('change', (e) => {
-        this.levelFilter = e.target.value === 'Todos os níveis' ? 'all' : e.target.value;
-        this.currentPage = 1;
-        this.loadStudents();
-      });
-    }
-    
-    // Filter button
-    const filterBtn = document.querySelector('button[onclick*="filtrar"], button .fa-filter');
+    const filterBtn = document.querySelector('button .fa-filter');
     if (filterBtn) {
-      const btn = filterBtn.tagName === 'BUTTON' ? filterBtn : filterBtn.closest('button');
-      if (btn) btn.onclick = () => this.loadStudents();
+      const btn = filterBtn.closest('button');
+      if (btn) {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          this.loadStudents();
+        };
+      }
     }
   }
 
@@ -301,26 +298,119 @@ class StudentsManager {
 
   downloadCSV(students) {
     const csv = [
-      ['ID', 'Nome', 'Email', 'Status', 'Progresso', 'Último Acesso'],
+      ['ID', 'Nome', 'Email', 'Status', 'Cursos Matriculados', 'Cursos Concluídos', 'Último Acesso'],
       ...students.map(s => [
         s.id,
         s.name || '',
         s.email,
-        s.status || 'Ativo',
-        (s.progressPercentage || 0) + '%',
+        s.isEmailVerified ? 'Ativo' : 'Inativo',
+        s.coursesEnrolled || 0,
+        s.coursesCompleted || 0,
         s.lastLogin || 'Nunca'
       ])
-    ].map(row => row.join(',')).join('\n');
+    ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
     
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `alunos_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
   }
 
-  viewStudentDetails(id) {
-    window.location.href = `student-profile.html?id=${id}`;
+  async viewStudentDetails(id) {
+    try {
+      const data = await safeFetchJSON(`/api/admin/students/${id}`, {
+        headers: GMP_Security.getAuthHeaders()
+      });
+      
+      if (data.success && data.student) {
+        this.showStudentModal(data.student);
+      }
+    } catch(e) {
+      console.error('Erro ao buscar detalhes:', e);
+      alert('Erro ao carregar detalhes do aluno');
+    }
+  }
+
+  showStudentModal(student) {
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999;';
+    
+    const coursesEnrolled = student.totalCourses || 0;
+    const coursesCompleted = student.completedCourses || 0;
+    const avgProgress = student.averageProgress || 0;
+    
+    modal.innerHTML = `
+      <div style="background: white; border-radius: 12px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="margin: 0;">Detalhes do Aluno</h2>
+          <button class="btn btn-outline" onclick="this.closest('div[style*=fixed]').remove()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div style="display: grid; gap: 15px;">
+          <div>
+            <strong>Nome:</strong> ${student.name || 'N/A'}
+          </div>
+          <div>
+            <strong>Email:</strong> ${student.email}
+          </div>
+          <div>
+            <strong>ID:</strong> ${student.id}
+          </div>
+          <div>
+            <strong>Status:</strong> ${student.isEmailVerified ? '✅ Verificado' : '❌ Não verificado'}
+          </div>
+          <div>
+            <strong>Último acesso:</strong> ${student.lastLogin ? new Date(student.lastLogin).toLocaleString('pt-BR') : 'Nunca'}
+          </div>
+          <div>
+            <strong>Cadastrado em:</strong> ${student.createdAt ? new Date(student.createdAt).toLocaleString('pt-BR') : 'N/A'}
+          </div>
+          
+          <hr style="margin: 10px 0;">
+          
+          <h3>Progresso</h3>
+          <div>
+            <strong>Cursos matriculados:</strong> ${coursesEnrolled}
+          </div>
+          <div>
+            <strong>Cursos concluídos:</strong> ${coursesCompleted}
+          </div>
+          <div>
+            <strong>Progresso médio:</strong> ${Math.round(avgProgress)}%
+          </div>
+          
+          ${student.progress && student.progress.length > 0 ? `
+            <hr style="margin: 10px 0;">
+            <h3>Cursos</h3>
+            ${student.progress.map(p => `
+              <div style="padding: 10px; background: #f5f5f5; border-radius: 8px; margin-bottom: 10px;">
+                <div><strong>${p.title}</strong></div>
+                <div style="font-size: 14px; color: #666;">${p.category} - ${p.level}</div>
+                <div style="margin-top: 5px;">
+                  <div class="progress" style="width: 100%; height: 8px; background: #ddd; border-radius: 4px;">
+                    <div style="width: ${p.progressPercentage || 0}%; height: 100%; background: linear-gradient(90deg, #4A90E2, #F5A623); border-radius: 4px;"></div>
+                  </div>
+                  <small>${Math.round(p.progressPercentage || 0)}% - ${p.lessonsCompleted || 0} de ${p.totalLessons || 0} aulas</small>
+                </div>
+              </div>
+            `).join('')}
+          ` : '<p style="color: #666;">Nenhum curso matriculado</p>'}
+        </div>
+        
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+          <button class="btn btn-outline" onclick="this.closest('div[style*=fixed]').remove()">Fechar</button>
+          <button class="btn btn-primary" onclick="window.studentsManager.showEditStudentModal('${student.id}'); this.closest('div[style*=fixed]').remove();">Editar</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
   }
 
   sendMessage(id) {
@@ -333,10 +423,10 @@ class StudentsManager {
     if (!student) return;
     
     const newName = prompt('Nome do aluno:', student.name);
-    if (!newName) return;
+    if (!newName || newName === student.name) return;
     
     try {
-      const data = await safeFetchJSON(`/api/admin/students/${id}`, {
+      const response = await fetch(`/api/admin/students/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -345,9 +435,13 @@ class StudentsManager {
         body: JSON.stringify({ name: newName })
       });
       
+      const data = await response.json();
+      
       if (data.success) {
         alert('Aluno atualizado com sucesso!');
         this.loadStudents();
+      } else {
+        alert('Erro: ' + (data.error || 'Falha ao atualizar'));
       }
     } catch(e) {
       console.error('Erro ao atualizar:', e);
@@ -357,7 +451,7 @@ class StudentsManager {
 
   async deleteStudent(id) {
     const student = this.students.find(s => s.id == id);
-    if (!confirm(`Tem certeza que deseja excluir ${student?.name || student?.email || 'este aluno'}?`)) return;
+    if (!confirm(`Tem certeza que deseja excluir ${student?.name || student?.email || 'este aluno'}?\n\nEsta ação não pode ser desfeita.`)) return;
     
     try {
       const response = await fetch(`/api/admin/students/${id}`, {
@@ -365,10 +459,14 @@ class StudentsManager {
         headers: GMP_Security.getAuthHeaders()
       });
       
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
         alert('Aluno excluído com sucesso!');
         this.loadStudents();
         this.loadStats();
+      } else {
+        alert('Erro: ' + (data.error || 'Falha ao excluir aluno'));
       }
     } catch(e) {
       console.error('Erro ao excluir:', e);
@@ -383,8 +481,11 @@ class StudentsManager {
     const email = prompt('Email do novo aluno:');
     if (!email) return;
     
-    const password = prompt('Senha inicial:');
-    if (!password) return;
+    const password = prompt('Senha inicial (mínimo 8 caracteres):');
+    if (!password || password.length < 8) {
+      alert('Senha deve ter no mínimo 8 caracteres');
+      return;
+    }
     
     this.createStudent({ name, email, password });
   }
@@ -416,7 +517,6 @@ class StudentsManager {
   }
 }
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   window.studentsManager = new StudentsManager();
 });
