@@ -60,9 +60,9 @@ class StudentsManager {
     const el=document.getElementById('statsContainer');
     if(!el) return;
     const total=this.stats.total||0;
-    el.innerHTML=\`
+    el.innerHTML=`
       <div>Total de Alunos: \${total}</div>
-    \`;
+    `;
   }
 
   renderStudents() {
@@ -72,7 +72,7 @@ class StudentsManager {
       tbody.innerHTML='<tr><td colspan="6">Nenhum aluno</td></tr>';
       return;
     }
-    tbody.innerHTML=this.students.map(s=>\`
+    tbody.innerHTML=this.students.map(s=>`
       <tr>
         <td>\${s.name}</td>
         <td>\${s.email}</td>
@@ -83,13 +83,13 @@ class StudentsManager {
           <button onclick="studentsManager.showEditStudentModal('\${s.id}')">Editar</button>
           <button onclick="studentsManager.viewProgress('\${s.id}')">Progresso</button>
         </td>
-      </tr>\`).join('');
+      </tr>`).join('');
   }
 
   renderPagination() {
     const el=document.getElementById('paginationContainer');
     if(!el) return;
-    el.innerHTML=\`Página \${this.pagination.page} de \${this.pagination.totalPages}\`;
+    el.innerHTML=`Página \${this.pagination.page} de \${this.pagination.totalPages}`;
   }
 
   setupEventListeners() {
