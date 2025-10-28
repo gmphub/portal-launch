@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Alunos - gmp Academy Admin</title>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex align-items-center">
+            <button aria-label="Toggle menu" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="index.html">Admin</a>
+                </div>
+                <div class="breadcrumb-item active">
+                    <span>Alunos</span>
+                </div>
+            </nav>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button aria-label="Toggle theme" class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar" id="gmIcon">GM</div>
+                <div class="gm-dropdown">
+                    <a href="../student/profile.html">Perfil</a>
+                    <a href="settings.html">Configurações</a>
+                    <a href="../login.html">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img alt="gmp Academy Logo" class="logo-img" src="../assets/images/Logo gmp Academy Round 2025.png"/>
+                <span class="logo-text">gmp Academy</span>
+            </div>
+            <div class="sidebar-header" style="display: none;">
+                <div class="sidebar-logo">
+                    <span>gmp Academy</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item" href="index.html">
+                    <i class="fas fa-home"></i> Início
+                </a>
+                <a class="nav-item" href="products.html">
+                    <i class="fas fa-box"></i> Produtos
+                </a>
+                <a class="nav-item has-submenu" href="#">
+                    <i class="fas fa-edit"></i> Gerenciar Conteúdo
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="content-manager.html" title="Visão Geral"><i class="fas fa-eye"></i>Visão Geral</a></li>
+                    <li><a class="sub-item" href="video-upload.html" title="Upload de Vídeos"><i class="fas fa-video"></i>Upload de Vídeos</a></li>
+                    <li><a class="sub-item" href="bulk-upload.html" title="Upload em Lote"><i class="fas fa-upload"></i>Upload em Lote</a></li>
+                    <li><a class="sub-item" href="media-library.html" title="Biblioteca de Mídia"><i class="fas fa-photo-video"></i>Biblioteca de Mídia</a></li>
+                </ul>
+                <a class="nav-item active" href="students.html">
+                    <i class="fas fa-users"></i> Alunos
+                </a>
+                <a class="nav-item" href="classes.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Turmas
+                </a>
+                <a class="nav-item" href="analytics.html">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a class="nav-item" href="certificates.html">
+                    <i class="fas fa-certificate"></i> Certificados
+                </a>
+                <a class="nav-item" href="gamification.html">
+                    <i class="fas fa-trophy"></i> Gamificação
+                </a>
+                <a class="nav-item" href="sales.html">
+                    <i class="fas fa-dollar-sign"></i> Vendas
+                </a>
+                <a class="nav-item" href="comments.html">
+                    <i class="fas fa-comments"></i> Comentários
+                </a>
+                <a class="nav-item" href="showcase.html">
+                    <i class="fas fa-store"></i> Vitrine
+                </a>
+                <a class="nav-item has-submenu" href="#">
+                    <i class="fas fa-cog"></i> Configurações
+                    <i class="fas fa-chevron-down nav-arrow"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a class="sub-item" href="settings.html" title="Configurações Gerais"><i class="fas fa-cogs"></i>Geral</a></li>
+                    <li><a class="sub-item" href="personalization.html" title="Personalização"><i class="fas fa-palette"></i>Personalização</a></li>
+                    <li><a class="sub-item" href="payment-setup.html" title="Configuração de Pagamento"><i class="fas fa-credit-card"></i>Config. Pagamento</a></li>
+                    <li><a class="sub-item" href="payment-history.html" title="Histórico de Pagamento"><i class="fas fa-history"></i>Histórico Pagamento</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <main class="main-content" id="mainContent">
+            <div class="container full-width">
+                <div class="container" style="padding: 2rem;">
+                    <!-- Navigation Container -->
+                    <div style="display: flex; align-items: flex-start; gap: 5px; margin-bottom: 2rem;">
+                        <!-- Navigation Tabs with Horizontal Scroll -->
+                        <div class="card" style="flex: 1; position: relative;">
+                            <div class="card-body" style="padding: 0; position: relative; margin: 0;">
+                                <div class="admin-nav-tabs-container" style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px; padding-right: 0; display: inline-flex; width: fit-content;">
+                                    <style>
+                                        .admin-nav-tabs-container::-webkit-scrollbar { display: none; }
+                                        .admin-nav-tab { flex-shrink: 0; }
+                                        .admin-nav-tab:last-child { margin-right: 0; }
+                                    </style>
+                                    <!-- Main Navigation Tabs (7 visible) -->
+                                    <a class="admin-nav-tab" href="index.html"><i class="fas fa-home"></i> Dashboard</a>
+                                    <a class="admin-nav-tab" href="products.html"><i class="fas fa-box"></i> Produtos</a>
+                                    <a class="admin-nav-tab" href="content-manager.html"><i class="fas fa-edit"></i> Conteúdo</a>
+                                    <a class="admin-nav-tab active" href="students.html" style="padding: 1rem 1.5rem; margin: 0;"><i class="fas fa-users"></i> Alunos</a>
+                                    <a class="admin-nav-tab" href="classes.html"><i class="fas fa-chalkboard-teacher"></i> Turmas</a>
+                                    <a class="admin-nav-tab" href="analytics.html"><i class="fas fa-chart-bar"></i> Analytics</a>
+                                    <a class="admin-nav-tab" href="certificates.html"><i class="fas fa-certificate"></i> Certificados</a>
+                                </div>
+                                
+                                <!-- Scroll indicators -->
+                                <div class="scroll-fade-left" style="position: absolute; left: 0; top: 0; bottom: 2px; width: 20px; background: linear-gradient(to right, rgba(255,255,255,0.9), transparent); pointer-events: none; z-index: 1;"></div>
+                                <div class="scroll-fade-right" style="position: absolute; right: 0; top: 0; bottom: 2px; width: 20px; background: linear-gradient(to left, rgba(255,255,255,0.9), transparent); pointer-events: none; z-index: 1;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mais Button - Separate container -->
+                        <div class="card" style="flex-shrink: 0; position: relative; overflow: visible;">
+                            <div class="card-body" style="padding: 0; position: relative; margin: 0; overflow: visible;">
+                                <div class="admin-nav-more-dropdown" style="display: flex; align-items: center; height: 100%; position: relative;">
+                                    <button class="admin-nav-tab admin-more-btn" type="button" id="moreDropdown">
+                                        <i class="fas fa-ellipsis-h"></i> Mais
+                                        <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: 0.8rem; transition: transform 0.2s;"></i>
+                                    </button>
+                                    <!-- More Dropdown Menu -->
+                                    <div class="admin-more-dropdown-menu" id="moreDropdownMenu" style="display: none; position: absolute; top: 100%; right: 0; z-index: 1000;">
+                                        <div class="admin-dropdown-header">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                            <span>Mais Opções</span>
+                                        </div>
+                                        
+                                        <!-- Gaming & Commerce -->
+                                        <a href="gamification.html" class="admin-dropdown-item">
+                                            <i class="fas fa-trophy"></i>
+                                            <div>
+                                                <span>Gamificação</span>
+                                                <small>Gerenciar sistema de conquistas</small>
+                                            </div>
+                                        </a>
+                                        <a href="sales.html" class="admin-dropdown-item">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <div>
+                                                <span>Vendas</span>
+                                                <small>Acompanhar vendas e receitas</small>
+                                            </div>
+                                        </a>
+                                        <a href="comments.html" class="admin-dropdown-item">
+                                            <i class="fas fa-comments"></i>
+                                            <div>
+                                                <span>Comentários</span>
+                                                <small>Gerenciar feedback dos alunos</small>
+                                            </div>
+                                        </a>
+                                        <a href="showcase.html" class="admin-dropdown-item">
+                                            <i class="fas fa-store"></i>
+                                            <div>
+                                                <span>Vitrine</span>
+                                                <small>Exibir cursos em destaque</small>
+                                            </div>
+                                        </a>
+                                        
+                                        <div class="admin-dropdown-divider"></div>
+                                        
+                                        <!-- Content & Media -->
+                                        <a href="video-upload.html" class="admin-dropdown-item">
+                                            <i class="fas fa-video"></i>
+                                            <div>
+                                                <span>Upload de Vídeos</span>
+                                                <small>Enviar novos vídeos</small>
+                                            </div>
+                                        </a>
+                                        <a href="bulk-upload.html" class="admin-dropdown-item">
+                                            <i class="fas fa-upload"></i>
+                                            <div>
+                                                <span>Upload em Lote</span>
+                                                <small>Enviar múltiplos arquivos</small>
+                                            </div>
+                                        </a>
+                                        <a href="media-library.html" class="admin-dropdown-item">
+                                            <i class="fas fa-photo-video"></i>
+                                            <div>
+                                                <span>Biblioteca de Mídia</span>
+                                                <small>Gerenciar arquivos de mídia</small>
+                                            </div>
+                                        </a>
+                                        
+                                        <div class="admin-dropdown-divider"></div>
+                                        
+                                        <!-- Settings & Configuration -->
+                                        <a href="payment-setup.html" class="admin-dropdown-item">
+                                            <i class="fas fa-credit-card"></i>
+                                            <div>
+                                                <span>Config. Pagamento</span>
+                                                <small>Configurar métodos de pagamento</small>
+                                            </div>
+                                        </a>
+                                        <a href="payment-history.html" class="admin-dropdown-item">
+                                            <i class="fas fa-history"></i>
+                                            <div>
+                                                <span>Histórico de Pagamentos</span>
+                                                <small>Visualizar transações anteriores</small>
+                                            </div>
+                                        </a>
+                                        <a href="personalization.html" class="admin-dropdown-item">
+                                            <i class="fas fa-palette"></i>
+                                            <div>
+                                                <span>Personalização</span>
+                                                <small>Customizar aparência e layout</small>
+                                            </div>
+                                        </a>
+                                        <a href="settings.html" class="admin-dropdown-item">
+                                            <i class="fas fa-cogs"></i>
+                                            <div>
+                                                <span>Configurações Gerais</span>
+                                                <small>Configurações do sistema</small>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Header -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h1 class="text-gradient" style="margin-bottom: 0.5rem;">Gerenciamento de Alunos</h1>
+                                    <p style="color: var(--text-secondary); margin: 0;">
+                                        Visualize e gerencie todos os alunos do curso
+                                    </p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-secondary" id="exportBtn">
+                                        <i class="fas fa-download"></i> Exportar Lista
+                                    </button>
+                                    <button class="btn-modern btn-modern-secondary" id="importBtn">
+                                        <i class="fas fa-upload"></i> Importar Usuários
+                                    </button>
+                                    <button class="btn-modern btn-modern-primary" id="segmentBtn">
+                                        <i class="fas fa-plus"></i> Nova Segmentação
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modern Student Metrics -->
+                    <div class="modern-metrics-grid animate-fade-in-up" id="metricsContainer">
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-users"></i></div>
+                            </div>
+                            <div class="metric-value" id="totalStudents">0</div>
+                            <div class="metric-label">Total de Alunos</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-graduation-cap"></i></div>
+                            </div>
+                            <div class="metric-value" id="completionRate">0%</div>
+                            <div class="metric-label">Taxa de Conclusão</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+                            </div>
+                            <div class="metric-value" id="avgProgress">0%</div>
+                            <div class="metric-label">Progresso Médio</div>
+                        </div>
+                        <div class="modern-metric-card">
+                            <div class="metric-header">
+                                <div class="metric-icon"><i class="fas fa-heart"></i></div>
+                            </div>
+                            <div class="metric-value" id="engagementLevel" style="color: var(--warning-yellow);">Baixo</div>
+                            <div class="metric-label">Engajamento</div>
+                        </div>
+                    </div>
+
+                    <!-- Student Management Actions - Horizontal Cards -->
+                    <div class="cards-grid cards-grid-3 animate-slide-in-right">
+                        <!-- Search & Filter Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Buscar Alunos</h3>
+                                <p class="card-description">Encontre alunos por nome, email ou progresso</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Engagement Analysis Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Análise de Engajamento</h3>
+                                <p class="card-description">Monitore o engajamento dos alunos</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-secondary">
+                                    <i class="fas fa-analytics"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Communication Card -->
+                        <div class="card-horizontal shadow-hover">
+                            <div class="card-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">Comunicação</h3>
+                                <p class="card-description">Envie mensagens para os alunos</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-modern btn-modern-success">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Search and Filters -->
+                    <div class="card shadow-hover">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3" style="flex-wrap: wrap;">
+                                <input class="form-control" placeholder="Buscar alunos..." style="flex: 1; min-width: 250px;" type="text"/>
+                                <select class="form-control" style="min-width: 150px;">
+                                    <option>Todos os status</option>
+                                    <option>Ativo</option>
+                                    <option>Inativo</option>
+                                    <option>Concluído</option>
+                                </select>
+                                <select class="form-control" style="min-width: 180px;">
+                                    <option>Todos os níveis</option>
+                                    <option>Alto engajamento</option>
+                                    <option>Médio engajamento</option>
+                                    <option>Baixo engajamento</option>
+                                </select>
+                                <button class="btn-modern btn-modern-primary">
+                                    <i class="fas fa-filter"></i> Filtrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Students Table with Modern Design -->
+                    <div class="card shadow-hover animate-fade-in-up">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3 class="text-gradient" style="margin: 0; font-size: 20px;">Lista de Alunos</h3>
+                                <div class="d-flex gap-2">
+                                    <button class="btn-modern btn-modern-primary" id="newStudentBtn">
+                                        <i class="fas fa-plus"></i>
+                                        Novo Aluno
+                                    </button>
+                                    <button class="btn-modern btn-modern-secondary" id="settingsBtn">
+                                        <i class="fas fa-cog"></i>
+                                        Configurações
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding: 0; overflow-x: auto;">
+                            <table class="table-modern">
+                                <thead>
+                                    <tr>
+                                        <th>Aluno</th>
+                                        <th>Último Acesso</th>
+                                        <th>Status</th>
+                                        <th>Engajamento</th>
+                                        <th>Progresso</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentsTableBody">
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="user-avatar" style="background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));">MS</div>
+                                                <div>
+                                                    <div style="font-weight: 500; font-size: 16px;">Maria Silva</div>
+                                                    <div style="font-size: 14px; color: var(--text-secondary);">maria.silva@email.com</div>
+                                                    <small style="color: var(--text-muted);">ID: 001</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 500;">Hoje</div>
+                                            <div style="font-size: 14px; color: var(--text-secondary);">14:30</div>
+                                            <small style="color: var(--success-green);">● Online</small>
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-success" style="font-size: 12px; padding: 6px 12px; border-radius: 20px;">
+                                                <i class="fas fa-check-circle"></i> Ativo
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 75%; background: linear-gradient(90deg, var(--success-green), var(--primary-green)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500; color: var(--success-green);">Alto (75%)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 45%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500;">45%</span>
+                                            </div>
+                                            <small style="color: var(--text-secondary);">32 de 71 aulas</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button class="btn btn-outline btn-sm" title="Ver perfil">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Enviar mensagem">
+                                                    <i class="fas fa-envelope"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Mais opções">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="user-avatar" style="background: linear-gradient(135deg, var(--primary-green), var(--primary-yellow));">JS</div>
+                                                <div>
+                                                    <div style="font-weight: 500; font-size: 16px;">João Santos</div>
+                                                    <div style="font-size: 14px; color: var(--text-secondary);">joao.santos@email.com</div>
+                                                    <small style="color: var(--text-muted);">ID: 002</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 500;">Ontem</div>
+                                            <div style="font-size: 14px; color: var(--text-secondary);">09:15</div>
+                                            <small style="color: var(--text-secondary);">● Offline</small>
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-success" style="font-size: 12px; padding: 6px 12px; border-radius: 20px;">
+                                                <i class="fas fa-check-circle"></i> Ativo
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 50%; background: linear-gradient(90deg, var(--warning-yellow), var(--primary-orange)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500; color: var(--warning-yellow);">Médio (50%)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 23%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500;">23%</span>
+                                            </div>
+                                            <small style="color: var(--text-secondary);">16 de 71 aulas</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button class="btn btn-outline btn-sm" title="Ver perfil">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Enviar mensagem">
+                                                    <i class="fas fa-envelope"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Mais opções">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="user-avatar" style="background: linear-gradient(135deg, var(--primary-orange), var(--danger-red));">AC</div>
+                                                <div>
+                                                    <div style="font-weight: 500; font-size: 16px;">Ana Costa</div>
+                                                    <div style="font-size: 14px; color: var(--text-secondary);">ana.costa@email.com</div>
+                                                    <small style="color: var(--text-muted);">ID: 003</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 500;">3 dias atrás</div>
+                                            <div style="font-size: 14px; color: var(--text-secondary);">16:45</div>
+                                            <small style="color: var(--danger-red);">● Ausente</small>
+                                        </td>
+                                        <td>
+                                            <span class="btn" style="font-size: 12px; padding: 6px 12px; border-radius: 20px; background: var(--warning-yellow); color: #333;">
+                                                <i class="fas fa-exclamation-triangle"></i> Inativo
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 25%; background: linear-gradient(90deg, var(--danger-red), var(--primary-orange)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500; color: var(--danger-red);">Baixo (25%)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 12%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500;">12%</span>
+                                            </div>
+                                            <small style="color: var(--text-secondary);">9 de 71 aulas</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button class="btn btn-outline btn-sm" title="Ver perfil">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Reativar aluno">
+                                                    <i class="fas fa-play"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Mais opções">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="user-avatar" style="background: linear-gradient(135deg, var(--success-green), var(--primary-blue));">PO</div>
+                                                <div>
+                                                    <div style="font-weight: 500; font-size: 16px;">Pedro Oliveira</div>
+                                                    <div style="font-size: 14px; color: var(--text-secondary);">pedro.oliveira@email.com</div>
+                                                    <small style="color: var(--text-muted);">ID: 004</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 500;">1 semana atrás</div>
+                                            <div style="font-size: 14px; color: var(--text-secondary);">11:20</div>
+                                            <small style="color: var(--success-green);">● Concluído</small>
+                                        </td>
+                                        <td>
+                                            <span class="btn btn-primary" style="font-size: 12px; padding: 6px 12px; border-radius: 20px;">
+                                                <i class="fas fa-trophy"></i> Concluído
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 90%; background: linear-gradient(90deg, var(--success-green), var(--primary-green)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500; color: var(--success-green);">Alto (90%)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                                                    <div class="progress-bar" style="width: 100%; background: linear-gradient(90deg, var(--success-green), var(--primary-green)); border-radius: 3px;"></div>
+                                                </div>
+                                                <span style="font-size: 14px; font-weight: 500; color: var(--success-green);">100%</span>
+                                            </div>
+                                            <small style="color: var(--success-green);">71 de 71 aulas ✓</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button class="btn btn-outline btn-sm" title="Ver perfil">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Enviar certificado">
+                                                    <i class="fas fa-certificate"></i>
+                                                </button>
+                                                <button class="btn btn-outline btn-sm" title="Mais opções">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modern Pagination -->
+                    <div class="d-flex align-items-center justify-content-between mt-4">
+                        <div style="color: var(--text-secondary); font-size: 14px;" id="paginationInfo">
+                            <i class="fas fa-info-circle"></i> Mostrando 0 de 0 alunos
+                        </div>
+                        <div class="d-flex gap-1" id="paginationButtons">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    // API Configuration
+    const API_BASE_URL = '/api';
+    const STUDENTS_API = `${API_BASE_URL}/students`;
+
+    // Global state
+    let studentsData = [];
+    let filteredStudents = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Utility Functions
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: ${type === 'success' ? 'var(--success-green)' : type === 'error' ? 'var(--danger-red)' : 'var(--primary-blue)'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+        `;
+        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    function showLoading(show = true) {
+        let loader = document.getElementById('globalLoader');
+        if (!loader) {
+            loader = document.createElement('div');
+            loader.id = 'globalLoader';
+            loader.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            `;
+            loader.innerHTML = '<div class="spinner" style="border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>';
+            document.body.appendChild(loader);
+        }
+        loader.style.display = show ? 'flex' : 'none';
+    }
+
+    // API Functions
+    async function fetchStudents() {
+        try {
+            showLoading(true);
+            const response = await fetch(STUDENTS_API, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch students');
+
+            const data = await response.json();
+            studentsData = data.students || [];
+            filteredStudents = [...studentsData];
+            updateUI();
+            showLoading(false);
+        } catch (error) {
+            console.error('Error fetching students:', error);
+            showNotification('Erro ao carregar alunos', 'error');
+            showLoading(false);
+        }
+    }
+
+    async function exportStudentsList() {
+        try {
+            showLoading(true);
+            const response = await fetch(`${STUDENTS_API}/export`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to export');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `students_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+
+            showNotification('Lista exportada com sucesso!', 'success');
+            showLoading(false);
+        } catch (error) {
+            console.error('Error exporting:', error);
+            showNotification('Erro ao exportar lista', 'error');
+            showLoading(false);
+        }
+    }
+
+    async function importUsers() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv,.xlsx';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showLoading(true);
+                const response = await fetch(`${STUDENTS_API}/import`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Failed to import');
+
+                const result = await response.json();
+                showNotification(`${result.imported} usuários importados com sucesso!`, 'success');
+                fetchStudents();
+                showLoading(false);
+            } catch (error) {
+                console.error('Error importing:', error);
+                showNotification('Erro ao importar usuários', 'error');
+                showLoading(false);
+            }
+        };
+        input.click();
+    }
+
+    async function createSegmentation() {
+        // Show modal for segmentation creation
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 20px;">Nova Segmentação</h3>
+                <input type="text" id="segmentName" placeholder="Nome da segmentação" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <select id="segmentCriteria" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                    <option value="">Selecione o critério</option>
+                    <option value="engagement">Por Engajamento</option>
+                    <option value="progress">Por Progresso</option>
+                    <option value="status">Por Status</option>
+                </select>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="cancelSegment" class="btn-modern btn-modern-secondary">Cancelar</button>
+                    <button id="saveSegment" class="btn-modern btn-modern-primary">Criar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('cancelSegment').onclick = () => modal.remove();
+        document.getElementById('saveSegment').onclick = async () => {
+            const name = document.getElementById('segmentName').value;
+            const criteria = document.getElementById('segmentCriteria').value;
+
+            if (!name || !criteria) {
+                showNotification('Preencha todos os campos', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${STUDENTS_API}/segments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ name, criteria })
+                });
+
+                if (!response.ok) throw new Error('Failed to create segment');
+
+                showNotification('Segmentação criada com sucesso!', 'success');
+                modal.remove();
+            } catch (error) {
+                console.error('Error creating segment:', error);
+                showNotification('Erro ao criar segmentação', 'error');
+            }
+        };
+    }
+
+    async function sendMessage(studentId) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 20px;">Enviar Mensagem</h3>
+                <input type="text" id="messageSubject" placeholder="Assunto" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <textarea id="messageBody" placeholder="Mensagem" rows="5" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;"></textarea>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="cancelMessage" class="btn-modern btn-modern-secondary">Cancelar</button>
+                    <button id="sendMessageBtn" class="btn-modern btn-modern-success">Enviar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('cancelMessage').onclick = () => modal.remove();
+        document.getElementById('sendMessageBtn').onclick = async () => {
+            const subject = document.getElementById('messageSubject').value;
+            const body = document.getElementById('messageBody').value;
+
+            if (!subject || !body) {
+                showNotification('Preencha todos os campos', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${STUDENTS_API}/${studentId}/message`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ subject, body })
+                });
+
+                if (!response.ok) throw new Error('Failed to send message');
+
+                showNotification('Mensagem enviada com sucesso!', 'success');
+                modal.remove();
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showNotification('Erro ao enviar mensagem', 'error');
+            }
+        };
+    }
+
+    async function viewStudentProfile(studentId) {
+        window.location.href = `student-profile.html?id=${studentId}`;
+    }
+
+    async function reactivateStudent(studentId) {
+        if (!confirm('Deseja reativar este aluno?')) return;
+
+        try {
+            const response = await fetch(`${STUDENTS_API}/${studentId}/reactivate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to reactivate');
+
+            showNotification('Aluno reativado com sucesso!', 'success');
+            fetchStudents();
+        } catch (error) {
+            console.error('Error reactivating student:', error);
+            showNotification('Erro ao reativar aluno', 'error');
+        }
+    }
+
+    async function sendCertificate(studentId) {
+        if (!confirm('Deseja enviar o certificado para este aluno?')) return;
+
+        try {
+            const response = await fetch(`${STUDENTS_API}/${studentId}/certificate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to send certificate');
+
+            showNotification('Certificado enviado com sucesso!', 'success');
+        } catch (error) {
+            console.error('Error sending certificate:', error);
+            showNotification('Erro ao enviar certificado', 'error');
+        }
+    }
+
+    function filterStudents() {
+        const searchTerm = document.querySelector('input[placeholder="Buscar alunos..."]').value.toLowerCase();
+        const statusFilter = document.querySelectorAll('select.form-control')[0].value;
+        const engagementFilter = document.querySelectorAll('select.form-control')[1].value;
+
+        filteredStudents = studentsData.filter(student => {
+            const matchesSearch = student.name.toLowerCase().includes(searchTerm) ||
+                                student.email.toLowerCase().includes(searchTerm);
+            const matchesStatus = !statusFilter || statusFilter === 'Todos os status' || student.status === statusFilter;
+            const matchesEngagement = !engagementFilter || engagementFilter === 'Todos os níveis' || student.engagement === engagementFilter;
+
+            return matchesSearch && matchesStatus && matchesEngagement;
+        });
+
+        currentPage = 1;
+        updateUI();
+    }
+
+    function updateUI() {
+        updateMetrics();
+        updateStudentsTable();
+        updatePagination();
+    }
+
+    function updateMetrics() {
+        const totalStudents = studentsData.length;
+        const completedStudents = studentsData.filter(s => s.progress === 100).length;
+        const avgProgress = studentsData.reduce((sum, s) => sum + s.progress, 0) / totalStudents || 0;
+        const avgEngagement = studentsData.reduce((sum, s) => sum + s.engagementScore, 0) / totalStudents || 0;
+
+        document.querySelector('.modern-metric-card:nth-child(1) .metric-value').textContent = totalStudents;
+        document.querySelector('.modern-metric-card:nth-child(2) .metric-value').textContent = `${Math.round((completedStudents / totalStudents) * 100)}%`;
+        document.querySelector('.modern-metric-card:nth-child(3) .metric-value').textContent = `${Math.round(avgProgress)}%`;
+
+        const engagementLevel = avgEngagement > 70 ? 'Alto' : avgEngagement > 40 ? 'Médio' : 'Baixo';
+        const engagementColor = avgEngagement > 70 ? 'var(--success-green)' : avgEngagement > 40 ? 'var(--warning-yellow)' : 'var(--danger-red)';
+        const engagementElement = document.querySelector('.modern-metric-card:nth-child(4) .metric-value');
+        engagementElement.textContent = engagementLevel;
+        engagementElement.style.color = engagementColor;
+    }
+
+    function updateStudentsTable() {
+        const tbody = document.querySelector('.table-modern tbody');
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageStudents = filteredStudents.slice(start, end);
+
+        tbody.innerHTML = pageStudents.map(student => `
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="user-avatar" style="background: ${student.avatarColor}">${student.initials}</div>
+                        <div>
+                            <div style="font-weight: 500; font-size: 16px;">${student.name}</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">${student.email}</div>
+                            <small style="color: var(--text-muted);">ID: ${student.id}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: 500;">${student.lastAccess}</div>
+                    <div style="font-size: 14px; color: var(--text-secondary);">${student.lastAccessTime}</div>
+                    <small style="color: ${student.onlineStatus === 'Online' ? 'var(--success-green)' : 'var(--text-secondary)'};">● ${student.onlineStatus}</small>
+                </td>
+                <td>
+                    <span class="btn ${student.status === 'Ativo' ? 'btn-success' : student.status === 'Concluído' ? 'btn-primary' : 'btn'}" style="font-size: 12px; padding: 6px 12px; border-radius: 20px; ${student.status === 'Inativo' ? 'background: var(--warning-yellow); color: #333;' : ''}">
+                        <i class="fas fa-${student.status === 'Ativo' ? 'check-circle' : student.status === 'Concluído' ? 'trophy' : 'exclamation-triangle'}"></i> ${student.status}
+                    </span>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                            <div class="progress-bar" style="width: ${student.engagementScore}%; background: linear-gradient(90deg, ${student.engagementColor}); border-radius: 3px;"></div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 500; color: ${student.engagementColor};">${student.engagement} (${student.engagementScore}%)</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                            <div class="progress-bar" style="width: ${student.progress}%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 500;">${student.progress}%</span>
+                    </div>
+                    <small style="color: var(--text-secondary);">${student.completedLessons} de ${student.totalLessons} aulas</small>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-outline btn-sm" title="Ver perfil" onclick="viewStudentProfile('${student.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${student.status === 'Inativo' ?
+                            `<button class="btn btn-outline btn-sm" title="Reativar aluno" onclick="reactivateStudent('${student.id}')">
+                                <i class="fas fa-play"></i>
+                            </button>` :
+                            student.status === 'Concluído' ?
+                            `<button class="btn btn-outline btn-sm" title="Enviar certificado" onclick="sendCertificate('${student.id}')">
+                                <i class="fas fa-certificate"></i>
+                            </button>` :
+                            `<button class="btn btn-outline btn-sm" title="Enviar mensagem" onclick="sendMessage('${student.id}')">
+                                <i class="fas fa-envelope"></i>
+                            </button>`
+                        }
+                        <button class="btn btn-outline btn-sm" title="Mais opções">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+        const paginationInfo = document.querySelector('.d-flex.align-items-center.justify-content-between.mt-4 > div:first-child');
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, filteredStudents.length);
+
+        paginationInfo.innerHTML = `<i class="fas fa-info-circle"></i> Mostrando ${start}-${end} de ${filteredStudents.length} alunos`;
+
+        const paginationButtons = document.querySelector('.d-flex.align-items-center.justify-content-between.mt-4 > div:last-child');
+        paginationButtons.innerHTML = `
+            <button class="btn-modern btn-modern-secondary" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            ${Array.from({length: totalPages}, (_, i) => i + 1).map(page => `
+                <button class="btn-modern ${page === currentPage ? 'btn-modern-primary' : 'btn-modern-secondary'}" onclick="changePage(${page})">${page}</button>
+            `).join('')}
+            <button class="btn-modern btn-modern-secondary" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        updateStudentsTable();
+        updatePagination();
+    }
+
+    // Enhanced horizontal scrolling for admin navigation tabs
+    document.addEventListener('DOMContentLoaded', function() {
+        const navContainer = document.querySelector('.admin-nav-tabs-container');
+        const leftFade = document.querySelector('.scroll-fade-left');
+        const rightFade = document.querySelector('.scroll-fade-right');
+
+        if (navContainer && leftFade && rightFade) {
+            function updateFades() {
+                const scrollLeft = navContainer.scrollLeft;
+                const maxScroll = navContainer.scrollWidth - navContainer.clientWidth;
+
+                leftFade.style.opacity = scrollLeft > 10 ? '1' : '0';
+                rightFade.style.opacity = scrollLeft < maxScroll - 10 ? '1' : '0';
+            }
+
+            updateFades();
+            navContainer.addEventListener('scroll', updateFades);
+
+            navContainer.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navContainer.scrollBy({ left: -100, behavior: 'smooth' });
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navContainer.scrollBy({ left: 100, behavior: 'smooth' });
+                }
+            });
+        }
+
+        // Initialize button event listeners
+        document.querySelector('.btn-modern.btn-modern-secondary:has(.fa-download)').addEventListener('click', exportStudentsList);
+        document.querySelector('.btn-modern.btn-modern-secondary:has(.fa-upload)').addEventListener('click', importUsers);
+        document.querySelector('.btn-modern.btn-modern-primary:has(.fa-plus)').addEventListener('click', createSegmentation);
+
+        // Search and filter
+        document.querySelector('input[placeholder="Buscar alunos..."]').addEventListener('input', filterStudents);
+        document.querySelectorAll('select.form-control').forEach(select => {
+            select.addEventListener('change', filterStudents);
+        });
+        document.querySelector('.btn-modern.btn-modern-primary:has(.fa-filter)').addEventListener('click', filterStudents);
+
+        // Load initial data
+        fetchStudents();
+    });
+
+    // More Dropdown Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const moreBtn = document.getElementById('moreDropdown');
+        const moreMenu = document.getElementById('moreDropdownMenu');
+
+        if (moreBtn && moreMenu) {
+            let isOpen = false;
+
+            moreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                isOpen = !isOpen;
+                moreMenu.style.display = isOpen ? 'block' : 'none';
+
+                const chevron = moreBtn.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+                    isOpen = false;
+                    moreMenu.style.display = 'none';
+                    const chevron = moreBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isOpen) {
+                    isOpen = false;
+                    moreMenu.style.display = 'none';
+                    const chevron = moreBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                    moreBtn.focus();
+                }
+            });
+        }
+    });
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+    </script>
+    <script src="../assets/js/security.js"></script>
+    <script src="../assets/js/students.js"></script>
+    <script src="../assets/js/students-page.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/admin-tabs.js"></script>
+    <script src="../assets/js/admin-dropdown.js"></script>
+</body>
+</html>
