@@ -28,10 +28,15 @@ class SecurityManager {
     // Obtém sessão do storage
     getSession() {
         try {
-            const sessionData = localStorage.getItem('gmp_session');
-            return sessionData ? JSON.parse(sessionData) : null;
+            const raw = localStorage.getItem("gmp_session");
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            // Validate structure
+            if (!parsed.user || !parsed.token || !parsed.expiresAt) return null;
+            return parsed;
         } catch (error) {
-            console.error('Error getting session:', error);
+            console.warn("Invalid session format, clearing");
+            localStorage.removeItem("gmp_session");
             return null;
         }
     }
@@ -61,6 +66,7 @@ class SecurityManager {
             };
 
             localStorage.setItem('gmp_session', JSON.stringify(session));
+            localStorage.setItem('authToken', session.token);
             this.currentUser = session.user;
             this.token = session.token;
             this.isAdmin = (normalizedRole === 'ADMIN');
@@ -80,6 +86,7 @@ class SecurityManager {
     clearSession() {
         try {
             localStorage.removeItem('gmp_session');
+            localStorage.removeItem('authToken');
             this.currentUser = null;
             this.isAdmin = false;
             this.token = null;
@@ -127,7 +134,7 @@ class SecurityManager {
 
         const isAdminPage = currentPath.includes('/gmp-portal/admin/');
         if (isAdminPage && role !== 'ADMIN') {
-            window.location.href = '/gmp-portal/access-denied.html';
+            window.location.href = '/gmp-portal/login.html';
             return false;
         }
         return true;
@@ -167,7 +174,7 @@ class SecurityManager {
     // Logout
     logout() {
         this.clearSession();
-        window.location.href = '/gmp-portal/index.html';
+        window.location.href = '/gmp-portal/login.html';
     }
 
     // Inicialização de segurança
@@ -191,7 +198,7 @@ class SecurityManager {
     // Headers com token real
     getAuthHeaders() {
         const session = this.getSession();
-        const token = session?.token || '';
+        const token = session?.token || localStorage.getItem('authToken') || '';
         return {
             'Content-Type': 'application/json',
             'Authorization': token ? `Bearer ${token}` : '',
@@ -403,82 +410,6 @@ class SecurityManager {
             return { success: false, error: data.error || 'Registration failed' };
         } catch (error) {
             return { success: false, error: error.message || 'Network error' };
-        }
-    }
-
-    // Checagem de disponibilidade de username (backend opcional com fallback local)
-    async checkUsernameAvailability(username) {
-        try {
-            try {
-                const res = await fetch('/api/auth/check-username', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (typeof data.available === 'boolean') return { available: data.available };
-                }
-            } catch {}
-            const takenUsernames = ['admin', 'test', 'user', 'root'];
-            const available = !takenUsernames.includes(String(username).toLowerCase());
-            return { available };
-        } catch {
-            return { available: false };
-        }
-    }
-
-    // Solicitação de reset de senha (backend com fallback)
-    async requestPasswordReset(email) {
-        try {
-            if (!this.validateEmail(email)) return { success: false, error: 'Invalid email' };
-            try {
-                const res = await fetch('/api/auth/request-reset', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-                const data = await res.json();
-                if (res.ok) return { success: true, message: data.message || 'Password reset email sent', token: data.token || null };
-                return { success: false, error: data.error || 'Failed to request reset' };
-            } catch {}
-            return { success: true, message: 'Password reset email simulated', token: 'reset_' + Date.now() };
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    }
-
-    // Validação de token de reset (backend com fallback)
-    async validateResetToken(token) {
-        try {
-            if (!token) return { valid: false };
-            try {
-                const res = await fetch('/api/auth/validate-reset', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                });
-                const data = await res.json();
-                if (res.ok) return { valid: !!data.valid, email: data.email || null };
-            } catch {}
-            return { valid: String(token).startsWith('reset_'), email: null };
-        } catch {
-            return { valid: false };
-        }
-    }
-
-    // Permissões por papel
-    async getRolePermissions(role) {
-        try {
-            const permissions = {
-                admin: ['read', 'write', 'delete', 'admin', 'manage_users'],
-                manager: ['read', 'write', 'manage_team'],
-                user: ['read', 'profile'],
-                guest: ['read']
-            };
-            return permissions[String(role).toLowerCase()] || [];
-        } catch {
-            return [];
         }
     }
 

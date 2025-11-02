@@ -102,8 +102,10 @@ function initThemeToggle() {
         console.log('Theme toggle clicked');
         
         document.body.classList.toggle('dark-theme');
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        document.documentElement.setAttribute('data-bs-theme', isDarkTheme ? 'dark' : 'light');
         
-        if (document.body.classList.contains('dark-theme')) {
+        if (isDarkTheme) {
             updatedThemeIcon.classList.remove('fa-sun');
             updatedThemeIcon.classList.add('fa-moon');
         } else {
@@ -111,7 +113,6 @@ function initThemeToggle() {
             updatedThemeIcon.classList.add('fa-sun');
         }
         
-        const isDarkTheme = document.body.classList.contains('dark-theme');
         localStorage.setItem('dark-theme', isDarkTheme);
         
         console.log('Theme toggled, dark mode:', isDarkTheme);

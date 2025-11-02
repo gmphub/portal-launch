@@ -1,0 +1,102 @@
+/* Dark Mode Support for Bootstrap Modals */
+
+[data-theme="dark"] .modal-content,
+body.dark-mode .modal-content {
+    background-color: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f1f5f9);
+    border: 1px solid var(--border-color, #334155);
+}
+
+[data-theme="dark"] .modal-header,
+body.dark-mode .modal-header {
+    background-color: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f1f5f9);
+    border-bottom: 1px solid var(--border-color, #334155);
+}
+
+[data-theme="dark"] .modal-body,
+body.dark-mode .modal-body {
+    background-color: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .modal-footer,
+body.dark-mode .modal-footer {
+    background-color: var(--card-bg, #1e293b);
+    border-top: 1px solid var(--border-color, #334155);
+}
+
+[data-theme="dark"] .modal-title,
+body.dark-mode .modal-title {
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .form-control,
+body.dark-mode .form-control {
+    background-color: var(--input-bg, #0f172a);
+    color: var(--text-primary, #f1f5f9);
+    border-color: var(--border-color, #334155);
+}
+
+[data-theme="dark"] .form-control:focus,
+body.dark-mode .form-control:focus {
+    background-color: var(--input-bg, #0f172a);
+    color: var(--text-primary, #f1f5f9);
+    border-color: var(--primary-blue, #3b82f6);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .form-label,
+body.dark-mode .form-label {
+    color: var(--text-secondary, #cbd5e1);
+}
+
+[data-theme="dark"] .btn-close,
+body.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .dropdown-menu,
+body.dark-mode .dropdown-menu {
+    background-color: var(--card-bg, #1e293b);
+    border-color: var(--border-color, #334155);
+}
+
+[data-theme="dark"] .dropdown-item,
+body.dark-mode .dropdown-item {
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .dropdown-item:hover,
+body.dark-mode .dropdown-item:hover {
+    background-color: var(--hover-bg, #334155);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] .dropdown-divider,
+body.dark-mode .dropdown-divider {
+    border-color: var(--border-color, #334155);
+}
+
+[data-theme="dark"] select.form-control option,
+body.dark-mode select.form-control option {
+    background-color: var(--card-bg, #1e293b);
+    color: var(--text-primary, #f1f5f9);
+}
+
+[data-theme="dark"] textarea.form-control,
+body.dark-mode textarea.form-control {
+    background-color: var(--input-bg, #0f172a);
+    color: var(--text-primary, #f1f5f9);
+    border-color: var(--border-color, #334155);
+}
+
+/* Ensure modal backdrop works in dark mode */
+.modal-backdrop {
+    background-color: #000;
+}
+
+[data-theme="dark"] .modal-backdrop,
+body.dark-mode .modal-backdrop {
+    opacity: 0.7;
+}

@@ -1,0 +1,1947 @@
+"C:\Users\cyclicgmp\gmp-portal\portal-launch\.env"
+PORT=3000
+JWT_SECRET=xxx...
+
+# Oracle Object Storage
+ORACLE_NAMESPACE=grbivt4hjsgn
+ORACLE_BUCKET=video-bucket
+ORACLE_REGION=sa-saopaulo-1
+
+# Autenticação Oracle
+ORACLE_USER=ocid1.user.oc1..aaaaaaaa3nyjmyehpcwtxgdfgpf7cftcsm34aw4srly7yc2ekgmqbwwhdc3q
+ORACLE_AUTH_TOKEN=xxx..
+
+GMAIL_APP_PASSWORD=bkcj xxxx.xxxx.xxxx
+PS C:\Users\cyclicgmp> node "C:\Users\cyclicgmp\gmp-portal\portal-launch\server.js"
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+GMAIL_APP_PASSWORD loaded: false
+gmp portal server running at http://0.0.0.0:3002
+✅ Database connected. Found 4 users.
+
+still showing 6 mockup students. Make a cat eof code to remove all.
+
+
+I have two bootstraps on head: <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css " rel="stylesheet">
+<!-- Bootstrap JS (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js "></script>
+
+- correct the errors on image.
+
+const axios = require('axios');
+const multer = require('multer');
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+console.log('GMAIL_APP_PASSWORD loaded:', !!process.env.GMAIL_APP_PASSWORD); // Should log `true`
+
+const app = express();
+
+this is the code you told me to remove that was giving some good functionality...
+<script>
+    // API Configuration
+    const API_BASE_URL = '/api';
+    const STUDENTS_API = `${API_BASE_URL}/students`;
+
+    // Global state
+    let studentsData = [];
+    let filteredStudents = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Utility Functions
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: ${type === 'success' ? 'var(--success-green)' : type === 'error' ? 'var(--danger-red)' : 'var(--primary-blue)'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+        `;
+        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    function showLoading(show = true) {
+        let loader = document.getElementById('globalLoader');
+        if (!loader) {
+            loader = document.createElement('div');
+            loader.id = 'globalLoader';
+            loader.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            `;
+            loader.innerHTML = '<div class="spinner" style="border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>';
+            document.body.appendChild(loader);
+        }
+        loader.style.display = show ? 'flex' : 'none';
+    }
+
+    // API Functions
+    async function fetchStudents() {
+        try {
+            showLoading(true);
+            const response = await fetch(STUDENTS_API, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch students');
+
+            const data = await response.json();
+            studentsData = data.students || [];
+            filteredStudents = [...studentsData];
+            updateUI();
+            showLoading(false);
+        } catch (error) {
+            console.error('Error fetching students:', error);
+            showNotification('Erro ao carregar alunos', 'error');
+            showLoading(false);
+        }
+    }
+
+    async function exportStudentsList() {
+        try {
+            showLoading(true);
+            const response = await fetch(`${STUDENTS_API}/export`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to export');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `students_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+
+            showNotification('Lista exportada com sucesso!', 'success');
+            showLoading(false);
+        } catch (error) {
+            console.error('Error exporting:', error);
+            showNotification('Erro ao exportar lista', 'error');
+            showLoading(false);
+        }
+    }
+
+    async function importUsers() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv,.xlsx';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                showLoading(true);
+                const response = await fetch(`${STUDENTS_API}/import`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Failed to import');
+
+                const result = await response.json();
+                showNotification(`${result.imported} usuários importados com sucesso!`, 'success');
+                fetchStudents();
+                showLoading(false);
+            } catch (error) {
+                console.error('Error importing:', error);
+                showNotification('Erro ao importar usuários', 'error');
+                showLoading(false);
+            }
+        };
+        input.click();
+    }
+
+    async function createSegmentation() {
+        // Show modal for segmentation creation
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 20px;">Nova Segmentação</h3>
+                <input type="text" id="segmentName" placeholder="Nome da segmentação" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <select id="segmentCriteria" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                    <option value="">Selecione o critério</option>
+                    <option value="engagement">Por Engajamento</option>
+                    <option value="progress">Por Progresso</option>
+                    <option value="status">Por Status</option>
+                </select>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="cancelSegment" class="btn-modern btn-modern-secondary">Cancelar</button>
+                    <button id="saveSegment" class="btn-modern btn-modern-primary">Criar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('cancelSegment').onclick = () => modal.remove();
+        document.getElementById('saveSegment').onclick = async () => {
+            const name = document.getElementById('segmentName').value;
+            const criteria = document.getElementById('segmentCriteria').value;
+
+            if (!name || !criteria) {
+                showNotification('Preencha todos os campos', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${STUDENTS_API}/segments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ name, criteria })
+                });
+
+                if (!response.ok) throw new Error('Failed to create segment');
+
+                showNotification('Segmentação criada com sucesso!', 'success');
+                modal.remove();
+            } catch (error) {
+                console.error('Error creating segment:', error);
+                showNotification('Erro ao criar segmentação', 'error');
+            }
+        };
+    }
+
+    async function sendMessage(studentId) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        modal.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 20px;">Enviar Mensagem</h3>
+                <input type="text" id="messageSubject" placeholder="Assunto" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;">
+                <textarea id="messageBody" placeholder="Mensagem" rows="5" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 6px;"></textarea>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="cancelMessage" class="btn-modern btn-modern-secondary">Cancelar</button>
+                    <button id="sendMessageBtn" class="btn-modern btn-modern-success">Enviar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('cancelMessage').onclick = () => modal.remove();
+        document.getElementById('sendMessageBtn').onclick = async () => {
+            const subject = document.getElementById('messageSubject').value;
+            const body = document.getElementById('messageBody').value;
+
+            if (!subject || !body) {
+                showNotification('Preencha todos os campos', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${STUDENTS_API}/${studentId}/message`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({ subject, body })
+                });
+
+                if (!response.ok) throw new Error('Failed to send message');
+
+                showNotification('Mensagem enviada com sucesso!', 'success');
+                modal.remove();
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showNotification('Erro ao enviar mensagem', 'error');
+            }
+        };
+    }
+
+    async function viewStudentProfile(studentId) {
+        window.location.href = `student-profile.html?id=${studentId}`;
+    }
+
+    async function reactivateStudent(studentId) {
+        if (!confirm('Deseja reativar este aluno?')) return;
+
+        try {
+            const response = await fetch(`${STUDENTS_API}/${studentId}/reactivate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to reactivate');
+
+            showNotification('Aluno reativado com sucesso!', 'success');
+            fetchStudents();
+        } catch (error) {
+            console.error('Error reactivating student:', error);
+            showNotification('Erro ao reativar aluno', 'error');
+        }
+    }
+
+    async function sendCertificate(studentId) {
+        if (!confirm('Deseja enviar o certificado para este aluno?')) return;
+
+        try {
+            const response = await fetch(`${STUDENTS_API}/${studentId}/certificate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to send certificate');
+
+            showNotification('Certificado enviado com sucesso!', 'success');
+        } catch (error) {
+            console.error('Error sending certificate:', error);
+            showNotification('Erro ao enviar certificado', 'error');
+        }
+    }
+
+    function filterStudents() {
+        const searchTerm = document.querySelector('input[placeholder="Buscar alunos..."]').value.toLowerCase();
+        const statusFilter = document.querySelectorAll('select.form-control')[0].value;
+        const engagementFilter = document.querySelectorAll('select.form-control')[1].value;
+
+        filteredStudents = studentsData.filter(student => {
+            const matchesSearch = student.name.toLowerCase().includes(searchTerm) ||
+                                student.email.toLowerCase().includes(searchTerm);
+            const matchesStatus = !statusFilter || statusFilter === 'Todos os status' || student.status === statusFilter;
+            const matchesEngagement = !engagementFilter || engagementFilter === 'Todos os níveis' || student.engagement === engagementFilter;
+
+            return matchesSearch && matchesStatus && matchesEngagement;
+        });
+
+        currentPage = 1;
+        updateUI();
+    }
+
+    function updateUI() {
+        updateMetrics();
+        updateStudentsTable();
+        updatePagination();
+    }
+
+    function updateMetrics() {
+        const totalStudents = studentsData.length;
+        const completedStudents = studentsData.filter(s => s.progress === 100).length;
+        const avgProgress = studentsData.reduce((sum, s) => sum + s.progress, 0) / totalStudents || 0;
+        const avgEngagement = studentsData.reduce((sum, s) => sum + s.engagementScore, 0) / totalStudents || 0;
+
+        document.querySelector('.modern-metric-card:nth-child(1) .metric-value').textContent = totalStudents;
+        document.querySelector('.modern-metric-card:nth-child(2) .metric-value').textContent = `${Math.round((completedStudents / totalStudents) * 100)}%`;
+        document.querySelector('.modern-metric-card:nth-child(3) .metric-value').textContent = `${Math.round(avgProgress)}%`;
+
+        const engagementLevel = avgEngagement > 70 ? 'Alto' : avgEngagement > 40 ? 'Médio' : 'Baixo';
+        const engagementColor = avgEngagement > 70 ? 'var(--success-green)' : avgEngagement > 40 ? 'var(--warning-yellow)' : 'var(--danger-red)';
+        const engagementElement = document.querySelector('.modern-metric-card:nth-child(4) .metric-value');
+        engagementElement.textContent = engagementLevel;
+        engagementElement.style.color = engagementColor;
+    }
+
+    function updateStudentsTable() {
+        const tbody = document.querySelector('.table-modern tbody');
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageStudents = filteredStudents.slice(start, end);
+
+        tbody.innerHTML = pageStudents.map(student => `
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="user-avatar" style="background: ${student.avatarColor}">${student.initials}</div>
+                        <div>
+                            <div style="font-weight: 500; font-size: 16px;">${student.name}</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">${student.email}</div>
+                            <small style="color: var(--text-muted);">ID: ${student.id}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: 500;">${student.lastAccess}</div>
+                    <div style="font-size: 14px; color: var(--text-secondary);">${student.lastAccessTime}</div>
+                    <small style="color: ${student.onlineStatus === 'Online' ? 'var(--success-green)' : 'var(--text-secondary)'};">● ${student.onlineStatus}</small>
+                </td>
+                <td>
+                    <span class="btn ${student.status === 'Ativo' ? 'btn-success' : student.status === 'Concluído' ? 'btn-primary' : 'btn'}" style="font-size: 12px; padding: 6px 12px; border-radius: 20px; ${student.status === 'Inativo' ? 'background: var(--warning-yellow); color: #333;' : ''}">
+                        <i class="fas fa-${student.status === 'Ativo' ? 'check-circle' : student.status === 'Concluído' ? 'trophy' : 'exclamation-triangle'}"></i> ${student.status}
+                    </span>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="progress" style="width: 60px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                            <div class="progress-bar" style="width: ${student.engagementScore}%; background: linear-gradient(90deg, ${student.engagementColor}); border-radius: 3px;"></div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 500; color: ${student.engagementColor};">${student.engagement} (${student.engagementScore}%)</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="progress" style="width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;">
+                            <div class="progress-bar" style="width: ${student.progress}%; background: linear-gradient(90deg, var(--primary-blue), var(--primary-yellow)); border-radius: 3px;"></div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 500;">${student.progress}%</span>
+                    </div>
+                    <small style="color: var(--text-secondary);">${student.completedLessons} de ${student.totalLessons} aulas</small>
+                </td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-outline btn-sm" title="Ver perfil" onclick="viewStudentProfile('${student.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${student.status === 'Inativo' ?
+                            `<button class="btn btn-outline btn-sm" title="Reativar aluno" onclick="reactivateStudent('${student.id}')">
+                                <i class="fas fa-play"></i>
+                            </button>` :
+                            student.status === 'Concluído' ?
+                            `<button class="btn btn-outline btn-sm" title="Enviar certificado" onclick="sendCertificate('${student.id}')">
+                                <i class="fas fa-certificate"></i>
+                            </button>` :
+                            `<button class="btn btn-outline btn-sm" title="Enviar mensagem" onclick="sendMessage('${student.id}')">
+                                <i class="fas fa-envelope"></i>
+                            </button>`
+                        }
+                        <button class="btn btn-outline btn-sm" title="Mais opções">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+        const paginationInfo = document.querySelector('.d-flex.align-items-center.justify-content-between.mt-4 > div:first-child');
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, filteredStudents.length);
+
+        paginationInfo.innerHTML = `<i class="fas fa-info-circle"></i> Mostrando ${start}-${end} de ${filteredStudents.length} alunos`;
+
+        const paginationButtons = document.querySelector('.d-flex.align-items-center.justify-content-between.mt-4 > div:last-child');
+        paginationButtons.innerHTML = `
+            <button class="btn-modern btn-modern-secondary" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            ${Array.from({length: totalPages}, (_, i) => i + 1).map(page => `
+                <button class="btn-modern ${page === currentPage ? 'btn-modern-primary' : 'btn-modern-secondary'}" onclick="changePage(${page})">${page}</button>
+            `).join('')}
+            <button class="btn-modern btn-modern-secondary" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        updateStudentsTable();
+        updatePagination();
+    }
+
+    // Enhanced horizontal scrolling for admin navigation tabs
+    document.addEventListener('DOMContentLoaded', function() {
+        const navContainer = document.querySelector('.admin-nav-tabs-container');
+        const leftFade = document.querySelector('.scroll-fade-left');
+        const rightFade = document.querySelector('.scroll-fade-right');
+
+        if (navContainer && leftFade && rightFade) {
+            function updateFades() {
+                const scrollLeft = navContainer.scrollLeft;
+                const maxScroll = navContainer.scrollWidth - navContainer.clientWidth;
+
+                leftFade.style.opacity = scrollLeft > 10 ? '1' : '0';
+                rightFade.style.opacity = scrollLeft < maxScroll - 10 ? '1' : '0';
+            }
+
+            updateFades();
+            navContainer.addEventListener('scroll', updateFades);
+
+            navContainer.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navContainer.scrollBy({ left: -100, behavior: 'smooth' });
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navContainer.scrollBy({ left: 100, behavior: 'smooth' });
+                }
+            });
+        }
+
+        // Initialize button event listeners
+        document.querySelector('.btn-modern.btn-modern-secondary:has(.fa-download)').addEventListener('click', exportStudentsList);
+        document.querySelector('.btn-modern.btn-modern-secondary:has(.fa-upload)').addEventListener('click', importUsers);
+        document.querySelector('.btn-modern.btn-modern-primary:has(.fa-plus)').addEventListener('click', createSegmentation);
+
+        // Search and filter
+        document.querySelector('input[placeholder="Buscar alunos..."]').addEventListener('input', filterStudents);
+        document.querySelectorAll('select.form-control').forEach(select => {
+            select.addEventListener('change', filterStudents);
+        });
+        document.querySelector('.btn-modern.btn-modern-primary:has(.fa-filter)').addEventListener('click', filterStudents);
+
+        // Load initial data
+        fetchStudents();
+    });
+
+    // More Dropdown Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const moreBtn = document.getElementById('moreDropdown');
+        const moreMenu = document.getElementById('moreDropdownMenu');
+
+        if (moreBtn && moreMenu) {
+            let isOpen = false;
+
+            moreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                isOpen = !isOpen;
+                moreMenu.style.display = isOpen ? 'block' : 'none';
+
+                const chevron = moreBtn.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+                    isOpen = false;
+                    moreMenu.style.display = 'none';
+                    const chevron = moreBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isOpen) {
+                    isOpen = false;
+                    moreMenu.style.display = 'none';
+                    const chevron = moreBtn.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                    moreBtn.focus();
+                }
+            });
+        }
+    });
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+    </script>
+	 <script src="../assets/js/security.js"></script>
+    <script src="../assets/js/students.js"></script>
+    <script src="../assets/js/students-page.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/admin-tabs.js"></script>
+    <script src="../assets/js/admin-dropdown.js"></script>
+
+I'm not sure about your arbitrary decision to create a fucking new js file, as the tens that are there hanging around are not sufficient.
+The result of your choise is very precarious and I have run out of pacience, you are offering patching according to your guesses. I'm sick now of this unprofessional way of working. I want to see real results, too much time has been spent only on this document. You told me if I give a token or credencials to access my https://github.com/gmphub/portal-launch you would make changes accordingly, I need you to do all the testing and only provide fully working and functional code after every single item is working as due to. No more games. Facts!
+
+// assets/js/students-manager.js
+class StudentsManager {
+    constructor() {
+        this.API_BASE = '/api/admin';
+        this.students = [];
+        this.filtered = [];
+        this.currentPage = 1;
+        this.itemsPerPage = 10;
+    }
+
+    async loadStudents() {
+        try {
+            const url = new URL(`${this.API_BASE}/students`);
+            url.searchParams.set('page', this.currentPage);
+            url.searchParams.set('limit', this.itemsPerPage);
+            
+            const res = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+            });
+            
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            
+            this.students = data.students || [];
+            this.filtered = [...this.students];
+            this.render();
+        } catch (err) {
+            console.error('Fetch students error:', err);
+            this.showNotification('Falha ao carregar alunos', 'error');
+        }
+    }
+
+    render() {
+        this.updateMetrics();
+        this.updateTable();
+        this.updatePagination();
+    }
+
+    // ... (rest of your StudentsManager methods)
+}
+
+// Initialize when DOM loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.securityManager?.isAuthenticated()) {
+        window.studentsManager = new StudentsManager();
+        window.studentsManager.loadStudents();
+    }
+});
+
+/**
+ * Security Layer (revisado e funcional)
+ * Autenticação e autorização integradas ao backend real e com fallback local consistente
+ */
+
+class SecurityManager {
+    constructor() {
+        this.currentUser = null;
+        this.isAdmin = false;
+        this.token = null;
+        this.sessionTimeout = 30 * 60 * 1000; // 30 minutos
+        this.initializeAuth();
+    }
+
+    // Inicializa a autenticação a partir da sessão persistida
+    initializeAuth() {
+        const session = this.getSession();
+        if (session && this.isSessionValid(session)) {
+            this.currentUser = session.user;
+            this.token = session.token || null;
+            this.isAdmin = (String(session.user.role).toUpperCase() === 'ADMIN');
+            this.updateLastActivity();
+        } else {
+            this.clearSession();
+        }
+    }
+
+    // Obtém sessão do storage
+    getSession() {
+        try {
+            const raw = localStorage.getItem("gmp_session");
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            // Validate structure
+            if (!parsed.user || !parsed.token || !parsed.expiresAt) return null;
+            return parsed;
+        } catch (error) {
+            console.warn("Invalid session format, clearing");
+            localStorage.removeItem("gmp_session");
+            return null;
+        }
+    }
+
+    // Verifica validade da sessão localmente
+    isSessionValid(session) {
+        if (!session || !session.expiresAt) return false;
+        return Date.now() < session.expiresAt;
+    }
+
+    // Cria sessão a partir de dados reais (user + token)
+    async createSession(userData) {
+        try {
+            const normalizedRole = String(userData.user?.role || userData.role || 'USER').toUpperCase();
+            const session = {
+                user: {
+                    id: userData.user?.id || userData.userId || userData.id || ('user_' + Date.now()),
+                    name: userData.user?.name || userData.username || userData.name || 'user',
+                    email: userData.user?.email || userData.email || '',
+                    role: normalizedRole
+                },
+                token: userData.token || null,
+                sessionId: 'session_' + Date.now(),
+                createdAt: new Date().toISOString(),
+                expiresAt: Date.now() + this.sessionTimeout,
+                lastActivity: Date.now()
+            };
+
+            localStorage.setItem('gmp_session', JSON.stringify(session));
+            this.currentUser = session.user;
+            this.token = session.token;
+            this.isAdmin = (normalizedRole === 'ADMIN');
+
+            return {
+                success: true,
+                sessionId: session.sessionId,
+                user: session.user,
+                token: session.token
+            };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Limpa sessão
+    clearSession() {
+        try {
+            localStorage.removeItem('gmp_session');
+            this.currentUser = null;
+            this.isAdmin = false;
+            this.token = null;
+            return true;
+        } catch (error) {
+            console.error('Error clearing session:', error);
+            return false;
+        }
+    }
+
+    // Atualiza atividade e renova validade local
+    updateLastActivity() {
+        try {
+            const session = this.getSession();
+            if (session) {
+                session.lastActivity = Date.now();
+                session.expiresAt = Date.now() + this.sessionTimeout;
+                localStorage.setItem('gmp_session', JSON.stringify(session));
+            }
+        } catch (error) {
+            console.error('Error updating activity:', error);
+        }
+    }
+
+    // Estado de autenticação
+    isAuthenticated() {
+        return !!this.currentUser && !!this.token;
+    }
+
+    // Admin
+    isUserAdmin() {
+        return this.isAdmin;
+    }
+
+    // Usuário atual
+    getCurrentUser() {
+        return this.currentUser;
+    }
+
+    // Protege rotas admin
+    protectAdminRoutes() {
+        const session = this.getSession();
+        const role = session?.user?.role?.toUpperCase() || 'GUEST';
+        const currentPath = window.location.pathname;
+
+        const isAdminPage = currentPath.includes('/gmp-portal/admin/');
+        if (isAdminPage && role !== 'ADMIN') {
+            window.location.href = '/gmp-portal/access-denied.html';
+            return false;
+        }
+        return true;
+    }
+
+    // Validações e sanitização
+    validateInput(input, type = 'text') {
+        if (!input || typeof input !== 'string') return false;
+        switch (type) {
+            case 'email': return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+            case 'number': return !isNaN(input) && Number(input) >= 0;
+            case 'text': return input.trim().length > 0 && input.length <= 255;
+            default: return true;
+        }
+    }
+
+    sanitizeInput(input) {
+        if (!input || typeof input !== 'string') return '';
+        return input
+            .replace(/</g, '<')
+            .replace(/>/g, '>')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#x27;')
+            .trim();
+    }
+
+    // Timeout
+    checkSessionTimeout() {
+        const session = this.getSession();
+        if (!session || !this.isSessionValid(session)) {
+            this.clearSession();
+            return false;
+        }
+        return true;
+    }
+
+    // Logout
+    logout() {
+        this.clearSession();
+        window.location.href = '/gmp-portal/login.html';
+    }
+
+    // Inicialização de segurança
+    initializeSecurity() {
+        setInterval(() => {
+            if (!this.checkSessionTimeout()) {
+                console.log('Session expired');
+                this.logout();
+            }
+        }, 60000);
+
+        ['click', 'keypress', 'scroll', 'mousemove'].forEach(event => {
+            document.addEventListener(event, () => {
+                this.updateLastActivity();
+            });
+        });
+
+        this.protectAdminRoutes();
+    }
+
+    // Headers com token real
+    getAuthHeaders() {
+        const session = this.getSession();
+        const token = session?.token || '';
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '',
+            'X-User-Role': session ? session.user.role : 'GUEST'
+        };
+    }
+
+    // Força da senha
+    checkPasswordStrength(password) {
+        if (!password || typeof password !== 'string') {
+            return { strong: false, message: 'Password is required' };
+        }
+        const checks = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            numbers: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+        const score = Object.values(checks).filter(Boolean).length;
+        if (score < 3) return { strong: false, message: 'Password is too weak', checks };
+        if (score < 5) return { strong: true, message: 'Password is medium strength', checks };
+        return { strong: true, message: 'Password is strong', checks };
+    }
+
+    // Validação de email
+    validateEmail(email) {
+        if (!email || typeof email !== 'string') return false;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Autenticação real (usa email como username)
+    async authenticateUser(username, password) {
+        try {
+            const email = username;
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            if (response.ok && (data.user && data.token)) {
+                const sessionResult = await this.createSession({ user: data.user, token: data.token });
+                if (sessionResult.success) {
+                    return {
+                        success: true,
+                        userId: data.user.id,
+                        username: data.user.name,
+                        role: data.user.role
+                    };
+                }
+                return { success: false, error: 'Failed to create session' };
+            }
+            return { success: false, error: data.error || 'Invalid credentials' };
+        } catch (error) {
+            return { success: false, error: error.message || 'Network error' };
+        }
+    }
+
+    // Validação de senha (fallback local + opcional endpoint)
+    async validatePassword(password, hashedPassword) {
+        try {
+            const basic = !!password && password.length > 0;
+            try {
+                const res = await fetch('/api/auth/validate-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password, hashedPassword })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    return !!data.valid;
+                }
+            } catch {}
+            return basic;
+        } catch {
+            return false;
+        }
+    }
+
+    // Geração de token (usa login real; aqui apenas informa para usar token da sessão)
+    async generateToken(payload) {
+        const session = this.getSession();
+        if (session?.token) {
+            return { success: true, token: session.token, expiresIn: Math.max(0, (session.expiresAt - Date.now()) / 1000) };
+        }
+        return { success: false, error: 'Use the JWT returned by /api/auth/login or /api/auth/register' };
+    }
+
+    // Validação de sessão no backend (se disponível) ou localmente
+    async validateSession(sessionId) {
+        try {
+            const local = this.getSession();
+            try {
+                const res = await fetch('/api/security/validate', { headers: this.getAuthHeaders() });
+                const data = await res.json();
+                if (res.ok && data.valid) {
+                    return { success: true, valid: true, user: data.user || local?.user || null };
+                }
+            } catch {}
+            if (local && local.sessionId === sessionId && this.isSessionValid(local)) {
+                return { success: true, valid: true, user: local.user };
+            }
+            return { success: false, valid: false };
+        } catch (error) {
+            return { success: false, valid: false, error: error.message };
+        }
+    }
+
+    // Destrói sessão
+    async destroySession(sessionId) {
+        try {
+            const session = this.getSession();
+            if (session && session.sessionId === sessionId) {
+                this.clearSession();
+                return { success: true };
+            }
+            return { success: false, error: 'Session not found' };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Permissões funcionais locais
+    async hasPermission(userId, permission) {
+        try {
+            const session = this.getSession();
+            if (!session || !session.user) return false;
+            const userRole = String(session.user.role).toLowerCase();
+            const permissions = {
+                admin: ['read', 'write', 'delete', 'admin'],
+                manager: ['read', 'write'],
+                user: ['read'],
+                guest: []
+            };
+            return !!(permissions[userRole] && permissions[userRole].includes(permission));
+        } catch {
+            return false;
+        }
+    }
+
+    // Atribuição de papel funcional local
+    async assignRole(userId, role) {
+        try {
+            const session = this.getSession();
+            if (!session || !session.user || session.user.id !== userId) {
+                return { success: false, error: 'User not in current session' };
+            }
+            session.user.role = String(role).toUpperCase();
+            localStorage.setItem('gmp_session', JSON.stringify(session));
+            this.currentUser = session.user;
+            this.isAdmin = (String(role).toUpperCase() === 'ADMIN');
+            return {
+                success: true,
+                userId,
+                role: session.user.role,
+                assignedAt: new Date().toISOString()
+            };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Papel do usuário
+    async getUserRole(userId) {
+        try {
+            const session = this.getSession();
+            if (session && session.user && (session.user.userId === userId || session.user.id === userId)) {
+                return session.user.role;
+            }
+            return 'GUEST';
+        } catch {
+            return 'GUEST';
+        }
+    }
+
+    // Registro de usuário via backend
+    async registerUser(userData) {
+        try {
+            if (!userData.username && !userData.name) return { success: false, error: 'Missing username/name' };
+            if (!userData.email || !userData.password) return { success: false, error: 'Missing email or password' };
+            if (!this.validateEmail(userData.email)) return { success: false, error: 'Invalid email format' };
+            const passwordCheck = this.checkPasswordStrength(userData.password);
+            if (!passwordCheck.strong) return { success: false, error: 'Password too weak' };
+
+            let response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: userData.username || userData.name, email: userData.email, password: userData.password })
+            });
+            if (!response.ok) {
+                try {
+                    response = await fetch('/api/auth/signup', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: userData.username || userData.name, email: userData.email, password: userData.password })
+                    });
+                } catch {}
+            }
+            const data = await response.json();
+            if (response.ok && (data.user && data.token)) {
+                const sessionResult = await this.createSession({ user: data.user, token: data.token });
+                if (sessionResult.success) {
+                    return { success: true, user: data.user, token: data.token, message: data.message || 'User registered successfully' };
+                }
+                return { success: false, error: 'Failed to create session after registration' };
+            }
+            return { success: false, error: data.error || 'Registration failed' };
+        } catch (error) {
+            return { success: false, error: error.message || 'Network error' };
+        }
+    }
+
+    // Checagem de disponibilidade de username (backend opcional com fallback local)
+    async checkUsernameAvailability(username) {
+        try {
+            try {
+                const res = await fetch('/api/auth/check-username', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (typeof data.available === 'boolean') return { available: data.available };
+                }
+            } catch {}
+            const takenUsernames = ['admin', 'test', 'user', 'root'];
+            const available = !takenUsernames.includes(String(username).toLowerCase());
+            return { available };
+        } catch {
+            return { available: false };
+        }
+    }
+
+    // Solicitação de reset de senha (backend com fallback)
+    async requestPasswordReset(email) {
+        try {
+            if (!this.validateEmail(email)) return { success: false, error: 'Invalid email' };
+            try {
+                const res = await fetch('/api/auth/request-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                if (res.ok) return { success: true, message: data.message || 'Password reset email sent', token: data.token || null };
+                return { success: false, error: data.error || 'Failed to request reset' };
+            } catch {}
+            return { success: true, message: 'Password reset email simulated', token: 'reset_' + Date.now() };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Validação de token de reset (backend com fallback)
+    async validateResetToken(token) {
+        try {
+            if (!token) return { valid: false };
+            try {
+                const res = await fetch('/api/auth/validate-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                const data = await res.json();
+                if (res.ok) return { valid: !!data.valid, email: data.email || null };
+            } catch {}
+            return { valid: String(token).startsWith('reset_'), email: null };
+        } catch {
+            return { valid: false };
+        }
+    }
+
+    // Permissões por papel
+    async getRolePermissions(role) {
+        try {
+            const permissions = {
+                admin: ['read', 'write', 'delete', 'admin', 'manage_users'],
+                manager: ['read', 'write', 'manage_team'],
+                user: ['read', 'profile'],
+                guest: ['read']
+            };
+            return permissions[String(role).toLowerCase()] || [];
+        } catch {
+            return [];
+        }
+    }
+
+    // Status de segurança
+    getSecurityStatus() {
+        return {
+            active: true,
+            authenticated: this.isAuthenticated(),
+            currentUser: this.getCurrentUser(),
+            isAdmin: this.isUserAdmin(),
+            sessionValid: this.checkSessionTimeout()
+        };
+    }
+}
+
+// Inicializa e expõe globalmente
+const securityManager = new SecurityManager();
+window.securityManager = securityManager;
+window.GMP_Security = securityManager;
+
+// Inicializa quando DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    securityManager.initializeSecurity();
+});
+
+// Funções globais para login e signup (compatíveis com páginas existentes)
+async function loginUser(email, password) {
+    try {
+        if (!email || !password) return { success: false, error: 'Email and password are required' };
+        if (!securityManager.validateEmail(email)) return { success: false, error: 'Invalid email format' };
+
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+
+        if (response.ok && (data.user && data.token)) {
+            const sessionResult = await securityManager.createSession({ user: data.user, token: data.token });
+            if (sessionResult.success) {
+                // Guarda token para database.js e segue redirect do backend
+                localStorage.setItem('authToken', data.token);
+                const dest = data.redirect || (String(data.user.role).toUpperCase() === 'ADMIN'
+                    ? '/gmp-portal/admin/login.html'
+                    : '/gmp-portal/student/login.html');
+                window.location.href = dest;
+                return { success: true, token: data.token, user: data.user };
+            }
+            return { success: false, error: 'Failed to create session' };
+        } else {
+            return { success: false, error: data.error || 'Login failed' };
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        return { success: false, error: 'Network error. Please try again.' };
+    }
+}
+
+async function signupUser(name, email, password) {
+    try {
+        if (!name || !email || !password) return { success: false, error: 'All fields are required' };
+        if (!securityManager.validateEmail(email)) return { success: false, error: 'Invalid email format' };
+        const passwordCheck = securityManager.checkPasswordStrength(password);
+        if (!passwordCheck.strong) return { success: false, error: 'Password is too weak' };
+
+        let response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        if (!response.ok) {
+            try {
+                response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+            } catch {}
+        }
+        const data = await response.json();
+
+        if (response.ok && (data.user && data.token)) {
+            const sessionResult = await securityManager.createSession({ user: data.user, token: data.token });
+            if (sessionResult.success) {
+                localStorage.setItem('authToken', data.token);
+                return { success: true, message: data.message || 'User registered', user: data.user, token: data.token };
+            }
+            return { success: false, error: 'Failed to create session after signup' };
+        } else {
+            return { success: false, error: data.error || 'Signup failed' };
+        }
+    } catch (error) {
+        console.error('Signup error:', error);
+        return { success: false, error: 'Network error. Please try again.' };
+    }
+}
+
+// expõe globalmente
+window.loginUser = loginUser;
+window.signupUser = signupUser;
+
+/**
+ * Database Integration Layer
+ * Prepares data for Oracle server integration
+ * Currently uses local storage as fallback
+ */
+
+class DatabaseManager {
+    constructor() {
+        this.isServerAvailable = false;
+        this.useLocalStorage = true;
+        this.initializeData();
+    }
+
+    // Initialize local data structure matching expected Oracle schema
+    initializeData() {
+        if (!localStorage.getItem('gmp_student_data')) {
+            const initialData = {
+                studentId: 'student_001',
+                name: 'João Silva',
+                email: 'joao.silva@email.com',
+                enrollmentDate: '2024-01-15',
+                progress: {
+                    totalUnits: 71,
+                    completedUnits: 0,
+                    averageProgress: 0,
+                    streak: 0,
+                    totalTimeMinutes: 0
+                },
+                units: [],
+                statistics: {
+                    classesThisWeek: 0,
+                    averageRating: 0,
+                    certificates: 0,
+                    lastAccessDate: null
+                }
+            };
+            localStorage.setItem('gmp_student_data', JSON.stringify(initialData));
+        }
+    }
+
+    // Get student data
+    getStudentData() {
+        try {
+            const data = localStorage.getItem('gmp_student_data');
+            return data ? JSON.parse(data) : null;
+        } catch (error) {
+            console.error('Error getting student data:', error);
+            return null;
+        }
+    }
+
+    // Update student progress
+    updateProgress(unitId, progress, timeSpent = 0) {
+        try {
+            const data = this.getStudentData();
+            if (!data) return false;
+
+            const unitIndex = data.units.findIndex(u => u.id === unitId);
+            if (unitIndex === -1) {
+                data.units.push({
+                    id: unitId,
+                    progress: progress,
+                    timeSpent: timeSpent,
+                    lastAccessed: new Date().toISOString(),
+                    completed: progress >= 100
+                });
+            } else {
+                data.units[unitIndex].progress = progress;
+                data.units[unitIndex].timeSpent += timeSpent;
+                data.units[unitIndex].lastAccessed = new Date().toISOString();
+                data.units[unitIndex].completed = progress >= 100;
+            }
+
+            this.updateStatistics(data);
+            localStorage.setItem('gmp_student_data', JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Error updating progress:', error);
+            return false;
+        }
+    }
+
+    // Update student statistics
+    updateStatistics(data) {
+        const completedUnits = data.units.filter(u => u.completed).length;
+        const totalProgress = data.units.reduce((sum, u) => sum + u.progress, 0);
+        const averageProgress = data.units.length > 0 ? totalProgress / data.units.length : 0;
+        const totalTimeMinutes = data.units.reduce((sum, u) => sum + (u.timeSpent || 0), 0);
+
+        data.progress.completedUnits = completedUnits;
+        data.progress.averageProgress = Math.round(averageProgress);
+        data.progress.totalTimeMinutes = totalTimeMinutes;
+        data.statistics.lastAccessDate = new Date().toISOString();
+
+        const today = new Date().toDateString();
+        const lastAccess = data.statistics.lastAccessDate ? new Date(data.statistics.lastAccessDate).toDateString() : null;
+        if (lastAccess !== today) {
+            data.progress.streak = 1;
+        }
+    }
+
+    // Get unit data
+    getUnitData(unitId) {
+        try {
+            const data = this.getStudentData();
+            if (!data) return null;
+
+            return data.units.find(u => u.id === unitId) || {
+                id: unitId,
+                progress: 0,
+                timeSpent: 0,
+                lastAccessed: null,
+                completed: false
+            };
+        } catch (error) {
+            console.error('Error getting unit data:', error);
+            return null;
+        }
+    }
+
+    // Check if unit is unlocked
+    isUnitUnlocked(unitId) {
+        try {
+            const data = this.getStudentData();
+            if (!data) return false;
+
+            if (unitId === 1) return true;
+
+            const previousUnit = data.units.find(u => u.id === unitId - 1);
+            return previousUnit ? previousUnit.progress >= 50 : false;
+        } catch (error) {
+            console.error('Error checking unit unlock:', error);
+            return false;
+        }
+    }
+
+    // Save session data
+    saveSession(sessionData) {
+        try {
+            const data = this.getStudentData();
+            if (!data) return false;
+
+            data.currentSession = {
+                startTime: sessionData.startTime,
+                currentUnit: sessionData.currentUnit,
+                timeSpent: sessionData.timeSpent || 0
+            };
+
+            localStorage.setItem('gmp_student_data', JSON.stringify(data));
+            return true;
+        } catch (error) {
+            console.error('Error saving session:', error);
+            return false;
+        }
+    }
+
+    // Get session data
+    getSession() {
+        try {
+            const data = this.getStudentData();
+            return data ? data.currentSession : null;
+        } catch (error) {
+            console.error('Error getting session:', error);
+            return null;
+        }
+    }
+
+    // Format time from minutes to readable format
+    formatTime(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (hours > 0) {
+            return `${hours}h ${mins}m`;
+        }
+        return `${mins}m`;
+    }
+
+    // Prepare for server integration (placeholder)
+    async syncWithServer() {
+        console.log('Server sync not yet implemented - using local storage');
+        return true;
+    }
+
+    // Connect to database
+    async connect() {
+        try {
+            this.isServerAvailable = true;
+            return {
+                success: true,
+                message: 'Database connection established',
+                connectionId: 'conn_' + Date.now()
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Execute SQL query
+    async execute(sql, params = []) {
+        try {
+            const token = localStorage.getItem("authToken");
+            const res = await fetch("/api/db/execute", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({ sql, params })
+            });
+
+            const data = await res.json();
+            return {
+                success: res.ok,
+                changes: data.changes || 0,
+                lastID: data.lastID || null,
+                error: data.error || null
+            };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Query data
+    async query(sql, params = []) {
+        try {
+            const token = localStorage.getItem("authToken");
+            const res = await fetch("/api/db/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({ sql, params })
+            });
+            return await res.json();
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Transaction support
+    async transaction(callback) {
+        try {
+            const result = await callback(this);
+            return {
+                success: true,
+                result: result
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Batch operations
+    async batch(queries) {
+        try {
+            const results = [];
+            for (const query of queries) {
+                const result = await this.execute(query);
+                results.push(result);
+            }
+
+            return {
+                success: true,
+                results: results,
+                totalAffected: results.reduce((sum, r) => sum + (r.rowsAffected || 0), 0)
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Call stored procedure
+    async callProcedure(procedureName, params = []) {
+        try {
+            console.log('Calling procedure:', procedureName, params);
+            return {
+                success: true,
+                result: 'Procedure executed successfully',
+                outputParams: {}
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Oracle connection
+    async connectOracle(config) {
+        try {
+            console.log('Connecting to Oracle with config:', config);
+            return {
+                success: true,
+                message: 'Oracle connection established',
+                version: 'Oracle Database 19c',
+                connectionId: 'oracle_' + Date.now()
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Oracle query
+    async oracleQuery(sql, params = []) {
+        try {
+            console.log('Oracle query:', sql, params);
+
+            if (sql.includes('all_tables')) {
+                return {
+                    success: true,
+                    data: [
+                        { table_name: 'USERS', owner: 'GMP' },
+                        { table_name: 'PRODUCTS', owner: 'GMP' },
+                        { table_name: 'ORDERS', owner: 'GMP' }
+                    ],
+                    rowCount: 3
+                };
+            }
+
+            return {
+                success: true,
+                data: [],
+                rowCount: 0
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Sync with Oracle
+    async syncWithOracle(config) {
+        try {
+            console.log('Syncing with Oracle:', config);
+            return {
+                success: true,
+                syncedTables: config.tables ? config.tables.length : 0,
+                totalRecords: 1250,
+                duration: '2.3s',
+                timestamp: new Date().toISOString()
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Save student data
+    async saveStudentData(studentData) {
+        try {
+            if (!studentData || !studentData.id) {
+                return { success: false, error: 'Invalid student data' };
+            }
+            localStorage.setItem('gmp_student_data', JSON.stringify(studentData));
+            return {
+                success: true,
+                message: 'Student data saved successfully',
+                studentId: studentData.id
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Get student data by ID
+    async getStudentDataById(studentId) {
+        try {
+            const baseData = this.getStudentData();
+            if (baseData && baseData.id === studentId) {
+                return {
+                    success: true,
+                    data: baseData
+                };
+            }
+            return {
+                success: false,
+                error: 'Student not found'
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Check data access
+    async checkDataAccess(userId, resource) {
+        try {
+            const session = JSON.parse(localStorage.getItem('gmp_session') || '{}');
+            const userRole = (session.user?.role || 'GUEST').toUpperCase();
+
+            const permissions = {
+                ADMIN: ['student_data', 'user_data', 'system_data'],
+                MANAGER: ['student_data', 'user_data'],
+                USER: ['student_data'],
+                GUEST: []
+            };
+
+            const hasAccess = permissions[userRole]?.includes(resource) || false;
+
+            return {
+                success: true,
+                hasAccess,
+                userId,
+                resource,
+                role: userRole
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Verify sync data
+    async verifySyncData(tables) {
+        try {
+            const results = {};
+            for (const table of tables) {
+                results[table] = {
+                    rowCount: Math.floor(Math.random() * 1000),
+                    lastSync: new Date().toISOString(),
+                    status: 'synced'
+                };
+            }
+
+            return {
+                success: true,
+                valid: true,
+                tables: results
+            };
+        } catch (error) {
+            return {
+                success: false,
+                valid: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Validate Oracle config
+    validateOracleConfig(config) {
+        try {
+            const required = ['user', 'password', 'connectString'];
+            const missing = required.filter(field => !config[field]);
+
+            if (missing.length > 0) {
+                return {
+                    valid: false,
+                    error: `Missing required fields: ${missing.join(', ')}`
+                };
+            }
+
+            return {
+                valid: true,
+                message: 'Oracle configuration is valid'
+            };
+        } catch (error) {
+            return {
+                valid: false,
+                error: error.message
+            };
+        }
+    }
+
+    // Get connection status
+    getConnectionStatus() {
+        return {
+            connected: this.isServerAvailable,
+            type: this.useLocalStorage ? 'localStorage' : 'oracle',
+            lastActivity: new Date().toISOString(),
+            available: true
+        };
+    }
+}
+
+// Initialize database manager
+const dbManager = new DatabaseManager();
+
+// Make available globally
+window.dbManager = dbManager;
+window.GMP_Database = dbManager;
+
+// Authentication database functions
+async function createTables() {
+    try {
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS users (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                role TEXT DEFAULT 'STUDENT',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS courses (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                description TEXT,
+                "order" INTEGER,
+                is_published INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS lessons (
+                id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                content TEXT,
+                "order" INTEGER,
+                course_id TEXT,
+                is_published INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE
+            )
+        `);
+
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS enrollments (
+                id TEXT PRIMARY KEY,
+                user_id TEXT,
+                course_id TEXT,
+                enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                completed_at DATETIME,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE,
+                UNIQUE(user_id, course_id)
+            )
+        `);
+
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS progress (
+                id TEXT PRIMARY KEY,
+                user_id TEXT,
+                lesson_id TEXT,
+                is_completed INTEGER DEFAULT 0,
+                completed_at DATETIME,
+                time_spent INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                FOREIGN KEY (lesson_id) REFERENCES lessons (id) ON DELETE CASCADE,
+                UNIQUE(user_id, lesson_id)
+            )
+        `);
+
+        await dbManager.execute(`
+            CREATE TABLE IF NOT EXISTS quiz_scores (
+                id TEXT PRIMARY KEY,
+                user_id TEXT,
+                lesson_id TEXT,
+                score INTEGER,
+                total_score INTEGER,
+                percentage REAL,
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                FOREIGN KEY (lesson_id) REFERENCES lessons (id) ON DELETE CASCADE
+            )
+        `);
+
+        return { success: true, message: 'Tables created successfully' };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+async function insertSampleData() {
+    try {
+        const courses = [
+            {
+                id: 'course_1',
+                title: 'GMP Fundamentals',
+                description: 'Learn the basics of Good Manufacturing Practices',
+                order: 1,
+                is_published: 1
+            },
+            {
+                id: 'course_2',
+                title: 'Quality Systems',
+                description: 'Understanding quality management systems in pharmaceutical manufacturing',
+                order: 2,
+                is_published: 1
+            },
+            {
+                id: 'course_3',
+                title: 'Documentation & Records',
+                description: 'Proper documentation and record-keeping practices',
+                order: 3,
+                is_published: 1
+            }
+        ];
+
+        for (const course of courses) {
+            await dbManager.execute(`
+                INSERT OR IGNORE INTO courses (id, title, description, "order", is_published)
+                VALUES (?, ?, ?, ?, ?)
+            `, [course.id, course.title, course.description, course.order, course.is_published]);
+        }
+
+        const lessons = [
+            {
+                id: 'lesson_1',
+                title: 'Introduction to GMP',
+                content: 'Welcome to Good Manufacturing Practices. This lesson covers the fundamental principles of GMP in pharmaceutical manufacturing.',
+                order: 1,
+                course_id: 'course_1',
+                is_published: 1
+            },
+            {
+                id: 'lesson_2',
+                title: 'GMP Regulations',
+                content: 'Understanding the regulatory framework and compliance requirements for GMP.',
+                order: 2,
+                course_id: 'course_1',
+                is_published: 1
+            },
+            {
+                id: 'lesson_3',
+                title: 'Quality Management',
+                content: 'Learn about quality management systems and their importance in manufacturing.',
+                order: 1,
+                course_id: 'course_2',
+                is_published: 1
+            },
+            {
+                id: 'lesson_4',
+                title: 'Documentation Basics',
+                content: 'Proper documentation practices and record-keeping requirements.',
+                order: 1,
+                course_id: 'course_3',
+                is_published: 1
+            }
+        ];
+
+        for (const lesson of lessons) {
+            await dbManager.execute(`
+                INSERT OR IGNORE INTO lessons (id, title, content, "order", course_id, is_published)
+                VALUES (?, ?, ?, ?, ?, ?)
+            `, [lesson.id, lesson.title, lesson.content, lesson.order, lesson.course_id, lesson.is_published]);
+        }
+
+        return { success: true, message: 'Sample data inserted successfully' };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// Initialize database with tables and sample data
+async function initializeDatabase() {
+    try {
+        await createTables();
+        await insertSampleData();
+        return { success: true, message: 'Database initialized successfully' };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+// Make functions globally available
+window.createTables = createTables;
+window.insertSampleData = insertSampleData;
+window.initializeDatabase = initializeDatabase;

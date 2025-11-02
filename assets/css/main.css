@@ -1422,3 +1422,13 @@ body.dark-theme {
 .sidebar {
     border-right: none !important;
 }
+
+/* Ensure modals respect dark mode */
+body.dark-mode .modal-content {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: var(--border-color);
+}
